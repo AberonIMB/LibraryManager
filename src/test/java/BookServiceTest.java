@@ -20,7 +20,7 @@ public class BookServiceTest {
     }
 
     /**
-     * Отчищает библиотеку после каждого теста
+     * Очищает библиотеку после каждого теста
      */
     @AfterEach
     public void cleanUp() {
@@ -121,9 +121,9 @@ public class BookServiceTest {
 
     /**
      * Проверяет, что свойства книги совпадают с ожидаемыми значениями
-     * @param title ожидаемое название книги
-     * @param author ожидаемый автор книги
-     * @param year ожидаемый год публикации книги
+     * @param title ожидаемое название
+     * @param author ожидаемый автор
+     * @param year ожидаемый год публикации
      * @param book сравниваемая книга
      */
     private void runAssertEqualsTest(String title, String author, int year, Book book) {
