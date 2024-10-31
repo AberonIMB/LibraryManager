@@ -2,7 +2,7 @@ package org.example.service;
 
 import org.example.model.Book;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Класс для работы с библиотекой, который включает в себя
@@ -10,60 +10,86 @@ import java.util.List;
  */
 public class BookService {
 
+    private final Map<Integer, Book> books = new LinkedHashMap<>();
+
+    private Integer lastID = 0;
+
     /**
      * Создать книгу и сохранить книгу
-     * @param title
-     * @param author
-     * @param publicationYear
      */
     public void addBook(String title, String author, int publicationYear) {
-        //TODO
+        int id = findFreeId();
+        Book book = new Book(title, author, publicationYear, id);
+        books.put(id, book);
+        System.out.println("Добавлена книга:");
+        book.printBook();
     }
 
     /**
      * Получить список всех книг
-     * @return
      */
     public List<Book> getListBooks() {
-        return null;
-        //TODO
+        return books.values()
+                .stream()
+                .toList();
     }
 
     /**
      * Редактировать книгу по id
-     * @param id
-     * @param title
-     * @param author
-     * @param publicationYear
      */
     public void editBook(int id, String title, String author, int publicationYear) {
-        //TODO
+        Book book = books.get(id);
+        if (book == null) {
+            System.out.println("Не найдено книги с данным ID\n");
+            return;
+        }
+        book.setNewData(title, author, publicationYear);
+        System.out.println("Изменена книга:");
+        book.printBook();
     }
 
     /**
      * Удалить книгу по id
-     * @param id
      */
     public void deleteBook(int id) {
-        //TODO
+        if (!books.containsKey(id)) {
+            System.out.println("Книга не найдена\n");
+            return;
+        }
+        books.remove(id);
+        System.out.printf("Книга с ID %d успешно удалена\n", id);
     }
 
     /**
-     * Получить книгу по id
-     * @param id
-     * @return
+     * Получить и вывести книгу по id
      */
     public Book getBook(int id) {
-        return null;
-        //TODO
+        Book book = books.get(id);
+        if (book == null) {
+            System.out.printf("Книга c ID %d не найдена:", id);
+            return null;
+        }
+        System.out.println("Добавлена книга:");
+        book.printBook();
+        return book;
+    }
+
+    /**
+     * Вывод списка книг
+     */
+    public void printBooks() {
+        List<Book> bookList = getListBooks();
+        for (int i = 1; i <= bookList.size(); i++) {
+            Book book = bookList.get(i - 1);
+            System.out.printf("%d) %s\n", i, book.getBookShortInfo());
+        }
     }
 
     /**
      * Получить следующий свободный идентификатор
-     * @return
      */
-    private int fingFreeId() {
-        return 0;
-        //TODO
+    private int findFreeId() {
+        lastID++;
+        return lastID;
     }
 }
