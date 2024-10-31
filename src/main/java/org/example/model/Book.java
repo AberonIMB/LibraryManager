@@ -68,26 +68,14 @@ public class Book {
     }
 
     /**
-     * Установить новое название книги
+     * Установить новые значения для назвавния, автора и года публикации книги
      * @param title
-     */
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    /**
-     * Установить нового Автора
      * @param author
-     */
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    /**
-     * Установить новый год публикации
      * @param publicationYear
      */
-    public void setPublicationYear(int publicationYear) {
+    public void setNewData(String title, String author, int publicationYear) {
+        this.title = title;
+        this.author = author;
         this.publicationYear = publicationYear;
     }
 

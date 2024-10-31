@@ -2,12 +2,15 @@ package org.example;
 
 import org.example.service.BookService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
     public static void main(String[] args) {
         BookService bookService = new BookService();
-
         commandsProcess(bookService);
     }
 
@@ -51,7 +54,7 @@ public class Main {
      * Выводит сообщение об ошибке при вводе несуществующей команды
      */
     private static void showDefaultErrorMessage() {
-
+        //TODO
     }
 
     /**
@@ -61,13 +64,27 @@ public class Main {
     private static String[] readCommand() {
         Scanner scanner = new Scanner(System.in);
         String command = scanner.nextLine();
-        return command.split(" ");
+        List<String> args = new ArrayList<>();
+
+        Pattern pattern = Pattern.compile("[\"“](.*?)[\"”]|(\\S+)");
+        // выбирает либо выражения в ковычках, либо выражения без пробела
+        Matcher matcher = pattern.matcher(command);
+        while(matcher.find()) {
+            String subString = matcher.group(1);
+            if (subString != null) {
+                args.add(subString);
+            } else {
+                args.add(matcher.group(2));
+            }
+        }
+
+        return args.toArray(new String[0]);
     }
 
     /**
      * Выводит справку по всем командам
      */
     private static void showHelp() {
-
+        //TODO
     }
 }
