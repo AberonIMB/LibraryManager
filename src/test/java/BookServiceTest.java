@@ -121,14 +121,14 @@ public class BookServiceTest {
 
     /**
      * Проверяет, что свойства книги совпадают с ожидаемыми значениями
-     * @param title
-     * @param author
-     * @param year
-     * @param book
+     * @param title ожидаемое название книги
+     * @param author ожидаемый автор книги
+     * @param year ожидаемый год публикации книги
+     * @param book сравниваемая книга
      */
     private void runAssertEqualsTest(String title, String author, int year, Book book) {
         Assertions.assertEquals(title, book.getTitle());
-        Assertions.assertEquals(title, book.getAuthor());
+        Assertions.assertEquals(author, book.getAuthor());
         Assertions.assertEquals(year, book.getPublicationYear());
     }
 }
