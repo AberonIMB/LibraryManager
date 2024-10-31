@@ -23,10 +23,6 @@ public class Book {
 
     /**
      * Конструктор класса, который принимает название, автора, год издания и id книги
-     * @param title
-     * @param author
-     * @param publicationYear
-     * @param id
      */
     public Book(String title, String author, int publicationYear, int id) {
         this.title = title;
@@ -37,7 +33,6 @@ public class Book {
 
     /**
      * Получить id книги
-     * @return
      */
     public int getId() {
         return id;
@@ -45,7 +40,6 @@ public class Book {
 
     /**
      * Получить название книги
-     * @return
      */
     public String getTitle() {
         return title;
@@ -53,7 +47,6 @@ public class Book {
 
     /**
      * Получить автора книги
-     * @return
      */
     public String getAuthor() {
         return author;
@@ -61,7 +54,6 @@ public class Book {
 
     /**
      * Получить год издания книги
-     * @return
      */
     public int getPublicationYear() {
         return publicationYear;
@@ -69,9 +61,6 @@ public class Book {
 
     /**
      * Установить новые значения для назвавния, автора и года публикации книги
-     * @param title
-     * @param author
-     * @param publicationYear
      */
     public void setNewData(String title, String author, int publicationYear) {
         this.title = title;
@@ -79,15 +68,23 @@ public class Book {
         this.publicationYear = publicationYear;
     }
 
-    //        /**
-//     * Метод для удобного вывода информации о книге
-//     * @return
-//     */
-//    @Override
-//    public String toString() {
-//        return "ID: " + id +
-//                "\nНазвание: " + title +
-//                "\nАвтор: " + author +
-//                "\nГод издания: " + publicationYear;
-//    }
+    /**
+     * Вывод полной информации о книге
+     */
+    public void printBook() {
+        System.out.printf("""
+                        ID: %d
+                        Название: %s
+                        Автор: %s
+                        Год издания: %d
+                        """,
+                id, title, author, publicationYear);
+    }
+
+    /**
+     * Возвращает краткую информуцию о книге
+     */
+    public String getBookShortInfo() {
+        return String.format("[%d] %s - %s (%d)", id, title, author, publicationYear);
+    }
 }
