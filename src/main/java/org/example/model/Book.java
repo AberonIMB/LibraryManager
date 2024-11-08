@@ -1,34 +1,52 @@
 package org.example.model;
 
+import jakarta.persistence.*;
+
 /**
  * Класс книги
  */
+@Entity
+@Table(name = "books")
 public class Book {
+
     /**
      * Идентификатор книги
      */
-    private final int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
     /**
      * Название книги
      */
+    @Column(name = "title")
     private String title;
+
     /**
      * Автор книги
      */
+    @Column(name = "author")
     private String author;
+
     /**
      * Год издания книги
      */
+    @Column(name = "publication_year")
     private int publicationYear;
 
     /**
-     * Конструктор класса, который принимает название, автора, год издания и id книги
+     * Пустой конструктор для Hibernate
      */
-    public Book(String title, String author, int publicationYear, int id) {
+    public Book() {
+    }
+
+    /**
+     * Конструктор класса, который принимает название, автора, год издания
+     */
+    public Book(String title, String author, int publicationYear) {
         this.title = title;
         this.author = author;
         this.publicationYear = publicationYear;
-        this.id = id;
     }
 
     /**
@@ -69,20 +87,19 @@ public class Book {
     }
 
     /**
-     * Вывод полной информации о книге
+     * Возвращает информацию о книге
      */
-    public void printBook() {
-        System.out.printf("""
+    public String getBookInfo() {
+        return String.format("""
                         ID: %d
                         Название: %s
                         Автор: %s
-                        Год издания: %d
-                        """,
+                        Год издания: %d""",
                 id, title, author, publicationYear);
     }
 
     /**
-     * Возвращает краткую информуцию о книге
+     * Возвращает информуцию о книге в кратком виде
      */
     public String getBookShortInfo() {
         return String.format("[%d] %s - %s (%d)", id, title, author, publicationYear);
