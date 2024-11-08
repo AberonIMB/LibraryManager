@@ -15,6 +15,9 @@ public class BookService {
 
     private final SessionFactory factory;
 
+    /**
+     * Конструктор, в котором задаётся конфигурация SessionFactory для Hibernate
+     */
     public BookService() {
         factory = new Configuration()
                 .configure("hibernate.cfg.xml")
