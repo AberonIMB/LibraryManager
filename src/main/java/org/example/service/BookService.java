@@ -16,7 +16,7 @@ public class BookService {
     private final Printer printer;
 
     /**
-     * Конструктор для присваивания bookDAO и printer
+     * Конструктор, в котором присваивается bookDAO и printer
      */
     public BookService(BookDAO bookDAO, Printer printer) {
         this.bookDAO = bookDAO;
