@@ -1,5 +1,6 @@
 import org.example.model.Book;
-import org.example.service.BookService;
+import org.example.service.LibraryService;
+import org.example.util.Printer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,14 +10,14 @@ import java.util.List;
 
 public class BookServiceTest {
 
-    private final BookService bookService = new BookService();
+    private final LibraryService libraryService = new LibraryService(new Printer());
 
     /**
      * Перед каждым тестом добавляет одну книгу в библиотеку
      */
     @BeforeEach
     public void setUp() {
-        bookService.addBook("Война и мир", "Лев Толстой", 1869);
+        libraryService.addBook("Война и мир", "Лев Толстой", 1869);
     }
 
     /**
@@ -24,8 +25,8 @@ public class BookServiceTest {
      */
     @AfterEach
     public void cleanUp() {
-        bookService.deleteBook(1);
-        bookService.deleteBook(2);
+        libraryService.deleteBook(1);
+        libraryService.deleteBook(2);
     }
 
     /**
@@ -33,7 +34,7 @@ public class BookServiceTest {
      */
     @Test
     public void addBookTest() {
-        Book book = bookService.getBook(1);
+        Book book = libraryService.getBook(1);
 
         runAssertEqualsTest("Война и мир", "Лев Толстой", 1869, book);
     }
@@ -43,11 +44,11 @@ public class BookServiceTest {
      */
     @Test
     public void getListBooksTest() {
-        bookService.addBook("Преступление и наказание", "Фёдор Достоевский", 1866);
+        libraryService.addBook("Преступление и наказание", "Фёдор Достоевский", 1866);
 
-        List<Book> books = bookService.getListBooks();
-        Book book1 = bookService.getBook(1);
-        Book book2 = bookService.getBook(2);
+        List<Book> books = libraryService.getListBooks();
+        Book book1 = libraryService.getBook(1);
+        Book book2 = libraryService.getBook(2);
 
         Assertions.assertEquals(2, books.size());
 
@@ -60,12 +61,12 @@ public class BookServiceTest {
      */
     @Test
     public void editBookTest() {
-        bookService.editBook(1,
+        libraryService.editBook(1,
                 "Преступление и наказание",
                 "Фёдор Достоевский",
                 1866);
 
-        Book book = bookService.getBook(1);
+        Book book = libraryService.getBook(1);
 
         runAssertEqualsTest("Преступление и наказание", "Фёдор Достоевский", 1866, book);
     }
@@ -75,12 +76,12 @@ public class BookServiceTest {
      */
     @Test
     public void deleteBookTest() {
-        bookService.addBook("Преступление и наказание", "Фёдор Достоевский", 1866);
+        libraryService.addBook("Преступление и наказание", "Фёдор Достоевский", 1866);
 
-        bookService.deleteBook(1);
-        Assertions.assertEquals(1, bookService.getListBooks().size());
+        libraryService.deleteBook(1);
+        Assertions.assertEquals(1, libraryService.getListBooks().size());
 
-        Book book = bookService.getBook(2);
+        Book book = libraryService.getBook(2);
         runAssertEqualsTest("Преступление и наказание", "Фёдор Достоевский", 1866, book);
     }
 
@@ -89,7 +90,7 @@ public class BookServiceTest {
      */
     @Test
     public void getBookTest() {
-        Book book = bookService.getBook(1);
+        Book book = libraryService.getBook(1);
         runAssertEqualsTest("Война и мир", "Лев Толстой", 1869, book);
     }
 
@@ -98,12 +99,12 @@ public class BookServiceTest {
      */
     @Test
     public void addMultipleBooksWithSameDataTest() {
-        bookService.addBook("Преступление и наказание", "Фёдор Достоевский", 1866);
-        bookService.addBook("Преступление и наказание", "Фёдор Достоевский", 1866);
+        libraryService.addBook("Преступление и наказание", "Фёдор Достоевский", 1866);
+        libraryService.addBook("Преступление и наказание", "Фёдор Достоевский", 1866);
 
         Assertions.assertNotEquals(
-                bookService.getListBooks().get(1).getId(),
-                bookService.getListBooks().get(2).getId());
+                libraryService.getListBooks().get(1).getId(),
+                libraryService.getListBooks().get(2).getId());
     }
 
     /**
@@ -113,8 +114,8 @@ public class BookServiceTest {
     public void multipleEditBookTest() {
 
         for (int i = 0; i < 5; i++) {
-            bookService.editBook(1, "Книга " + i, "Автор " + i, i);
-            Book book = bookService.getBook(1);
+            libraryService.editBook(1, "Книга " + i, "Автор " + i, i);
+            Book book = libraryService.getBook(1);
             runAssertEqualsTest("Книга " + i, "Автор " + i, i, book);
         }
     }

@@ -1,6 +1,8 @@
 package org.example;
 
-import org.example.service.BookService;
+import org.example.service.LibraryService;
+import org.example.util.Printer;
+import org.example.util.SyntaxChecker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,80 +11,68 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Класс для запуска прилоежния
+ * Класс для запуска приложения
  */
 public class LibraryConsoleApplication {
 
     /**
-     * Метод запуска приложенения
+     * Метод запуска приложения
      */
     public static void main(String[] args) {
-        BookService bookService = new BookService();
+        Printer printer = new Printer();
+        LibraryService libraryService = new LibraryService(printer);
         LibraryConsoleApplication app = new LibraryConsoleApplication();
-        app.commandsProcess(bookService);
+        app.commandsProcess(libraryService, printer);
     }
 
     /**
      * Обрабатывает команды пользователя из консоли
-     *
-     * @param bookService сервсис обработки книг
+     * @param libraryService сервсис библиотеки
      */
-    private void commandsProcess(BookService bookService) {
+    private void commandsProcess(LibraryService libraryService, Printer printer) {
+        SyntaxChecker syntaxChecker = new SyntaxChecker();
         while (true) {
             String[] command = readCommand();
             if (command.length == 0)
                 continue;
             switch (command[0]) {
                 case "add-book":
-                    if (command.length != 4 || !command[3].matches("\\d+")) {
-                        showDefaultErrorMessage();
+                    if (!syntaxChecker.checkAddBookCommandSyntax(command)) {
                         continue;
                     }
-                    bookService.addBook(command[1], command[2], Integer.parseInt(command[3]));
+                    libraryService.addBook(command[1], command[2], Integer.parseInt(command[3]));
                     break;
                 case "list-books":
-                    bookService.printBooks();
+                    libraryService.printBooks();
                     break;
                 case "edit-book":
-                    if (command.length != 5
-                            || !command[1].matches("\\d+")
-                            || !command[4].matches("\\d+")) {
-                        showDefaultErrorMessage();
+                    if (!syntaxChecker.checkEditBookCommandSyntax(command)) {
                         continue;
                     }
-                    bookService.editBook(Integer.parseInt(command[1]),
+                    libraryService.editBook(Integer.parseInt(command[1]),
                             command[2],
                             command[3],
                             Integer.parseInt(command[4]));
                     break;
                 case "delete-book":
-                    if (command.length != 2 || !command[1].matches("\\d+")) {
-                        showDefaultErrorMessage();
+                    if (!syntaxChecker.checkDeleteBookCommandSyntax(command)) {
                         continue;
                     }
-                    bookService.deleteBook(Integer.parseInt(command[1]));
+                    libraryService.deleteBook(Integer.parseInt(command[1]));
                     break;
                 case "help":
-                    showHelp();
+                    printer.printHelp();
                     break;
                 default:
-                    showDefaultErrorMessage();
-                    break;
+                    printer.printWrongCommand();
             }
         }
     }
 
     /**
-     * Выводит сообщение об ошибке при вводе несуществующей команды
-     */
-    private static void showDefaultErrorMessage() {
-        System.out.println("Некоректный ввод команды");
-    }
-
-    /**
      * Считывает команду пользователя и разбивает её на название и параметры
      */
-    private static String[] readCommand() {
+    private String[] readCommand() {
         Scanner scanner = new Scanner(System.in);
         String command = scanner.nextLine();
         List<String> args = new ArrayList<>();
@@ -98,20 +88,6 @@ public class LibraryConsoleApplication {
                 args.add(matcher.group(2));
             }
         }
-
         return args.toArray(new String[0]);
-    }
-
-    /**
-     * Выводит справку по всем командам
-     */
-    private void showHelp() {
-        System.out.println("""
-                Доступные команды:
-                \t- add-book "<название>" "<автор>" <год издания> – Добавить книгу
-                \t- list-books – Просмотреть список книг
-                \t- edit-book <ID книги> “<название>” “<автор>” <год издания> - Изменить книгу
-                \t- delete-book <ID книги> – Удалить книгу
-                \t- help – Справка""");
     }
 }
