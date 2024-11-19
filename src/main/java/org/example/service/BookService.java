@@ -1,69 +1,89 @@
 package org.example.service;
 
 import org.example.model.Book;
+import org.example.model.BookDAO;
+import org.example.util.Printer;
 
-import java.util.List;
+import java.util.*;
 
 /**
- * Класс для работы с библиотекой, который включает в себя
+ * Класс для работы с книгами в библиотеки, который включает в себя
  * добавление, удаление, редактирование, получение и просмотр всех книг
  */
 public class BookService {
 
+    private final BookDAO bookDAO;
+    private final Printer printer;
+
+    /**
+     * Конструктор, в котором присваивается bookDAO и printer
+     */
+    public BookService(BookDAO bookDAO, Printer printer) {
+        this.bookDAO = bookDAO;
+        this.printer = printer;
+    }
+
     /**
      * Создать книгу и сохранить книгу
-     * @param title
-     * @param author
-     * @param publicationYear
      */
     public void addBook(String title, String author, int publicationYear) {
-        //TODO
+        Book book = new Book(title, author, publicationYear);
+        bookDAO.save(book);
+        printer.printBookAdded(book);
     }
 
     /**
      * Получить список всех книг
-     * @return
      */
     public List<Book> getListBooks() {
-        return null;
-        //TODO
+        return bookDAO.getAll();
     }
 
     /**
      * Редактировать книгу по id
-     * @param id
-     * @param title
-     * @param author
-     * @param publicationYear
      */
     public void editBook(int id, String title, String author, int publicationYear) {
-        //TODO
+        Book book = bookDAO.getById(id);
+        if (book == null) {
+            printer.printBookNotFound(id);
+            return;
+        }
+        book.setNewData(title, author, publicationYear);
+        bookDAO.update(book);
+        printer.printBookEdited(book);
     }
 
     /**
      * Удалить книгу по id
-     * @param id
      */
     public void deleteBook(int id) {
-        //TODO
+        Book book = bookDAO.getById(id);
+        if (book == null) {
+            printer.printBookNotFound(id);
+            return;
+        }
+        bookDAO.deleteBook(id);
+        printer.printBookDeleted(id);
     }
 
     /**
-     * Получить книгу по id
-     * @param id
-     * @return
+     * Получить и вывести книгу по id
      */
     public Book getBook(int id) {
-        return null;
-        //TODO
+        Book book = bookDAO.getById(id);
+        if (book == null) {
+            printer.printBookNotFound(id);
+        } else {
+            printer.printBookInfo(book);
+        }
+        return book;
     }
 
     /**
-     * Получить следующий свободный идентификатор
-     * @return
+     * Вывести спискок книг
      */
-    private int fingFreeId() {
-        return 0;
-        //TODO
+    public void printBooks() {
+        List<Book> bookList = getListBooks();
+        printer.printBookList(bookList);
     }
 }

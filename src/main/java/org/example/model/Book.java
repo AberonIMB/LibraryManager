@@ -1,43 +1,57 @@
 package org.example.model;
 
+import jakarta.persistence.*;
+import java.util.Objects;
+
 /**
  * Класс книги
  */
+@Entity
+@Table(name = "books")
 public class Book {
+
     /**
      * Идентификатор книги
      */
-    private final int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
     /**
      * Название книги
      */
+    @Column(name = "title")
     private String title;
+
     /**
      * Автор книги
      */
+    @Column(name = "author")
     private String author;
+
     /**
      * Год издания книги
      */
+    @Column(name = "publication_year")
     private int publicationYear;
 
     /**
-     * Конструктор класса, который принимает название, автора, год издания и id книги
-     * @param title
-     * @param author
-     * @param publicationYear
-     * @param id
+     * Пустой конструктор для Hibernate
      */
-    public Book(String title, String author, int publicationYear, int id) {
+    public Book() {
+    }
+
+    /**
+     * Конструктор класса, который принимает название, автора, год издания
+     */
+    public Book(String title, String author, int publicationYear) {
         this.title = title;
         this.author = author;
         this.publicationYear = publicationYear;
-        this.id = id;
     }
 
     /**
      * Получить id книги
-     * @return
      */
     public int getId() {
         return id;
@@ -45,7 +59,6 @@ public class Book {
 
     /**
      * Получить название книги
-     * @return
      */
     public String getTitle() {
         return title;
@@ -53,7 +66,6 @@ public class Book {
 
     /**
      * Получить автора книги
-     * @return
      */
     public String getAuthor() {
         return author;
@@ -61,7 +73,6 @@ public class Book {
 
     /**
      * Получить год издания книги
-     * @return
      */
     public int getPublicationYear() {
         return publicationYear;
@@ -69,9 +80,6 @@ public class Book {
 
     /**
      * Установить новые значения для назвавния, автора и года публикации книги
-     * @param title
-     * @param author
-     * @param publicationYear
      */
     public void setNewData(String title, String author, int publicationYear) {
         this.title = title;
@@ -79,15 +87,45 @@ public class Book {
         this.publicationYear = publicationYear;
     }
 
-    //        /**
-//     * Метод для удобного вывода информации о книге
-//     * @return
-//     */
-//    @Override
-//    public String toString() {
-//        return "ID: " + id +
-//                "\nНазвание: " + title +
-//                "\nАвтор: " + author +
-//                "\nГод издания: " + publicationYear;
-//    }
+    /**
+     * Возвращает информацию о книге
+     */
+    public String getBookInfo() {
+        return String.format("""
+                        ID: %d
+                        Название: %s
+                        Автор: %s
+                        Год издания: %d""",
+                id, title, author, publicationYear);
+    }
+
+    /**
+     * Возвращает информуцию о книге в кратком виде
+     */
+    public String getBookShortInfo() {
+        return String.format("[%d] %s - %s (%d)", id, title, author, publicationYear);
+    }
+
+    /**
+     * Сравнивает этот объект с другим объектом на равенство
+     * @return true - если
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return id == book.id
+                && publicationYear == book.publicationYear
+                && Objects.equals(title, book.title)
+                && Objects.equals(author, book.author);
+    }
+
+    /**
+     * Возвращает hashCode объекта
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, author, publicationYear);
+    }
 }

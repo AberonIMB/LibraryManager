@@ -1,6 +1,8 @@
 package org.example;
 
-import org.example.service.BookService;
+import org.example.service.LibraryService;
+import org.example.util.Printer;
+import org.example.util.SyntaxChecker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,60 +10,69 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Main {
+/**
+ * Класс для запуска приложения
+ */
+public class LibraryConsoleApplication {
+
+    /**
+     * Метод запуска приложения
+     */
     public static void main(String[] args) {
-        BookService bookService = new BookService();
-        commandsProcess(bookService);
+        Printer printer = new Printer();
+        LibraryService libraryService = new LibraryService(printer);
+        LibraryConsoleApplication app = new LibraryConsoleApplication();
+        app.commandsProcess(libraryService, printer);
     }
 
     /**
      * Обрабатывает команды пользователя из консоли
-     * @param bookService
+     * @param libraryService сервсис библиотеки
      */
-    private static void commandsProcess(BookService bookService) {
+    private void commandsProcess(LibraryService libraryService, Printer printer) {
+        SyntaxChecker syntaxChecker = new SyntaxChecker();
         while (true) {
             String[] command = readCommand();
+            if (command.length == 0)
+                continue;
             switch (command[0]) {
                 case "add-book":
-                    bookService.addBook(command[1], command[2], Integer.parseInt(command[3]));
+                    if (!syntaxChecker.checkAddBookCommandSyntax(command)) {
+                        continue;
+                    }
+                    libraryService.addBook(command[1], command[2], Integer.parseInt(command[3]));
                     break;
-                case "list-book":
-                    bookService.getListBooks();
+                case "list-books":
+                    libraryService.printBooks();
                     break;
                 case "edit-book":
-                    bookService.editBook(Integer.parseInt(command[1]),
+                    if (!syntaxChecker.checkEditBookCommandSyntax(command)) {
+                        continue;
+                    }
+                    libraryService.editBook(Integer.parseInt(command[1]),
                             command[2],
                             command[3],
                             Integer.parseInt(command[4]));
                     break;
                 case "delete-book":
-                    bookService.deleteBook(Integer.parseInt(command[1]));
+                    if (!syntaxChecker.checkDeleteBookCommandSyntax(command)) {
+                        continue;
+                    }
+                    libraryService.deleteBook(Integer.parseInt(command[1]));
                     break;
-//                case "get-book":
-//                    bookService.getBook(Integer.parseInt(command[1]));
-//                    break;
                 case "help":
-                    showHelp();
+                    printer.printHelp();
                     break;
                 default:
-                    showDefaultErrorMessage();
-                    break;
+                    printer.printWrongCommand();
             }
         }
     }
 
     /**
-     * Выводит сообщение об ошибке при вводе несуществующей команды
-     */
-    private static void showDefaultErrorMessage() {
-        //TODO
-    }
-
-    /**
      * Считывает команду пользователя и разбивает её на название и параметры
-     * @return
      */
-    private static String[] readCommand() {
+    private String[] readCommand() {
         Scanner scanner = new Scanner(System.in);
         String command = scanner.nextLine();
         List<String> args = new ArrayList<>();
@@ -69,7 +80,7 @@ public class Main {
         Pattern pattern = Pattern.compile("[\"“](.*?)[\"”]|(\\S+)");
         // выбирает либо выражения в ковычках, либо выражения без пробела
         Matcher matcher = pattern.matcher(command);
-        while(matcher.find()) {
+        while (matcher.find()) {
             String subString = matcher.group(1);
             if (subString != null) {
                 args.add(subString);
@@ -77,14 +88,6 @@ public class Main {
                 args.add(matcher.group(2));
             }
         }
-
         return args.toArray(new String[0]);
-    }
-
-    /**
-     * Выводит справку по всем командам
-     */
-    private static void showHelp() {
-        //TODO
     }
 }
