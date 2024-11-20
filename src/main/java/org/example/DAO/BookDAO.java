@@ -1,5 +1,6 @@
-package org.example.model;
+package org.example.DAO;
 
+import org.example.model.Book;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 

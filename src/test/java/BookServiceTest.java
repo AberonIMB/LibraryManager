@@ -1,5 +1,5 @@
 import org.example.model.Book;
-import org.example.model.BookDAO;
+import org.example.DAO.BookDAO;
 import org.example.service.BookService;
 import org.example.util.Printer;
 import org.junit.jupiter.api.Assertions;

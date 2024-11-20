@@ -1,7 +1,7 @@
 package org.example.service;
 
 import org.example.model.Book;
-import org.example.model.BookDAO;
+import org.example.DAO.BookDAO;
 import org.example.util.Printer;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
