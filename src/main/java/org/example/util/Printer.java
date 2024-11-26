@@ -10,10 +10,17 @@ import java.util.List;
 public class Printer {
 
     /**
-     * Выводит сообщение об ошибке: ID и год публикации должны быть представлены числом
+     * Выводит сообщение об ошибке: ID должен быть представлен числом
      */
-    public void printNotNumberError() {
-        System.out.println("ID и год публикации должны быть представлены числом.");
+    public void printIdNotNumberError() {
+        System.out.println("ID должен быть представлен числом.");
+    }
+
+    /**
+     * Выводит сообщение об ошибке: Год публикации должен быть представлен числом
+     */
+    public void printYearNotNumberError() {
+        System.out.println("Год публикации должен быть представлен числом.");
     }
 
     /**
@@ -78,14 +85,14 @@ public class Printer {
     /**
      * Выводит сообщение об успешном удалении книги
      */
-    public void printBookDeleted(int id) {
+    public void printBookDeleted(Long id) {
         System.out.printf("Книга с ID %d успешно удалена.\n", id);
     }
 
     /**
      * Выводит сообщение, если книга с указанным ID не найдена
      */
-    public void printBookNotFound(int id) {
+    public void printBookNotFound(Long id) {
         System.out.printf("Книга с ID %d не найдена.\n", id);
     }
 

@@ -58,7 +58,8 @@ public class SyntaxCheckerTest {
     public void testCheckAddBookCommandSyntaxYearNotNumber() {
         String[] command = new String[]{"add-book", "title", "author", "year"};
 
-        assertIdOrYearNotNumberCommand(syntaxChecker.checkAddBookCommandSyntax(command));
+        assertIdOrYearNotNumberCommand(syntaxChecker.checkAddBookCommandSyntax(command),
+                "Год публикации должен быть представлен числом.");
     }
 
     /**
@@ -83,13 +84,25 @@ public class SyntaxCheckerTest {
     }
 
     /**
-     * Проверяет корректность работы метода checkEditBookCommandSyntax с неверным типом аргумента
+     * Проверяет корректность работы метода checkEditBookCommandSyntax с неверным типом ID
      */
     @Test
-    public void testCheckEditBookCommandSyntaxYearOrIdNotNumber() {
-        String[] command = new String[]{"edit-book", "id", "title", "author", "year"};
+    public void testCheckEditBookCommandSyntaxIdNotNumber() {
+        String[] command = new String[]{"edit-book", "id", "title", "author", "2020"};
 
-        assertIdOrYearNotNumberCommand(syntaxChecker.checkEditBookCommandSyntax(command));
+        assertIdOrYearNotNumberCommand(syntaxChecker.checkEditBookCommandSyntax(command),
+                "ID должен быть представлен числом.");
+    }
+
+    /**
+     * Проверяет корректность работы метода checkEditBookCommandSyntax с неверным типом года публикации
+     */
+    @Test
+    public void testCheckEditBookCommandSyntaxYearNotNumber() {
+        String[] command = new String[]{"edit-book", "1", "title", "author", "year"};
+
+        assertIdOrYearNotNumberCommand(syntaxChecker.checkEditBookCommandSyntax(command),
+                "Год публикации должен быть представлен числом.");
     }
 
     /**
@@ -120,9 +133,9 @@ public class SyntaxCheckerTest {
     @Test
     public void testCheckDeleteBookCommandSyntaxIdNotNumber() {
         String[] command = new String[]{"delete-book", "book"};
-        boolean answer = syntaxChecker.checkDeleteBookCommandSyntax(command);
 
-        assertIdOrYearNotNumberCommand(answer);
+        assertIdOrYearNotNumberCommand(syntaxChecker.checkDeleteBookCommandSyntax(command),
+                "ID должен быть представлен числом.");
     }
 
     /**
@@ -152,9 +165,8 @@ public class SyntaxCheckerTest {
      * Проверяет, что аргумент команды имеет неверный тип и выводит правильное сообщение об ошибке
      * @param answer результат проверки команды(должен быть false)
      */
-    private void assertIdOrYearNotNumberCommand(boolean answer) {
+    private void assertIdOrYearNotNumberCommand(boolean answer, String outputMessage) {
         Assertions.assertFalse(answer);
-        Assertions.assertEquals("ID и год публикации должны быть представлены числом.",
-                outputStreamCaptor.toString().trim());
+        Assertions.assertEquals(outputMessage, outputStreamCaptor.toString().trim());
     }
 }

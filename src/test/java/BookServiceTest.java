@@ -65,10 +65,10 @@ public class BookServiceTest {
 
         Book book = new Book("Преступление и наказание", "Фёдор Достоевский", 866);
         Mockito.doNothing().when(bookDAOMock).update(book);
-        Mockito.when(bookDAOMock.getById(1)).thenReturn(book);
-        bookService.editBook(1, "Преступление и наказание", "Фёдор Достоевский", 1866);
+        Mockito.when(bookDAOMock.getById(1L)).thenReturn(book);
+        bookService.editBook(1L, "Преступление и наказание", "Фёдор Достоевский", 1866);
         runAssertEqualsTest("Преступление и наказание", "Фёдор Достоевский", 1866, book);
-        Mockito.verify(bookDAOMock, Mockito.times(1)).getById(1);
+        Mockito.verify(bookDAOMock, Mockito.times(1)).getById(1L);
         Mockito.verify(bookDAOMock, Mockito.times(1)).update(Mockito.eq(book));
     }
 
@@ -78,10 +78,10 @@ public class BookServiceTest {
     @Test
     public void deleteBookInvokesDelete() {
         Book book = new Book("Война и мир", "Лев Толстой", 1869);
-        Mockito.doNothing().when(bookDAOMock).deleteBook(Mockito.any(Integer.class));
-        Mockito.when(bookDAOMock.getById(1)).thenReturn(book);
-        bookService.deleteBook(1);
-        Mockito.verify(bookDAOMock, Mockito.times(1)).deleteBook(1);
+        Mockito.doNothing().when(bookDAOMock).deleteBook(Mockito.any(Long.class));
+        Mockito.when(bookDAOMock.getById(1L)).thenReturn(book);
+        bookService.deleteBook(1L);
+        Mockito.verify(bookDAOMock, Mockito.times(1)).deleteBook(1L);
     }
 
     /**
@@ -89,9 +89,9 @@ public class BookServiceTest {
      */
     @Test
     public void deleteNotAddedBookNotInvokesDelete() {
-        Mockito.when(bookDAOMock.getById(1)).thenReturn(null);
-        bookService.deleteBook(1);
-        Mockito.verify(bookDAOMock, Mockito.never()).deleteBook(1);
+        Mockito.when(bookDAOMock.getById(1L)).thenReturn(null);
+        bookService.deleteBook(1L);
+        Mockito.verify(bookDAOMock, Mockito.never()).deleteBook(1L);
     }
 
     /**
@@ -100,11 +100,11 @@ public class BookServiceTest {
     @Test
     public void getBookTest() {
         Book book = new Book("Война и мир", "Лев Толстой", 1869);
-        Mockito.when(bookDAOMock.getById(1)).thenReturn(book);
-        Book result = bookService.getBook(1);
+        Mockito.when(bookDAOMock.getById(1L)).thenReturn(book);
+        Book result = bookService.getBook(1L);
         Assertions.assertNotNull(result);
         runAssertEqualsTest("Война и мир", "Лев Толстой", 1869, result);
-        Mockito.verify(bookDAOMock, Mockito.times(1)).getById(1);
+        Mockito.verify(bookDAOMock, Mockito.times(1)).getById(1L);
     }
 
     /**
@@ -112,10 +112,10 @@ public class BookServiceTest {
      */
     @Test
     public void getNotAddedBook() {
-        Mockito.when(bookDAOMock.getById(1)).thenReturn(null);
-        Book result = bookService.getBook(1);
+        Mockito.when(bookDAOMock.getById(1L)).thenReturn(null);
+        Book result = bookService.getBook(1L);
         Assertions.assertNull(result);
-        Mockito.verify(bookDAOMock, Mockito.times(1)).getById(1);
+        Mockito.verify(bookDAOMock, Mockito.times(1)).getById(1L);
     }
 
     /**

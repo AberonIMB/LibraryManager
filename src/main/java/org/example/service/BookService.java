@@ -42,7 +42,7 @@ public class BookService {
     /**
      * Редактировать книгу по id
      */
-    public void editBook(int id, String title, String author, int publicationYear) {
+    public void editBook(Long id, String title, String author, int publicationYear) {
         Book book = bookDAO.getById(id);
         if (book == null) {
             printer.printBookNotFound(id);
@@ -56,7 +56,7 @@ public class BookService {
     /**
      * Удалить книгу по id
      */
-    public void deleteBook(int id) {
+    public void deleteBook(Long id) {
         Book book = bookDAO.getById(id);
         if (book == null) {
             printer.printBookNotFound(id);
@@ -69,7 +69,7 @@ public class BookService {
     /**
      * Получить и вывести книгу по id
      */
-    public Book getBook(int id) {
+    public Book getBook(Long id) {
         Book book = bookDAO.getById(id);
         if (book == null) {
             printer.printBookNotFound(id);
@@ -77,13 +77,5 @@ public class BookService {
             printer.printBookInfo(book);
         }
         return book;
-    }
-
-    /**
-     * Вывести спискок книг
-     */
-    public void printBooks() {
-        List<Book> bookList = getListBooks();
-        printer.printBookList(bookList);
     }
 }
