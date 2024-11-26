@@ -19,7 +19,7 @@ public class SyntaxChecker {
             return false;
         }
         if (!command[3].matches("\\d+")) {
-            printer.printNotNumberError();
+            printer.printYearNotNumberError();
             return false;
         }
         return true;
@@ -35,10 +35,15 @@ public class SyntaxChecker {
             printer.printNotEnoughArgsError(command.length - 1, 4);
             return false;
         }
-        if (!command[1].matches("\\d+") || !command[4].matches("\\d+")) {
-            printer.printNotNumberError();
+        if (!command[1].matches("\\d+")) {
+            printer.printIdNotNumberError();
             return false;
         }
+        if (!command[4].matches("\\d+")) {
+            printer.printYearNotNumberError();
+            return false;
+        }
+
         return true;
     }
 
@@ -53,7 +58,7 @@ public class SyntaxChecker {
             return false;
         }
         if (!command[1].matches("\\d+")) {
-            printer.printNotNumberError();
+            printer.printIdNotNumberError();
             return false;
         }
         return true;

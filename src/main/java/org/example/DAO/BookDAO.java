@@ -1,5 +1,6 @@
-package org.example.model;
+package org.example.DAO;
 
+import org.example.model.Book;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -44,7 +45,7 @@ public class BookDAO {
     /**
      * Получает книгу по её ID
      */
-    public Book getById(int id) {
+    public Book getById(Long id) {
         try (Session session = factory.getCurrentSession()) {
             session.beginTransaction();
             Book book = session.get(Book.class, id);
@@ -68,7 +69,7 @@ public class BookDAO {
     /**
      * Удаляет книгу из базы данных по ID
      */
-    public void deleteBook(int id) {
+    public void deleteBook(Long id) {
         try (Session session = factory.getCurrentSession()) {
             session.beginTransaction();
             Book book = session.get(Book.class, id);
