@@ -3,6 +3,7 @@ package org.example.DAO;
 import org.example.model.Book;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import java.util.List;
 
@@ -24,7 +25,9 @@ public class BookDAO {
      */
     public void save(Book book) {
         try (Session session = factory.openSession()) {
+            Transaction transaction = session.beginTransaction();
             session.persist(book);
+            transaction.commit();
         }
     }
 
@@ -51,7 +54,9 @@ public class BookDAO {
      */
     public void update(Book book) {
         try (Session session = factory.openSession()) {
+            Transaction transaction = session.beginTransaction();
             session.merge(book);
+            transaction.commit();
         }
     }
 
@@ -60,7 +65,9 @@ public class BookDAO {
      */
     public void deleteBook(Book book) {
         try (Session session = factory.openSession()) {
+            Transaction transaction = session.beginTransaction();
             session.remove(book);
+            transaction.commit();
         }
     }
 }
