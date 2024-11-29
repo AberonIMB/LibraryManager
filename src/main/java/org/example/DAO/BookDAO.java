@@ -23,7 +23,7 @@ public class BookDAO {
      * Сохраняет книгу в базе данных
      */
     public void save(Book book) {
-        try (Session session = factory.getCurrentSession()) {
+        try (Session session = factory.openSession()) {
             session.persist(book);
         }
     }
@@ -32,7 +32,7 @@ public class BookDAO {
      * Получает список всех книг из базы данных
      */
     public List<Book> getAll() {
-        try (Session session = factory.getCurrentSession()) {
+        try (Session session = factory.openSession()) {
             return session.createQuery("from Book", Book.class).getResultList();
         }
     }
@@ -41,7 +41,7 @@ public class BookDAO {
      * Получает книгу по её ID
      */
     public Book getById(Long id) {
-        try (Session session = factory.getCurrentSession()) {
+        try (Session session = factory.openSession()) {
             return session.get(Book.class, id);
         }
     }
@@ -50,7 +50,7 @@ public class BookDAO {
      * Обновляет данные существующей книги в базе данных
      */
     public void update(Book book) {
-        try (Session session = factory.getCurrentSession()) {
+        try (Session session = factory.openSession()) {
             session.merge(book);
         }
     }
@@ -59,7 +59,7 @@ public class BookDAO {
      * Удаляет книгу из базы данных по ID
      */
     public void deleteBook(Book book) {
-        try (Session session = factory.getCurrentSession()) {
+        try (Session session = factory.openSession()) {
             session.remove(book);
         }
     }
