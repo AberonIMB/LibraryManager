@@ -84,7 +84,7 @@ public class SyntaxChecker {
      */
     public boolean checkEditReaderCommandSyntax(String[] command) {
         if (command.length != 3) {
-            printer.printNotEnoughArgsError(command.length - 1, 1);
+            printer.printNotEnoughArgsError(command.length - 1, 2);
             return false;
         }
         if (!command[1].matches("\\d+")) {
@@ -101,7 +101,7 @@ public class SyntaxChecker {
      */
     public boolean checkCheckoutCommand(String[] command) {
         if (command.length != 3) {
-            printer.printNotEnoughArgsError(command.length - 1, 1);
+            printer.printNotEnoughArgsError(command.length - 1, 2);
             return false;
         }
         if (!command[1].matches("\\d+") || !command[2].matches("\\d+")) {

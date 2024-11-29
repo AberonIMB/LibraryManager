@@ -106,12 +106,12 @@ public class SyntaxCheckerTest {
     }
 
     /**
-     * Проверяет корректность работы метода checkDeleteBookCommandSyntax с правильными данными
+     * Проверяет корректность работы метода checkCommandSyntaxWithIdOnly с правильными данными
      */
     @Test
     public void testCheckDeleteBookCommandSyntaxCorrect() {
         String[] command = new String[]{"delete-book", "1"};
-        boolean answer = syntaxChecker.checkDeleteBookCommandSyntax(command);
+        boolean answer = syntaxChecker.checkCommandSyntaxWithIdOnly(command);
 
         assertCorrectCommand(answer);
     }
@@ -122,7 +122,7 @@ public class SyntaxCheckerTest {
     @Test
     public void testCheckDeleteBookCommandSyntaxInvalidArgsCount() {
         String[] command = new String[]{"delete-book", "book", "title"};
-        boolean answer = syntaxChecker.checkDeleteBookCommandSyntax(command);
+        boolean answer = syntaxChecker.checkCommandSyntaxWithIdOnly(command);
 
         assertInvalidArgsCountCommand(answer, 1, command);
     }
@@ -134,12 +134,99 @@ public class SyntaxCheckerTest {
     public void testCheckDeleteBookCommandSyntaxIdNotNumber() {
         String[] command = new String[]{"delete-book", "book"};
 
-        assertIdOrYearNotNumberCommand(syntaxChecker.checkDeleteBookCommandSyntax(command),
+        assertIdOrYearNotNumberCommand(syntaxChecker.checkCommandSyntaxWithIdOnly(command),
+                "ID должен быть представлен числом.");
+    }
+
+    /**
+     * Проверяет корректность работы метода checkEditReaderCommandSyntax с правильными данными
+     */
+    @Test
+    public void testCheckEditReaderCommandSyntaxCorrect() {
+        String[] command = new String[]{"edit-reader", "1", "name"};
+        assertCorrectCommand(syntaxChecker.checkEditReaderCommandSyntax(command));
+    }
+
+    /**
+     * Проверяет корректность работы метода checkEditReaderCommandSyntax с неверным количетсвом аргументов
+     */
+    @Test
+    public void testCheckEditReaderCommandSyntaxInvalidArgsCount() {
+        String[] command = new String[]{"edit-reader", "1", "name", "notName"};
+        boolean answer = syntaxChecker.checkEditReaderCommandSyntax(command);
+        assertInvalidArgsCountCommand(answer, 2, command);
+    }
+
+    /**
+     * Проверяет корректность работы метода checkEditReaderCommandSyntax с неверным типом ID
+     */
+    @Test
+    public void testCheckEditReaderCommandSyntaxIdNotNumber() {
+        String[] command = new String[]{"edit-reader", "ID", "name"};
+        assertIdOrYearNotNumberCommand(syntaxChecker.checkEditReaderCommandSyntax(command),
+                "ID должен быть представлен числом.");    }
+
+    /**
+     * Проверяет корректность работы метода AddReaderCommandSyntax с правильными данными
+     */
+    @Test
+    public void testCheckAddReaderCommandSyntaxCorrect() {
+        String[] command = new String[]{"edit-reader", "name"};
+        assertCorrectCommand(syntaxChecker.checkAddReaderCommandSyntax(command));
+    }
+
+    /**
+     * Проверяет корректность работы метода AddReaderCommandSyntax с неверным количетсвом аргументов
+     */
+    @Test
+    public void testCheckAddReaderCommandSyntaxInvalidArgsCount() {
+        String[] command = new String[]{"edit-reader", "name", "notName"};
+        boolean answer = syntaxChecker.checkAddReaderCommandSyntax(command);
+        assertInvalidArgsCountCommand(answer, 1, command);
+    }
+
+    /**
+     * Проверяет корректность работы метода checkCheckoutCommand с правильными данными
+     */
+    @Test
+    public void testCheckCheckoutBookCommandSyntaxCorrect() {
+        String[] command = new String[]{"checkout-book", "1", "2"};
+        assertCorrectCommand(syntaxChecker.checkCheckoutCommand(command));
+    }
+
+    /**
+     * Проверяет корректность работы метода checkCheckoutCommand с неверным количетсвом аргументов
+     */
+    @Test
+    public void testCheckCheckoutBookCommandSyntaxInvalidArgsCount() {
+        String[] command = new String[]{"edit-reader", "1"};
+        boolean answer = syntaxChecker.checkCheckoutCommand(command);
+        assertInvalidArgsCountCommand(answer, 2, command);
+    }
+
+    /**
+     * Проверяет корректность работы метода checkCheckoutCommand с неверным типом ID книги
+     */
+    @Test
+    public void testCheckCheckoutCommandSyntaxBookIdNotNumber() {
+        String[] command = new String[]{"edit-reader", "bookID", "2"};
+        assertIdOrYearNotNumberCommand(syntaxChecker.checkCheckoutCommand(command),
+                "ID должен быть представлен числом.");
+    }
+
+    /**
+     * Проверяет корректность работы метода checkCheckoutCommand неверным типом ID читателя
+     */
+    @Test
+    public void testCheckCheckoutCommandSyntaxReaderIdNotNumber() {
+        String[] command = new String[]{"edit-reader", "1", "readerID"};
+        assertIdOrYearNotNumberCommand(syntaxChecker.checkCheckoutCommand(command),
                 "ID должен быть представлен числом.");
     }
 
     /**
      * Проверяет, что команда является правильной и вывод пустой строкой
+     *
      * @param answer результат проверки команды(должен быть true)
      */
     private void assertCorrectCommand(boolean answer) {
@@ -149,9 +236,10 @@ public class SyntaxCheckerTest {
 
     /**
      * Проверяет, что команда имеет неверное количество аргументов и выводит правильное сообщение об ошибке
-     * @param answer результат проверки команды(должен быть false)
+     *
+     * @param answer        результат проверки команды(должен быть false)
      * @param expectedCount ожидаемое число аргументов
-     * @param command выполненная команда
+     * @param command       выполненная команда
      */
     private void assertInvalidArgsCountCommand(boolean answer, int expectedCount, String[] command) {
         Assertions.assertFalse(answer);
@@ -163,6 +251,7 @@ public class SyntaxCheckerTest {
 
     /**
      * Проверяет, что аргумент команды имеет неверный тип и выводит правильное сообщение об ошибке
+     *
      * @param answer результат проверки команды(должен быть false)
      */
     private void assertIdOrYearNotNumberCommand(boolean answer, String outputMessage) {

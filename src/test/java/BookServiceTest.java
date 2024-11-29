@@ -1,5 +1,6 @@
 import org.example.model.Book;
 import org.example.DAO.BookDAO;
+import org.example.model.Reader;
 import org.example.service.BookService;
 import org.example.util.Printer;
 import org.junit.jupiter.api.Assertions;
@@ -108,7 +109,7 @@ public class BookServiceTest {
     }
 
     /**
-     * Проверяет корректность получения не добавленной книги по ID или книги или с неверным ID
+     * Проверяет корректность получения не добавленной книги по ID или книги с неверным ID
      */
     @Test
     public void getNotAddedBook() {
@@ -126,6 +127,29 @@ public class BookServiceTest {
         bookService.addBook("Преступление и наказание", "Фёдор Достоевский", 1866);
         bookService.addBook("Преступление и наказание", "Фёдор Достоевский", 1866);
         Mockito.verify(bookDAOMock, Mockito.times(2)).save(Mockito.any(Book.class));
+    }
+
+    /**
+     * Проверяет, что метод checkoutBook у bookService
+     */
+    @Test
+    public void checkoutBookTestCorrect() {
+        Book book = new Book("Преступление и наказание", "Фёдор Достоевский", 1866);
+        Mockito.when(bookDAOMock.getById(1L)).thenReturn(book);
+        Reader reader = new Reader("Читатель - 1");
+        bookService.checkoutBook(1L, reader);
+        Mockito.verify(bookDAOMock, Mockito.times(1)).update(Mockito.eq(book));
+    }
+
+    /**
+     * Проверяет, что метод checkoutBook у bookService не вызывает update, если книга не найдена
+     */
+    @Test
+    public void checkoutBookWithNullBookNotInvokeUpdate() {
+        Mockito.when(bookDAOMock.getById(1L)).thenReturn(null);
+        Reader reader = new Reader("Читатель - 1");
+        bookService.checkoutBook(1L, reader);
+        Mockito.verify(bookDAOMock, Mockito.never()).update(Mockito.eq(null));
     }
 
     /**
