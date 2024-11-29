@@ -78,10 +78,10 @@ public class BookServiceTest {
     @Test
     public void deleteBookInvokesDelete() {
         Book book = new Book("Война и мир", "Лев Толстой", 1869);
-        Mockito.doNothing().when(bookDAOMock).deleteBook(Mockito.any(Long.class));
+        Mockito.doNothing().when(bookDAOMock).deleteBook(Mockito.any(Book.class));
         Mockito.when(bookDAOMock.getById(1L)).thenReturn(book);
         bookService.deleteBook(1L);
-        Mockito.verify(bookDAOMock, Mockito.times(1)).deleteBook(1L);
+        Mockito.verify(bookDAOMock, Mockito.times(1)).deleteBook(book);
     }
 
     /**
@@ -91,7 +91,7 @@ public class BookServiceTest {
     public void deleteNotAddedBookNotInvokesDelete() {
         Mockito.when(bookDAOMock.getById(1L)).thenReturn(null);
         bookService.deleteBook(1L);
-        Mockito.verify(bookDAOMock, Mockito.never()).deleteBook(1L);
+        Mockito.verify(bookDAOMock, Mockito.never()).deleteBook(Mockito.any(Book.class));
     }
 
     /**

@@ -62,7 +62,7 @@ public class BookService {
             printer.printBookNotFound(id);
             return;
         }
-        bookDAO.deleteBook(id);
+        bookDAO.deleteBook(book);
         printer.printBookDeleted(id);
     }
 

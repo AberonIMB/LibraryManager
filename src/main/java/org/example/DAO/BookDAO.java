@@ -24,9 +24,7 @@ public class BookDAO {
      */
     public void save(Book book) {
         try (Session session = factory.getCurrentSession()) {
-            session.beginTransaction();
             session.persist(book);
-            session.getTransaction().commit();
         }
     }
 
@@ -35,10 +33,7 @@ public class BookDAO {
      */
     public List<Book> getAll() {
         try (Session session = factory.getCurrentSession()) {
-            session.beginTransaction();
-            List<Book> books = session.createQuery("from Book", Book.class).getResultList();
-            session.getTransaction().commit();
-            return books;
+            return session.createQuery("from Book", Book.class).getResultList();
         }
     }
 
@@ -47,10 +42,7 @@ public class BookDAO {
      */
     public Book getById(Long id) {
         try (Session session = factory.getCurrentSession()) {
-            session.beginTransaction();
-            Book book = session.get(Book.class, id);
-            session.getTransaction().commit();
-            return book;
+            return session.get(Book.class, id);
         }
     }
 
@@ -59,24 +51,16 @@ public class BookDAO {
      */
     public void update(Book book) {
         try (Session session = factory.getCurrentSession()) {
-            session.beginTransaction();
             session.merge(book);
-            session.getTransaction().commit();
         }
     }
-
 
     /**
      * Удаляет книгу из базы данных по ID
      */
-    public void deleteBook(Long id) {
+    public void deleteBook(Book book) {
         try (Session session = factory.getCurrentSession()) {
-            session.beginTransaction();
-            Book book = session.get(Book.class, id);
-            if (book != null) {
-                session.remove(book);
-            }
-            session.getTransaction().commit();
+            session.remove(book);
         }
     }
 }
