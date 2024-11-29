@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.model.Book;
 import org.example.DAO.BookDAO;
+import org.example.model.Reader;
 import org.example.util.Printer;
 
 import java.util.*;
@@ -77,5 +78,38 @@ public class BookService {
             printer.printBookInfo(book);
         }
         return book;
+    }
+
+    /**
+     * Выдать книгу читателю
+     */
+    public void checkoutBook(Long bookId, Reader reader) {
+        Book book = bookDAO.getById(bookId);
+        if (book == null) {
+            printer.printBookNotFound(bookId);
+            return;
+        }
+        if (book.getReader() != null) {
+            printer.printBookAlreadyCheckoutError();
+            return;
+        }
+        book.setReader(reader);
+        bookDAO.update(book);
+        printer.printBookCheckout(bookId, reader);
+
+    }
+
+    /**
+     *  Вернуть книгу
+     */
+    public void returnBook(long bookID) {
+        Book book = bookDAO.getById(bookID);
+        if (book.getReader() == null) {
+            printer.printBookAlreadyReturnedError();
+            return;
+        }
+        book.setReader(null);
+        bookDAO.update(book);
+        printer.printBookReturned();
     }
 }

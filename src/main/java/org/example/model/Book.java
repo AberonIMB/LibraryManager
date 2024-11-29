@@ -1,6 +1,7 @@
 package org.example.model;
 
 import jakarta.persistence.*;
+
 import java.util.Objects;
 
 /**
@@ -34,6 +35,9 @@ public class Book {
      */
     @Column(name = "publication_year")
     private int publicationYear;
+
+    @ManyToOne
+    private Reader reader;
 
     /**
      * Пустой конструктор для Hibernate
@@ -79,6 +83,13 @@ public class Book {
     }
 
     /**
+     * Получить читателя, взявшего книгу
+     */
+    public Reader getReader() {
+        return reader;
+    }
+
+    /**
      * Установить новые значения для назвавния, автора и года публикации книги
      */
     public void setNewData(String title, String author, int publicationYear) {
@@ -107,8 +118,14 @@ public class Book {
     }
 
     /**
+     * Присваевает нового reader
+     */
+    public void setReader(Reader reader) {
+        this.reader = reader;
+    }
+    /**
      * Сравнивает этот объект с другим объектом на равенство
-     * @return true - если
+     * @return true - если равны, иначе false
      */
     @Override
     public boolean equals(Object o) {
