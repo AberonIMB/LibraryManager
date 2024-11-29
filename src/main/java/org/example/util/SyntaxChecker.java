@@ -48,16 +48,63 @@ public class SyntaxChecker {
     }
 
     /**
-     * Проверка синтаксиса команды deleteBook
+     * Проверка синтаксиса команд удаления
      *
      * @return true - если соответствует, иначе false
      */
-    public boolean checkDeleteBookCommandSyntax(String[] command) {
+    public boolean checkCommandSyntaxWithIdOnly(String[] command) {
         if (command.length != 2) {
             printer.printNotEnoughArgsError(command.length - 1, 1);
             return false;
         }
         if (!command[1].matches("\\d+")) {
+            printer.printIdNotNumberError();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Проверка синтаксиса команды добавления читателя
+     *
+     * @return true - если соответствует, иначе false
+     */
+    public boolean checkAddReaderCommandSyntax(String[] command) {
+        if (command.length != 2) {
+            printer.printNotEnoughArgsError(command.length - 1, 1);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Проверка синтаксиса команды изменения читателя
+     *
+     * @return true - если соответствует, иначе false
+     */
+    public boolean checkEditReaderCommandSyntax(String[] command) {
+        if (command.length != 3) {
+            printer.printNotEnoughArgsError(command.length - 1, 1);
+            return false;
+        }
+        if (!command[1].matches("\\d+")) {
+            printer.printIdNotNumberError();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Проверка синтаксиса команды выдачи книг
+     *
+     * @return true - если соответствует, иначе false
+     */
+    public boolean checkCheckoutCommand(String[] command) {
+        if (command.length != 3) {
+            printer.printNotEnoughArgsError(command.length - 1, 1);
+            return false;
+        }
+        if (!command[1].matches("\\d+") || !command[2].matches("\\d+")) {
             printer.printIdNotNumberError();
             return false;
         }
