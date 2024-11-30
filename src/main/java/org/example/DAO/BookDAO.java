@@ -3,6 +3,7 @@ package org.example.DAO;
 import org.example.model.Book;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import java.util.List;
 
@@ -23,10 +24,10 @@ public class BookDAO {
      * Сохраняет книгу в базе данных
      */
     public void save(Book book) {
-        try (Session session = factory.getCurrentSession()) {
-            session.beginTransaction();
+        try (Session session = factory.openSession()) {
+            Transaction transaction = session.beginTransaction();
             session.persist(book);
-            session.getTransaction().commit();
+            transaction.commit();
         }
     }
 
@@ -34,11 +35,8 @@ public class BookDAO {
      * Получает список всех книг из базы данных
      */
     public List<Book> getAll() {
-        try (Session session = factory.getCurrentSession()) {
-            session.beginTransaction();
-            List<Book> books = session.createQuery("from Book", Book.class).getResultList();
-            session.getTransaction().commit();
-            return books;
+        try (Session session = factory.openSession()) {
+            return session.createQuery("from Book", Book.class).getResultList();
         }
     }
 
@@ -46,11 +44,8 @@ public class BookDAO {
      * Получает книгу по её ID
      */
     public Book getById(Long id) {
-        try (Session session = factory.getCurrentSession()) {
-            session.beginTransaction();
-            Book book = session.get(Book.class, id);
-            session.getTransaction().commit();
-            return book;
+        try (Session session = factory.openSession()) {
+            return session.get(Book.class, id);
         }
     }
 
@@ -58,25 +53,21 @@ public class BookDAO {
      * Обновляет данные существующей книги в базе данных
      */
     public void update(Book book) {
-        try (Session session = factory.getCurrentSession()) {
-            session.beginTransaction();
+        try (Session session = factory.openSession()) {
+            Transaction transaction = session.beginTransaction();
             session.merge(book);
-            session.getTransaction().commit();
+            transaction.commit();
         }
     }
-
 
     /**
      * Удаляет книгу из базы данных по ID
      */
-    public void deleteBook(Long id) {
-        try (Session session = factory.getCurrentSession()) {
-            session.beginTransaction();
-            Book book = session.get(Book.class, id);
-            if (book != null) {
-                session.remove(book);
-            }
-            session.getTransaction().commit();
+    public void deleteBook(Book book) {
+        try (Session session = factory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.remove(book);
+            transaction.commit();
         }
     }
 }
