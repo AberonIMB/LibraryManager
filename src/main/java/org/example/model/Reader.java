@@ -76,7 +76,7 @@ public class Reader {
             booksString.append("Нет выданных книг");
         } else {
             for (Book book : books) {
-                booksString.append("\n\t%s".formatted(book.getBookShortInfo()));
+                booksString.append("\n\t%s".formatted(book.getBookShortInfoForReaderList()));
             }
         }
 

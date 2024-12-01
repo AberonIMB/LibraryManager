@@ -96,17 +96,22 @@ public class Book {
                         ID: %d
                         Название: %s
                         Автор: %s
-                        Год издания: %d""",
-                id, title, author, publicationYear);
+                        Год издания: %d
+                        Статус: %s""",
+                id, title, author, publicationYear, reader == null ? "в библиотеке" : "выдана");
     }
 
     /**
-     * Возвращает информуцию о книге в кратком виде
+     * Возвращает информуцию о книге в кратком виде для просмотра в списке книг читателя
      */
-    public String getBookShortInfo() {
+    public String getBookShortInfoForReaderList() {
         return String.format("[%d] %s - %s (%d)", id, title, author, publicationYear);
     }
 
+    public String getBookShortInfo() {
+        return String.format("[%d] %s - %s (%d) - %s", id, title, author, publicationYear,
+                reader == null ? "в библиотеке" : "выдана");
+    }
     /**
      * Сравнивает этот объект с другим объектом на равенство
      * @return true - если эти объекты равны
