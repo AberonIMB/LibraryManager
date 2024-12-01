@@ -1,7 +1,9 @@
 package org.example.service;
 
+import org.example.DAO.ReaderDAO;
 import org.example.model.Book;
 import org.example.DAO.BookDAO;
+import org.example.model.Reader;
 import org.example.util.Printer;
 import org.example.util.SyntaxChecker;
 import org.hibernate.SessionFactory;
@@ -16,6 +18,8 @@ public class LibraryService {
 
     private final BookService bookService;
 
+    private final ReaderService readerService;
+
     private final SessionFactory factory;
 
     private final SyntaxChecker syntaxChecker;
@@ -27,9 +31,12 @@ public class LibraryService {
         factory = new Configuration()
                 .configure("hibernate.cfg.xml")
                 .addAnnotatedClass(Book.class)
+                .addAnnotatedClass(Reader.class)
                 .buildSessionFactory();
         BookDAO bookDAO = new BookDAO(factory);
+        ReaderDAO readerDAO = new ReaderDAO(factory);
         bookService = new BookService(bookDAO, printer);
+        readerService = new ReaderService(readerDAO, printer);
         syntaxChecker = new SyntaxChecker();
     }
 
@@ -67,5 +74,57 @@ public class LibraryService {
      */
     public SyntaxChecker getSyntaxChecker() {
         return syntaxChecker;
+    }
+
+    /**
+     * Добавить читателя в библиотеку.
+     */
+    public void addReader(String name) {
+        readerService.addReader(name);
+    }
+
+    /**
+     * Редактировать книгу по id
+     */
+    public void editReader(Long id, String name) {
+        readerService.editReader(id, name);
+    }
+
+    /**
+     * Удалить читателя
+     */
+    public void deleteReader(long id) {
+        readerService.deleteReader(id);
+    }
+
+    /**
+     * Получить читателя
+     */
+    public Reader getReader(Long id) {
+        return readerService.getReader(id);
+    }
+
+    /**
+     * Получить список читателей
+     */
+    public List<Reader> getReaderList() {
+        return readerService.getListReaders();
+    }
+
+    /**
+     * Выдать книгу читателю
+     */
+    public void checkoutBook(long bookID, long readerID) {
+        Reader reader = getReader(readerID);
+        if (reader == null)
+            return;
+        bookService.checkoutBook(bookID, reader);
+    }
+
+    /**
+     * Вернуть книгу
+     */
+    public void returnBook(long bookID) {
+        bookService.returnBook(bookID);
     }
 }

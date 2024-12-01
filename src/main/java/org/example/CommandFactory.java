@@ -27,6 +27,13 @@ public class CommandFactory {
         commands.put("edit-book", new EditBookCommandHandler());
         commands.put("delete-book", new DeleteBookCommandHandler());
         commands.put("help", new HelpCommandHandler(printer));
+        commands.put("add-reader", new AddReaderCommandHandler());
+        commands.put("list-readers", new GetReaderListCommandHandler(printer));
+        commands.put("edit-reader", new EditReaderCommandHandler());
+        commands.put("delete-reader", new DeleteReaderCommandHandler());
+        commands.put("show-reader", new ShowReaderCommandHandler(printer));
+        commands.put("checkout-book", new CheckoutBookCommandHandler());
+        commands.put("return-book", new ReturnBookCommandHandler());
     }
 
     /**

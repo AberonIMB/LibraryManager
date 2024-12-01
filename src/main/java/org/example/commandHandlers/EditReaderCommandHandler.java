@@ -3,14 +3,15 @@ package org.example.commandHandlers;
 import org.example.service.LibraryService;
 
 /**
- * Обрабатывает команду удаления книги
- * Если команда корректна - удаляет книгу из библиотеки
+ * Обрабатывает команду редактирования читателя
+ * Если команда корректна - редактирует читателя
  */
-public class DeleteBookCommandHandler implements CommandHandler {
+public class EditReaderCommandHandler implements CommandHandler{
+
     @Override
     public void executeCommand(LibraryService libraryService, String[] command) {
         if (isCommandCorrect(libraryService, command)) {
-            libraryService.deleteBook(Long.parseLong(command[1]));
+            libraryService.editReader(Long.parseLong(command[1]), command[2]);
         }
     }
 
@@ -20,7 +21,7 @@ public class DeleteBookCommandHandler implements CommandHandler {
      * @param command название команды и параметры
      * @return true, если команда корректна, иначе false
      */
-    private boolean isCommandCorrect (LibraryService libraryService, String[] command) {
-        return libraryService.getSyntaxChecker().checkCommandSyntaxWithIdOnly(command);
+    private boolean isCommandCorrect(LibraryService libraryService, String[] command) {
+        return libraryService.getSyntaxChecker().checkEditReaderCommandSyntax(command);
     }
 }

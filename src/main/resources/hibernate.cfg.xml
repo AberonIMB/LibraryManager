@@ -12,5 +12,6 @@
         <property name="hibernate.hbm2ddl.auto">update</property>
         <property name="hibernate.current_session_context_class">thread</property>
         <mapping class="org.example.model.Book"/>
+        <mapping class="org.example.model.Reader"/>
     </session-factory>
 </hibernate-configuration>

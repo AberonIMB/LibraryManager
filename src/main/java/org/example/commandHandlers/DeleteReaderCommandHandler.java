@@ -3,14 +3,14 @@ package org.example.commandHandlers;
 import org.example.service.LibraryService;
 
 /**
- * Обрабатывает команду удаления книги
- * Если команда корректна - удаляет книгу из библиотеки
+ * Обрабатывает команду удаления читателя
+ * Если команда корректна - удаляет читателя из библиотеки
  */
-public class DeleteBookCommandHandler implements CommandHandler {
+public class DeleteReaderCommandHandler implements CommandHandler{
     @Override
     public void executeCommand(LibraryService libraryService, String[] command) {
         if (isCommandCorrect(libraryService, command)) {
-            libraryService.deleteBook(Long.parseLong(command[1]));
+            libraryService.deleteReader(Long.parseLong(command[1]));
         }
     }
 
