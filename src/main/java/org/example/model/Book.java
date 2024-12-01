@@ -108,9 +108,17 @@ public class Book {
         return String.format("[%d] %s - %s (%d)", id, title, author, publicationYear);
     }
 
+    /**
+     * Возвращает информуцию о книге в кратком виде
+     */
     public String getBookShortInfo() {
-        return String.format("[%d] %s - %s (%d) - %s", id, title, author, publicationYear,
-                reader == null ? "в библиотеке" : "выдана");
+        if (reader == null) {
+            return String.format("[%d] %s - %s (%d) - %s", id, title, author, publicationYear, "в библиотеке");
+        }
+
+        return String.format("""
+                [%d] %s - %s (%d)
+                \t\tУ читателя: [%d] %s""", id, title, author, publicationYear, reader.getId(), reader.getName());
     }
     /**
      * Сравнивает этот объект с другим объектом на равенство
