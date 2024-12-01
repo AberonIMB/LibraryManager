@@ -18,8 +18,7 @@ public class ShowReaderCommandHandler implements CommandHandler{
     @Override
     public void executeCommand(LibraryService libraryService, String[] command) {
         if (isCommandCorrect(libraryService, command)) {
-            Reader reader = libraryService.getReader(Long.parseLong(command[1]));
-            printer.printReaderInfo(reader);
+            libraryService.showReader(Long.parseLong(command[1]));
         }
     }
 
