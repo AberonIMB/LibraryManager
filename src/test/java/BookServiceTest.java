@@ -1,5 +1,5 @@
 import org.example.model.Book;
-import org.example.DAO.BookDAO;
+import org.example.dao.BookDAO;
 import org.example.model.Reader;
 import org.example.service.BookService;
 import org.example.util.Printer;

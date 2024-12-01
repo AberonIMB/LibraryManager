@@ -1,7 +1,7 @@
 package org.example.service;
 
 import org.example.model.Book;
-import org.example.DAO.BookDAO;
+import org.example.dao.BookDAO;
 import org.example.model.Reader;
 import org.example.util.Printer;
 
@@ -63,6 +63,10 @@ public class BookService {
             printer.printBookNotFound(id);
             return;
         }
+        if (book.getReader() != null) {
+            printer.printBookAlreadyCheckoutError();
+            return;
+        }
         bookDAO.deleteBook(book);
         printer.printBookDeleted(id);
     }
@@ -95,7 +99,7 @@ public class BookService {
         }
         book.setReader(reader);
         bookDAO.update(book);
-        printer.printBookCheckout(bookId, reader);
+        printer.printBookCheckout(book, reader);
 
     }
 
@@ -104,12 +108,16 @@ public class BookService {
      */
     public void returnBook(long bookID) {
         Book book = bookDAO.getById(bookID);
+        if (book == null) {
+            printer.printBookNotFound(bookID);
+            return;
+        }
         if (book.getReader() == null) {
             printer.printBookAlreadyReturnedError();
             return;
         }
         book.setReader(null);
         bookDAO.update(book);
-        printer.printBookReturned();
+        printer.printBookReturned(book);
     }
 }

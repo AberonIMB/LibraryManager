@@ -3,7 +3,6 @@ package org.example;
 import org.example.commandHandlers.CommandHandler;
 import org.example.service.LibraryService;
 import org.example.util.Printer;
-import org.example.util.SyntaxChecker;
 
 import java.util.ArrayList;
 import java.util.List;
