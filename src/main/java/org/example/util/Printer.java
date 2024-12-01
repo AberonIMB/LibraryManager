@@ -174,7 +174,7 @@ public class Printer {
      * Выводит сообщение, что книга с указанным ID успешно выдана читателю
      */
     public void printBookCheckout(Book book, Reader reader) {
-        System.out.printf("Книга с ID %d успешно выдана читателю %s\n", book.getId(), reader.getReaderShortInfo());
+        System.out.printf("Книга \"%s\" успешно выдана читателю %s\n", book.getTitle(), reader.getReaderShortInfo());
     }
 
     /**
@@ -188,13 +188,13 @@ public class Printer {
      * Выводит сообщение об успешном удалении читателя
      */
     public void printReaderDeleted(Reader reader) {
-        System.out.printf("Пользователь %s успешно удален.\n", reader.getReaderShortInfo());
+        System.out.printf("Читатель %s успешно удален.\n", reader.getReaderShortInfo());
     }
 
     /**
      * Выводит сообщение, что читатель не может быть удален, так как у него есть выданные книги
      */
     public void printReaderDeleteWithNotEmptyBooks(Reader reader) {
-        System.out.printf("Пользователь %s не может быть удален, так как у него есть выданные книги.\n", reader.getReaderShortInfo());
+        System.out.printf("Читатель %s не может быть удален, так как у него есть выданные книги.\n", reader.getReaderShortInfo());
     }
 }
