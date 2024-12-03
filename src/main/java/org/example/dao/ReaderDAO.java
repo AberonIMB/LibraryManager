@@ -1,4 +1,4 @@
-package org.example.DAO;
+package org.example.dao;
 
 import org.example.model.Reader;
 import org.hibernate.Session;

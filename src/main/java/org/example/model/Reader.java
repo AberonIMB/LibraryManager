@@ -39,6 +39,13 @@ public class Reader {
     }
 
     /**
+     * Получить id
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
      * Получить имя
      */
     public String getName() {
@@ -60,14 +67,19 @@ public class Reader {
     }
 
     /**
-     * Возвращает информуцию о читателе в п
-     * олном виде
+     * Возвращает информуцию о читателе в полном виде
      */
     public String getReaderInfo() {
         StringBuilder booksString = new StringBuilder();
-        for (Book book : books) {
-            booksString.append("\n\t%s".formatted(book.getBookShortInfo()));
+
+        if (books.isEmpty()) {
+            booksString.append("Нет выданных книг");
+        } else {
+            for (Book book : books) {
+                booksString.append("\n\t%s".formatted(book.getBookShortInfoForReaderList()));
+            }
         }
+
         return String.format("""
                         ID: %d
                         ФИО: %s
@@ -79,7 +91,7 @@ public class Reader {
      * Возвращает информуцию о читателе в кратком виде
      */
     public String getReaderShortInfo() {
-        return String.format("id: %d ФИО: %s", id, name);
+        return String.format("ID: %d ФИО: %s", id, name);
     }
 
     @Override

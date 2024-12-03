@@ -1,4 +1,4 @@
-import org.example.DAO.ReaderDAO;
+import org.example.dao.ReaderDAO;
 import org.example.model.Book;
 import org.example.model.Reader;
 import org.example.service.ReaderService;

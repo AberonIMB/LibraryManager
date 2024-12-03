@@ -35,14 +35,14 @@ public class Printer {
      * Выводит сообщение об ошибке из-за попытки выдачи уже выданной книги
      */
     public void printBookAlreadyCheckoutError() {
-        //TODO
+        System.out.println("Невозможно выполнить команду, так как книга уже выдана.");
     }
 
     /**
      * Выводит сообщение об ошибке из-за попытки вернуть книгу, которая и так находится в библиотеке
      */
     public void printBookAlreadyReturnedError() {
-        //TODO
+        System.out.println("Невозможно выполнить команду, так как книга уже находится в библиотеке.");
     }
 
     /**
@@ -129,48 +129,72 @@ public class Printer {
      * Выводит информацию о добавленном читателе
      */
     public void printReaderAdded(Reader reader) {
-        //TODO
+        System.out.println("Читатель добавлен в систему:");
+        System.out.println(reader.getReaderShortInfo());
     }
 
     /**
      * Выводит информацию о изменении читателя
      */
     public void printReaderEdited(Reader reader) {
-        //TODO
+        System.out.printf("Имя читателя %d изменено на %s.\n", reader.getId(), reader.getName());
     }
 
     /**
      * Выводит сообщение, если читатель с указанным ID не найден
      */
     public void printReaderNotFound(Long id) {
-        //TODO
+        System.out.printf("Читатель с ID %d не найден.\n", id);
     }
 
     /**
      * Выводит информацию о найденном читателе
      */
     public void printReaderInfo(Reader reader) {
-        //TODO
+        System.out.println(reader.getReaderInfo());
     }
 
     /**
      * Выводит сипсок всех читателей
      */
     public void printReaderList(List<Reader> readers) {
-        //TODO
+        if (readers.isEmpty()) {
+            System.out.println("Список читателей пуст.");
+            return;
+        }
+
+        System.out.println("Читатели:");
+        for (int i = 0; i < readers.size(); i++) {
+            Reader reader = readers.get(i);
+            System.out.printf("%d) %s\n", i + 1, reader.getReaderShortInfo());
+        }
     }
 
     /**
      * Выводит сообщение, что книга с указанным ID успешно выдана читателю
      */
-    public void printBookCheckout(Long id, Reader reader) {
-        //TODO
+    public void printBookCheckout(Book book, Reader reader) {
+        System.out.printf("Книга \"%s\" успешно выдана читателю %s\n", book.getTitle(), reader.getReaderShortInfo());
     }
 
     /**
      * Выводит сообщение, что с указанным ID книга успешно возвращена
      */
-    public void printBookReturned() {
-        //TODO
+    public void printBookReturned(Book book) {
+        System.out.printf("Книга \"%s\" возвращена в библиотеку.\n", book.getTitle());
+    }
+
+    /**
+     * Выводит сообщение об успешном удалении читателя
+     */
+    public void printReaderDeleted(Reader reader) {
+        System.out.printf("Читатель %s успешно удален.\n", reader.getReaderShortInfo());
+    }
+
+    /**
+     * Выводит сообщение, что читатель не может быть удален, так как у него есть выданные книги
+     */
+    public void printReaderDeleteWithNotEmptyBooks(Reader reader) {
+        System.out.printf("Читатель %s не может быть удален, так как у него есть выданные книги.\n", reader.getReaderShortInfo());
     }
 }

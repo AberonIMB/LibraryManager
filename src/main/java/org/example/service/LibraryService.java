@@ -1,8 +1,8 @@
 package org.example.service;
 
-import org.example.DAO.ReaderDAO;
+import org.example.dao.ReaderDAO;
 import org.example.model.Book;
-import org.example.DAO.BookDAO;
+import org.example.dao.BookDAO;
 import org.example.model.Reader;
 import org.example.util.Printer;
 import org.example.util.SyntaxChecker;
@@ -97,11 +97,18 @@ public class LibraryService {
         readerService.deleteReader(id);
     }
 
+//    /**
+//     * Получить читателя
+//     */
+//    public Reader getReader(Long id) {
+//        return readerService.getReader(id);
+//    }
+
     /**
-     * Получить читателя
+     * Вывести информацию о читателе
      */
-    public Reader getReader(Long id) {
-        return readerService.getReader(id);
+    public void showReader(long id) {
+        readerService.showReader(id);
     }
 
     /**
@@ -115,9 +122,10 @@ public class LibraryService {
      * Выдать книгу читателю
      */
     public void checkoutBook(long bookID, long readerID) {
-        Reader reader = getReader(readerID);
-        if (reader == null)
+        Reader reader = readerService.getReader(readerID);
+        if (reader == null) {
             return;
+        }
         bookService.checkoutBook(bookID, reader);
     }
 
