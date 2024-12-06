@@ -1,5 +1,5 @@
 import org.example.model.Book;
-import org.example.DAO.BookDAO;
+import org.example.dao.BookDAO;
 import org.example.service.BookService;
 import org.example.util.Printer;
 import org.junit.jupiter.api.Assertions;
@@ -28,7 +28,7 @@ public class BookServiceTest {
      */
     public BookServiceTest(@Mock BookDAO bookDAOMock) {
         this.bookDAOMock = bookDAOMock;
-        bookService = new BookService(bookDAOMock, new Printer());
+        bookService = new BookService(bookDAOMock);
     }
 
     /**

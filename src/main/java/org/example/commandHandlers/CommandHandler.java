@@ -1,6 +1,6 @@
 package org.example.commandHandlers;
 
-import org.example.service.LibraryService;
+import org.example.Command;
 
 /**
  * Обработчик команды
@@ -8,8 +8,6 @@ import org.example.service.LibraryService;
 public interface CommandHandler {
     /**
      * Выполняет команду
-     * @param libraryService Сервис библиотеки
-     * @param command название команды и параметры
      */
-    void executeCommand(LibraryService libraryService, String[] command);
+    void executeCommand(Command command);
 }

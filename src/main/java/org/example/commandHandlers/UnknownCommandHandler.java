@@ -1,24 +1,20 @@
 package org.example.commandHandlers;
 
-import org.example.service.LibraryService;
-import org.example.util.Printer;
+import org.example.Command;
+import org.example.util.IOHandler;
 
 /**
  * Обрабатывает неизвестную команду
  */
 public class UnknownCommandHandler implements CommandHandler {
-    private final Printer printer;
+    private final IOHandler ioHandler;
 
-    /**
-     * Конструктор
-     * @param printer класс для вывода текста в консоль
-     */
-    public UnknownCommandHandler(Printer printer) {
-        this.printer = printer;
+    public UnknownCommandHandler(IOHandler ioHandler) {
+        this.ioHandler = ioHandler;
     }
 
     @Override
-    public void executeCommand(LibraryService libraryService, String[] command) {
-        printer.printWrongCommand();
+    public void executeCommand(Command command) {
+        ioHandler.print("Введена несуществующая команда.");
     }
 }
