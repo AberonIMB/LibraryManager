@@ -17,6 +17,9 @@ public class GetBookListCommandHandler implements CommandHandler {
     private final IOHandler ioHandler;
     private final CommandValidator commandValidator;
 
+    /**
+     * Конструктор, который задает все необходимые поля
+     */
     public GetBookListCommandHandler(LibraryService libraryService, IOHandler ioHandler, CommandValidator commandValidator) {
         this.libraryService = libraryService;
         this.ioHandler = ioHandler;
@@ -31,7 +34,7 @@ public class GetBookListCommandHandler implements CommandHandler {
     }
 
     /**
-     * Выводит необходимателенную информацию о списке книг
+     * Выводит необходимую информацию о списке книг
      */
     private void printInfo(List<Book> books) {
         if (books.isEmpty()) {

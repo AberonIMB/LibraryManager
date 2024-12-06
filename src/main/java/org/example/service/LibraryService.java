@@ -79,6 +79,9 @@ public class LibraryService {
         return bookService.getBook(id);
     }
 
+    /**
+     * Создает книгу
+     */
     private Book createBook(String title, String author, int publicationYear) {
         return new Book(title, author, publicationYear);
     }

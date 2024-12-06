@@ -6,12 +6,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Класс команды, который принимает команду и разбивает её на параметры
+ * Класс команды
  */
 public class Command {
     private String name;
     private List<String> params;
 
+    /**
+     * Конструктор, принимающий команду
+     */
     public Command(String command) {
         List<String> args = readCommand(command);
 
@@ -19,6 +22,20 @@ public class Command {
             this.name = args.get(0);
             this.params = args.subList(1, args.size());
         }
+    }
+
+    /**
+     * Получить название команды
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Получить параметры
+     */
+    public List<String> getParams() {
+        return params;
     }
 
     /**
@@ -39,19 +56,5 @@ public class Command {
             }
         }
         return args;
-    }
-
-    /**
-     * Получить название команды
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Получить параметры
-     */
-    public List<String> getParams() {
-        return params;
     }
 }

@@ -17,7 +17,8 @@ public class LibraryConsoleApplication {
         this.ioHandler = new IOConsoleHandler();
         this.libraryService = new LibraryService();
         this.commandFactory = new CommandFactory(ioHandler, libraryService);
-    } //TODO нужно исправить замечания с pom, cfg и транзакциями. Написать тесты конечно же
+    }
+
     /**
      * Метод запуска приложения
      */

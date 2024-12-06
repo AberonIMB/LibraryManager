@@ -16,6 +16,7 @@ public class AddBookCommandValidator implements CommandValidator {
     public AddBookCommandValidator(IOHandler IOHandler) {
         this.ioHandler = IOHandler;
     }
+
     @Override
     public boolean validateCommand(Command command) {
         int paramsCount = command.getParams().size();

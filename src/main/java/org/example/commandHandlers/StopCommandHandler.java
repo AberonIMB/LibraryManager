@@ -11,6 +11,9 @@ public class StopCommandHandler implements CommandHandler {
     private final CommandValidator commandValidator;
     private final IOHandler ioHandler;
 
+    /**
+     * Конструктор, который задает все необходимые поля
+     */
     public StopCommandHandler(CommandValidator commandValidator, IOHandler ioHandler) {
         this.commandValidator = commandValidator;
         this.ioHandler = ioHandler;

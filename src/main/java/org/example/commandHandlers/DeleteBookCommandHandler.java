@@ -15,11 +15,15 @@ public class DeleteBookCommandHandler implements CommandHandler {
     private final LibraryService libraryService;
     private final IOHandler ioHandler;
 
+    /**
+     * Конструктор, который задает все необходимые поля
+     */
     public DeleteBookCommandHandler(CommandValidator commandValidator, LibraryService libraryService, IOHandler ioHandler) {
         this.commandValidator = commandValidator;
         this.libraryService = libraryService;
         this.ioHandler = ioHandler;
     }
+
     @Override
     public void executeCommand(Command command) {
         if (commandValidator.validateCommand(command)) {
@@ -29,7 +33,7 @@ public class DeleteBookCommandHandler implements CommandHandler {
     }
 
     /**
-     * Выводит необходимателенную информацию об удаленной книге
+     * Выводит необходимую информацию об удаленной книге
      */
     private void printInfo(Book book, Command command) {
         String id = command.getParams().get(0);

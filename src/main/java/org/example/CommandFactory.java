@@ -25,15 +25,15 @@ public class CommandFactory {
         CommandValidator addBookCommandValidator = new AddBookCommandValidator(ioHandler);
         CommandValidator deleteBookCommandValidator = new DeleteBookCommandValidator(ioHandler);
         CommandValidator editBookCommandValidator = new EditBookCommandValidator(ioHandler);
-        CommandValidator commandValidator = new CommandsWithoutParamsValidator(ioHandler);
+        CommandValidator commandWithoutParamsValidator = new CommandsWithoutParamsValidator(ioHandler);
 
         commands.put("unknown", new UnknownCommandHandler(ioHandler));
         commands.put("add-book", new AddBookCommandHandler(addBookCommandValidator, libraryService, ioHandler));
-        commands.put("list-books", new GetBookListCommandHandler(libraryService, ioHandler, commandValidator));
+        commands.put("list-books", new GetBookListCommandHandler(libraryService, ioHandler, commandWithoutParamsValidator));
         commands.put("edit-book", new EditBookCommandHandler(editBookCommandValidator, libraryService, ioHandler));
         commands.put("delete-book", new DeleteBookCommandHandler(deleteBookCommandValidator, libraryService, ioHandler));
-        commands.put("help", new HelpCommandHandler(ioHandler, commandValidator));
-        commands.put("stop", new StopCommandHandler(commandValidator, ioHandler));
+        commands.put("help", new HelpCommandHandler(ioHandler, commandWithoutParamsValidator));
+        commands.put("stop", new StopCommandHandler(commandWithoutParamsValidator, ioHandler));
     }
 
     /**

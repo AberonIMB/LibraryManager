@@ -16,6 +16,7 @@ public class DeleteBookCommandValidator implements CommandValidator {
     public DeleteBookCommandValidator(IOHandler ioHandler) {
         this.ioHandler = ioHandler;
     }
+
     @Override
     public boolean validateCommand(Command command) {
         int paramsCount = command.getParams().size();

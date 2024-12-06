@@ -16,6 +16,9 @@ public class EditBookCommandHandler implements CommandHandler {
     private final LibraryService libraryService;
     private final IOHandler ioHandler;
 
+    /**
+     * Конструктор, который задает все необходимые поля
+     */
     public EditBookCommandHandler(CommandValidator commandValidator, LibraryService libraryService, IOHandler ioHandler) {
         this.commandValidator = commandValidator;
         this.libraryService = libraryService;
@@ -31,7 +34,7 @@ public class EditBookCommandHandler implements CommandHandler {
     }
 
     /**
-     * Выводит необходимателенную информацию об измененной книге
+     * Выводит необходимую информацию об измененной книге
      */
     private void printInfo(Book book, Command command) {
         if (book == null) {

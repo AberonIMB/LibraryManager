@@ -12,7 +12,7 @@ public class HelpCommandHandler implements CommandHandler {
     private final CommandValidator commandValidator;
 
     /**
-     * Конструктор
+     * Конструктор, который задает все необходимые поля
      */
     public HelpCommandHandler(IOHandler ioHandler, CommandValidator commandValidator) {
         this.ioHandler = ioHandler;

@@ -15,6 +15,9 @@ public class AddBookCommandHandler implements CommandHandler {
     private final LibraryService libraryService;
     private final IOHandler ioHandler;
 
+    /**
+     * Конструктор, который задает все необходимые поля
+     */
     public AddBookCommandHandler(CommandValidator commandValidator, LibraryService libraryService, IOHandler ioHandler) {
         this.commandValidator = commandValidator;
         this.libraryService = libraryService;
@@ -30,7 +33,7 @@ public class AddBookCommandHandler implements CommandHandler {
     }
 
     /**
-     * Выводит необходимателенную информацию о добавленной книге
+     * Выводит необходимую информацию о добавленной книге
      */
     private void printInfo(Book book) {
         ioHandler.print("Добавлена книга:");

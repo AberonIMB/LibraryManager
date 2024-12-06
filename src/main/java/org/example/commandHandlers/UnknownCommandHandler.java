@@ -9,6 +9,9 @@ import org.example.util.IOHandler;
 public class UnknownCommandHandler implements CommandHandler {
     private final IOHandler ioHandler;
 
+    /**
+     * Конструктор, который задает все необходимые поля
+     */
     public UnknownCommandHandler(IOHandler ioHandler) {
         this.ioHandler = ioHandler;
     }

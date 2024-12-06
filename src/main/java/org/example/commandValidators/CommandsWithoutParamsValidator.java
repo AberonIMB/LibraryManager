@@ -10,11 +10,12 @@ public class CommandsWithoutParamsValidator implements CommandValidator {
     private final IOHandler ioHandler;
 
     /**
-     * Конструктор, в котором присваивается ioHandler
+     * Конструктор, в котором присваивается обработчик ввода/вывода
      */
     public CommandsWithoutParamsValidator(IOHandler ioHandler) {
         this.ioHandler = ioHandler;
     }
+
     @Override
     public boolean validateCommand(Command command) {
         if (!command.getParams().isEmpty()) {
