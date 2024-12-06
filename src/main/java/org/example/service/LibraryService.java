@@ -31,8 +31,8 @@ public class LibraryService {
     /**
      * Добавить книгу в библиотеку.
      */
-    public Book addBook(List<String> params) {
-        Book book = createBook(params.get(0), params.get(1), Integer.parseInt(params.get(2)));
+    public Book addBook(String title, String author, int publicationYear) {
+        Book book = createBook(title, author, publicationYear);
         bookService.addBook(book);
 
         return book;
@@ -41,12 +41,7 @@ public class LibraryService {
     /**
      * Редактировать книгу по id
      */
-    public Book editBook(List<String> params) {
-        Long id = Long.parseLong(params.get(0));
-        String title = params.get(1);
-        String author = params.get(2);
-        int publicationYear = Integer.parseInt(params.get(3));
-
+    public Book editBook(Long id, String title, String author, int publicationYear) {
         Book book = getBookById(id);
         bookService.editBook(book, title, author, publicationYear);
 
@@ -56,9 +51,7 @@ public class LibraryService {
     /**
      * Удалить книгу из библиотеки.
      */
-    public Book deleteBook(List<String> params) {
-        Long id = Long.parseLong(params.get(0));
-
+    public Book deleteBook(Long id) {
         Book book = getBookById(id);
         bookService.deleteBook(book);
 

@@ -28,7 +28,10 @@ public class EditBookCommandHandler implements CommandHandler {
     @Override
     public void executeCommand(Command command) {
         if (commandValidator.validateCommand(command)) {
-            Book book = libraryService.editBook(command.getParams());
+            Book book = libraryService.editBook(Long.parseLong(command.getParams().get(0)),
+                    command.getParams().get(1),
+                    command.getParams().get(2),
+                    Integer.parseInt(command.getParams().get(3)));
             printInfo(book, command);
         }
     }

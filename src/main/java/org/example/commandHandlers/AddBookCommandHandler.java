@@ -27,7 +27,9 @@ public class AddBookCommandHandler implements CommandHandler {
     @Override
     public void executeCommand(Command command) {
         if (commandValidator.validateCommand(command)) {
-            Book book = libraryService.addBook(command.getParams());
+            Book book = libraryService.addBook(command.getParams().get(0),
+                    command.getParams().get(1),
+                    Integer.parseInt(command.getParams().get(2)));
             printInfo(book);
         }
     }

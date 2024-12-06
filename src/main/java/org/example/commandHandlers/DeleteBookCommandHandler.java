@@ -27,7 +27,7 @@ public class DeleteBookCommandHandler implements CommandHandler {
     @Override
     public void executeCommand(Command command) {
         if (commandValidator.validateCommand(command)) {
-            Book book = libraryService.deleteBook(command.getParams());
+            Book book = libraryService.deleteBook(Long.parseLong(command.getParams().get(0)));
             printInfo(book, command);
         }
     }
