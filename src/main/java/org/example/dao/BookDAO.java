@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * DAO класс книг для доступа к данным
@@ -24,11 +25,7 @@ public class BookDAO {
      * Сохраняет книгу в базе данных
      */
     public void save(Book book) {
-        try (Session session = factory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.persist(book);
-            transaction.commit();
-        }
+        doInTransaction(session -> session.persist(book));
     }
 
     /**
@@ -53,21 +50,33 @@ public class BookDAO {
      * Обновляет данные существующей книги в базе данных
      */
     public void update(Book book) {
-        try (Session session = factory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.merge(book);
-            transaction.commit();
-        }
+        doInTransaction(session -> session.merge(book));
+
     }
 
     /**
      * Удаляет книгу из базы данных по ID
      */
     public void deleteBook(Book book) {
-        try (Session session = factory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.remove(book);
-            transaction.commit();
+        doInTransaction(session -> session.remove(book));
+    }
+
+    /**
+     * Выполнить действие в транзакции
+     * <p>Открывает сессию на время выполнения Consumer'а
+     * и выполняет Hibernate транзакцию правильным образом (открытие, затем коммит
+     * или откат при исключении)</p>
+     */
+    public void doInTransaction(Consumer<Session> consumer) {
+        try (Session session = factory.getCurrentSession()) {
+            final Transaction transaction = session.beginTransaction();
+            try {
+                consumer.accept(session);
+                transaction.commit();
+            } catch (final Exception e) {
+                transaction.rollback();
+                throw new RuntimeException("Во время выполнения транзакции произошла ошибка", e);
+            }
         }
     }
 }

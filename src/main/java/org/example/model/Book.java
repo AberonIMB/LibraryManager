@@ -1,6 +1,7 @@
 package org.example.model;
 
 import jakarta.persistence.*;
+
 import java.util.Objects;
 
 /**
@@ -115,10 +116,7 @@ public class Book {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Book book = (Book) o;
-        return id == book.id
-                && publicationYear == book.publicationYear
-                && Objects.equals(title, book.title)
-                && Objects.equals(author, book.author);
+        return Objects.equals(id, book.id);
     }
 
     /**
@@ -126,6 +124,6 @@ public class Book {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, author, publicationYear);
+        return Objects.hash(id);
     }
 }

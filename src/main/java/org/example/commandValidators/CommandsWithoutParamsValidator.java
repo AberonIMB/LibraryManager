@@ -4,7 +4,7 @@ import org.example.Command;
 import org.example.util.IOHandler;
 
 /**
- * Конструктор, в котором присваивается обработчик ввода/вывода
+ * Проверяет корректность команд без параметров
  */
 public class CommandsWithoutParamsValidator implements CommandValidator {
     private final IOHandler ioHandler;

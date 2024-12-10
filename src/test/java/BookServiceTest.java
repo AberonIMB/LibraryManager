@@ -1,15 +1,13 @@
-import org.example.model.Book;
 import org.example.dao.BookDAO;
+import org.example.model.Book;
 import org.example.service.BookService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
-
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -36,7 +34,6 @@ public class BookServiceTest {
     @Test
     public void addBookTest() {
         Book book = new Book("Анна Каренина", "Лев Толстой", 1877);
-        Mockito.doNothing().when(bookDAOMock).save(Mockito.any(Book.class));
         bookService.addBook(book);
         Mockito.verify(bookDAOMock, Mockito.times(1))
                 .save(Mockito.any(Book.class));
@@ -49,7 +46,7 @@ public class BookServiceTest {
     public void getListBooksTest() {
         Book book1 = new Book("Война и мир", "Лев Толстой", 1869);
         Book book2 = new Book("Преступление и наказание", "Фёдор Достоевский", 1866);
-        Mockito.when(bookDAOMock.getAll()).thenReturn(Arrays.asList(book1, book2));
+        Mockito.when(bookDAOMock.getAll()).thenReturn(List.of(book1, book2));
         List<Book> books = bookService.getListBooks();
         Assertions.assertEquals(2, books.size());
         Mockito.verify(bookDAOMock, Mockito.times(1)).getAll();
@@ -57,20 +54,16 @@ public class BookServiceTest {
         runAssertEqualsTest("Преступление и наказание", "Фёдор Достоевский", 1866, books.get(1));
     }
 
-//    /**
-//     * Проверяет корректность испраления данных книги и количество вызовов getById и update у bookDAO
-//     */
-//    @Test
-//    public void editBookTest() {
-//
-//        Book book = new Book("Преступление и наказание", "Фёдор Достоевский", 866);
-//        Mockito.doNothing().when(bookDAOMock).update(book);
-//        Mockito.when(bookDAOMock.getById(1L)).thenReturn(book);
-//        bookService.editBook(book, "Преступление и наказание", "Фёдор Достоевский", 1866);
-//        runAssertEqualsTest("Преступление и наказание", "Фёдор Достоевский", 1866, book);
-//        Mockito.verify(bookDAOMock, Mockito.times(1)).getById(1L);
-//        Mockito.verify(bookDAOMock, Mockito.times(1)).update(Mockito.eq(book));
-//    }
+    /**
+     * Проверяет корректность испраления данных книги и количество вызовов getById и update у bookDAO
+     */
+    @Test
+    public void editBookTest() {
+        Book book = new Book("Война и мир", "Лев Толстой", 1896);
+        bookService.editBook(book, "Преступление и наказание", "Фёдор Достоевский", 1866);
+        runAssertEqualsTest("Преступление и наказание", "Фёдор Достоевский", 1866, book);
+        Mockito.verify(bookDAOMock, Mockito.times(1)).update(Mockito.eq(book));
+    }
 
     /**
      * Проверяет корректность удаления книги
@@ -78,8 +71,6 @@ public class BookServiceTest {
     @Test
     public void deleteBookInvokesDelete() {
         Book book = new Book("Война и мир", "Лев Толстой", 1869);
-        Mockito.doNothing().when(bookDAOMock).deleteBook(Mockito.any(Book.class));
-        Mockito.when(bookDAOMock.getById(1L)).thenReturn(book);
         bookService.deleteBook(book);
         Mockito.verify(bookDAOMock, Mockito.times(1)).deleteBook(book);
     }
@@ -87,12 +78,11 @@ public class BookServiceTest {
     /**
      * Проверяет отсутствие вызова deleteBook у bookDAO, если при вызове deleteBook у bookService указан отсутсвующий ID
      */
-//    @Test
-//    public void deleteNotAddedBookNotInvokesDelete() {
-//        Mockito.when(bookDAOMock.getById(1L)).thenReturn(null);
-//        bookService.deleteBook(1L);
-//        Mockito.verify(bookDAOMock, Mockito.never()).deleteBook(Mockito.any(Book.class));
-//    }
+    @Test
+    public void deleteNotAddedBookNotInvokesDelete() {
+        bookService.deleteBook(null);
+        Mockito.verify(bookDAOMock, Mockito.never()).deleteBook(Mockito.any(Book.class));
+    }
 
     /**
      * Проверяет корректность получения добавленной книги по id
