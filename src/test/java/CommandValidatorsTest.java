@@ -161,14 +161,14 @@ public class CommandValidatorsTest {
 
 
     /**
-     * Общий метод для проверки валидатора с ожидаемым результатом.
+     * Общий метод для проверки валидатора с ожидаемым результатом
      */
     private void validateWithValidator(CommandValidator validator, Command command, boolean expected) {
         Assertions.assertEquals(expected, validator.validateCommand(command));
     }
 
     /**
-     * Общий метод для проверки валидатора с форматированным сообщением.
+     * Общий метод для проверки валидатора с форматированным сообщением
      */
     private void validateWithValidatorFormattedPrint(CommandValidator validator,
                                                      Command command,
@@ -182,7 +182,7 @@ public class CommandValidatorsTest {
     }
 
     /**
-     * Общий метод для проверки валидатора с обычным сообщением.
+     * Общий метод для проверки валидатора с обычным сообщением
      */
     private void validateWithValidatorPrint(CommandValidator validator,
                                             Command command,
