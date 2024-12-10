@@ -43,15 +43,15 @@ public class Command {
      */
     private List<String> readCommand(String command) {
         List<String> args = new ArrayList<>();
-//        Pattern pattern = Pattern.compile("[\"“](.*?)[\"”]|(\\S+)");
-        Pattern pattern = Pattern.compile("(\\S+)|[\"“](.*?)[\"”]");
-        // выбирает либо выражения в ковычках, либо выражения без пробела
+        Pattern pattern = Pattern.compile("\"(.*?)\"|(\\S+)");
+        // выбирает либо выражения в кавычках, либо выражения без пробела
         Matcher matcher = pattern.matcher(command);
         while (matcher.find()) {
-            String subString = matcher.group(1);
-            if (subString != null) {
-                args.add(subString);
+            if (matcher.group(1) != null) {
+                // Группа 1 содержит текст внутри кавычек, удаляем кавычки
+                args.add(matcher.group(1));
             } else {
+                // Группа 2 содержит текст без кавычек
                 args.add(matcher.group(2));
             }
         }
