@@ -13,12 +13,14 @@ public class LibraryConsoleApplication {
     private final CommandFactory commandFactory;
     private final IOHandler ioHandler;
 
+    /**
+     * Конструктор задающий IOHandler, LibraryService, CommandFactory
+     */
     public LibraryConsoleApplication() {
         this.ioHandler = new IOConsoleHandler();
         this.libraryService = new LibraryService();
         this.commandFactory = new CommandFactory(ioHandler, libraryService);
     }
-
     /**
      * Метод запуска приложения
      */
@@ -30,7 +32,7 @@ public class LibraryConsoleApplication {
     /**
      * Обрабатывает команды пользователя из консоли
      */
-    private void start() {
+    public void start() {
         while (true) {
             Command command = readCommand();
             if (command.getName() == null)
