@@ -1,7 +1,9 @@
 package org.example;
 
 import org.example.commandHandlers.*;
-import org.example.util.Printer;
+import org.example.commandValidators.*;
+import org.example.service.LibraryService;
+import org.example.util.IOHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,15 +20,20 @@ public class CommandFactory {
 
     /**
      * В хранилище добавляются пары команда-обработчик
-     * @param printer класс для вывода текста в консоль
      */
-    public CommandFactory(Printer printer) {
-        commands.put("unknown", new UnknownCommandHandler(printer));
-        commands.put("add-book", new AddBookCommandHandler());
-        commands.put("list-books", new GetBookListCommandHandler(printer));
-        commands.put("edit-book", new EditBookCommandHandler());
-        commands.put("delete-book", new DeleteBookCommandHandler());
-        commands.put("help", new HelpCommandHandler(printer));
+    public CommandFactory(IOHandler ioHandler, LibraryService libraryService) {
+        CommandValidator addBookCommandValidator = new AddBookCommandValidator(ioHandler);
+        CommandValidator deleteBookCommandValidator = new DeleteBookCommandValidator(ioHandler);
+        CommandValidator editBookCommandValidator = new EditBookCommandValidator(ioHandler);
+        CommandValidator commandWithoutParamsValidator = new CommandsWithoutParamsValidator(ioHandler);
+
+        commands.put("unknown", new UnknownCommandHandler(ioHandler));
+        commands.put("add-book", new AddBookCommandHandler(addBookCommandValidator, libraryService, ioHandler));
+        commands.put("list-books", new GetBookListCommandHandler(libraryService, ioHandler, commandWithoutParamsValidator));
+        commands.put("edit-book", new EditBookCommandHandler(editBookCommandValidator, libraryService, ioHandler));
+        commands.put("delete-book", new DeleteBookCommandHandler(deleteBookCommandValidator, libraryService, ioHandler));
+        commands.put("help", new HelpCommandHandler(ioHandler, commandWithoutParamsValidator));
+        commands.put("stop", new StopCommandHandler(commandWithoutParamsValidator, ioHandler));
     }
 
     /**
@@ -34,7 +41,7 @@ public class CommandFactory {
      * Если команда не существует, то возвращается обработчик UnknownCommandHandler
      * @param command команда
      */
-    public CommandHandler getCommandHandler(String command) {
-        return commands.getOrDefault(command, commands.get("unknown"));
+    public CommandHandler getCommandHandler(Command command) {
+        return commands.getOrDefault(command.getName(), commands.get("unknown"));
     }
 }

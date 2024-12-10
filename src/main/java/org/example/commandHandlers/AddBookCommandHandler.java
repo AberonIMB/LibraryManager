@@ -1,27 +1,44 @@
 package org.example.commandHandlers;
 
+import org.example.Command;
+import org.example.commandValidators.CommandValidator;
+import org.example.model.Book;
 import org.example.service.LibraryService;
+import org.example.util.IOHandler;
 
 /**
  * Обрабатывает команду добавления книги
  * Если команда корректна - добавляет книгу в библиотеку
  */
 public class AddBookCommandHandler implements CommandHandler {
+    private final CommandValidator commandValidator;
+    private final LibraryService libraryService;
+    private final IOHandler ioHandler;
+
+    /**
+     * Конструктор, который задает все необходимые поля
+     */
+    public AddBookCommandHandler(CommandValidator commandValidator, LibraryService libraryService, IOHandler ioHandler) {
+        this.commandValidator = commandValidator;
+        this.libraryService = libraryService;
+        this.ioHandler = ioHandler;
+    }
 
     @Override
-    public void executeCommand(LibraryService libraryService, String[] command) {
-        if (isCommandCorrect(libraryService, command)) {
-            libraryService.addBook(command[1], command[2], Integer.parseInt(command[3]));
+    public void executeCommand(Command command) {
+        if (commandValidator.validateCommand(command)) {
+            Book book = libraryService.addBook(command.getParams().get(0),
+                    command.getParams().get(1),
+                    Integer.parseInt(command.getParams().get(2)));
+            printInfo(book);
         }
     }
 
     /**
-     * Проверяет, что параметры команды корректны
-     * @param libraryService сервис библиотеки
-     * @param command название команды и параметры
-     * @return Если команда корректна - true, иначе false
+     * Выводит необходимую информацию о добавленной книге
      */
-    private boolean isCommandCorrect(LibraryService libraryService, String[] command) {
-        return libraryService.getSyntaxChecker().checkAddBookCommandSyntax(command);
+    private void printInfo(Book book) {
+        ioHandler.print("Добавлена книга:");
+        ioHandler.print(book.getBookInfo());
     }
 }

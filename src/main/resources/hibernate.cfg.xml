@@ -7,8 +7,8 @@
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/LibraryDB?createDatabaseIfNotExist=true</property>
-        <property name="hibernate.connection.username">default</property>
-        <property name="hibernate.connection.password">default</property>
+        <property name="hibernate.connection.username"></property>
+        <property name="hibernate.connection.password"></property>
         <property name="hibernate.hbm2ddl.auto">update</property>
         <property name="hibernate.current_session_context_class">thread</property>
         <mapping class="org.example.model.Book"/>

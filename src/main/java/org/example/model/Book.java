@@ -108,7 +108,7 @@ public class Book {
 
     /**
      * Сравнивает этот объект с другим объектом на равенство
-     * @return true - если
+     * @return true - если эти объекты равны
      */
     @Override
     public boolean equals(Object o) {

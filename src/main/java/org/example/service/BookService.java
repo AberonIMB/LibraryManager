@@ -1,8 +1,7 @@
 package org.example.service;
 
 import org.example.model.Book;
-import org.example.DAO.BookDAO;
-import org.example.util.Printer;
+import org.example.dao.BookDAO;
 
 import java.util.*;
 
@@ -13,23 +12,19 @@ import java.util.*;
 public class BookService {
 
     private final BookDAO bookDAO;
-    private final Printer printer;
 
     /**
-     * Конструктор, в котором присваивается bookDAO и printer
+     * Конструктор, в котором присваивается bookDAO
      */
-    public BookService(BookDAO bookDAO, Printer printer) {
+    public BookService(BookDAO bookDAO) {
         this.bookDAO = bookDAO;
-        this.printer = printer;
     }
 
     /**
-     * Создать книгу и сохранить книгу
+     * Сохранить книгу
      */
-    public void addBook(String title, String author, int publicationYear) {
-        Book book = new Book(title, author, publicationYear);
+    public void addBook(Book book) {
         bookDAO.save(book);
-        printer.printBookAdded(book);
     }
 
     /**
@@ -42,40 +37,26 @@ public class BookService {
     /**
      * Редактировать книгу по id
      */
-    public void editBook(Long id, String title, String author, int publicationYear) {
-        Book book = bookDAO.getById(id);
-        if (book == null) {
-            printer.printBookNotFound(id);
-            return;
+    public void editBook(Book book, String title, String author, int publicationYear) {
+        if (book != null) {
+            book.setNewData(title, author, publicationYear);
+            bookDAO.update(book);
         }
-        book.setNewData(title, author, publicationYear);
-        bookDAO.update(book);
-        printer.printBookEdited(book);
     }
 
     /**
      * Удалить книгу по id
      */
-    public void deleteBook(Long id) {
-        Book book = bookDAO.getById(id);
-        if (book == null) {
-            printer.printBookNotFound(id);
-            return;
+    public void deleteBook(Book book) {
+        if (book != null) {
+            bookDAO.deleteBook(book);
         }
-        bookDAO.deleteBook(book);
-        printer.printBookDeleted(id);
     }
 
     /**
-     * Получить и вывести книгу по id
+     * Получить книгу по id
      */
     public Book getBook(Long id) {
-        Book book = bookDAO.getById(id);
-        if (book == null) {
-            printer.printBookNotFound(id);
-        } else {
-            printer.printBookInfo(book);
-        }
-        return book;
+        return bookDAO.getById(id);
     }
 }
