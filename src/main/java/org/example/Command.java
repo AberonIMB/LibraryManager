@@ -16,7 +16,7 @@ public class Command {
      * Конструктор, принимающий команду
      */
     public Command(String command) {
-        List<String> args = readCommand(command);
+        List<String> args = parseCommand(command);
 
         if (!args.isEmpty()) {
             this.name = args.get(0);
@@ -41,7 +41,7 @@ public class Command {
     /**
      * Разбивает команду на название и параметры
      */
-    private List<String> readCommand(String command) {
+    private List<String> parseCommand(String command) {
         List<String> args = new ArrayList<>();
         Pattern pattern = Pattern.compile("\"(.*?)\"|(\\S+)");
         // выбирает либо выражения в кавычках, либо выражения без пробела
