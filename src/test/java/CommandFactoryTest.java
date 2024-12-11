@@ -32,9 +32,9 @@ public class CommandFactoryTest {
         Command addBookCommand = new Command("add-book");
         CommandHandler handler = commandFactory.getCommandHandler(addBookCommand);
 
-        Assertions.assertNotNull(handler, "Handler for 'add-book' should not be null");
+        Assertions.assertNotNull(handler, "Обработчик для 'add-book' не должен быть null");
         Assertions.assertInstanceOf(AddBookCommandHandler.class, handler,
-                "Handler for 'add-book' should AddBookCommandHandler");
+                "Обработчик для 'add-book' должен быть класса AddBookCommandHandler");
     }
 
     /**
@@ -45,9 +45,9 @@ public class CommandFactoryTest {
         Command unknownCommand = new Command("some-command");
         CommandHandler handler = commandFactory.getCommandHandler(unknownCommand);
 
-        Assertions.assertNotNull(handler, "Handler for unknown command should not be null");
+        Assertions.assertNotNull(handler, "Обработчик для неизвестной команды не должен быть null");
         Assertions.assertInstanceOf(UnknownCommandHandler.class, handler,
-                "Handler for unknown command should be of type UnknownCommandHandler");
+                "Обработчик для неизвестной команды должен быть класса UnknownCommandHandler");
     }
 
     /**
