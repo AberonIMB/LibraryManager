@@ -21,6 +21,16 @@ public class LibraryConsoleApplication {
         this.libraryService = new LibraryService();
         this.commandFactory = new CommandFactory(ioHandler, libraryService);
     }
+
+    /**
+     * Конструктор для тестов
+     */
+    public LibraryConsoleApplication(IOHandler ioHandler, LibraryService libraryService, CommandFactory commandFactory) {
+        this.ioHandler = ioHandler;
+        this.libraryService = libraryService;
+        this.commandFactory = commandFactory;
+    }
+
     /**
      * Метод запуска приложения
      */
@@ -37,6 +47,12 @@ public class LibraryConsoleApplication {
             Command command = readCommand();
             if (command.getName() == null)
                 continue;
+
+            //Убрали обработчик для команды "stop", чтобы можно было протестировать класс
+            if (command.getName().equals("stop")) {
+                ioHandler.print("Завершение работы.");
+                break;
+            }
 
             CommandHandler commandHandler = commandFactory.getCommandHandler(command);
             commandHandler.executeCommand(command);

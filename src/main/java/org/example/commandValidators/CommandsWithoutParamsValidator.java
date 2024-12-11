@@ -6,23 +6,17 @@ import org.example.util.IOHandler;
 /**
  * Проверяет корректность команд без параметров
  */
-public class CommandsWithoutParamsValidator implements CommandValidator {
-    private final IOHandler ioHandler;
+public class CommandsWithoutParamsValidator extends DefaultCommandValidator implements CommandValidator {
 
     /**
      * Конструктор, в котором присваивается обработчик ввода/вывода
      */
     public CommandsWithoutParamsValidator(IOHandler ioHandler) {
-        this.ioHandler = ioHandler;
+        super(ioHandler);
     }
 
     @Override
     public boolean validateCommand(Command command) {
-        if (!command.getParams().isEmpty()) {
-            ioHandler.printFormatted("Неверное количество аргументов команды: должно быть %d, представлено %d.",
-                    0, command.getParams().size());
-            return false;
-        }
-        return true;
+        return validateArgsCount(command.getParams().size(), 0);
     }
 }

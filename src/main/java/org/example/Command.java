@@ -2,6 +2,7 @@ package org.example;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,7 +17,7 @@ public class Command {
      * Конструктор, принимающий команду
      */
     public Command(String command) {
-        List<String> args = readCommand(command);
+        List<String> args = parseCommand(command);
 
         if (!args.isEmpty()) {
             this.name = args.get(0);
@@ -41,7 +42,7 @@ public class Command {
     /**
      * Разбивает команду на название и параметры
      */
-    private List<String> readCommand(String command) {
+    private List<String> parseCommand(String command) {
         List<String> args = new ArrayList<>();
         Pattern pattern = Pattern.compile("\"(.*?)\"|(\\S+)");
         // выбирает либо выражения в кавычках, либо выражения без пробела
@@ -55,6 +56,20 @@ public class Command {
                 args.add(matcher.group(2));
             }
         }
+
         return args;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Command command = (Command) o;
+        return Objects.equals(name, command.name) && Objects.equals(params, command.params);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, params);
     }
 }

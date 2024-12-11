@@ -56,7 +56,7 @@ class CommandTest {
         Assertions.assertEquals("edit-book", command.getName(),
                 "Имя команды должно быть: 'edit-book'");
 
-        Assertions.assertEquals(List.of("12345", "New Title", "12345"), command.getParams(),
+        Assertions.assertEquals(List.of("12345", "Название", "Автор", "12345"), command.getParams(),
                 "Параметры команды должны включать параметры смешанных типов");
     }
 
