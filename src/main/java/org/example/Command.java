@@ -2,6 +2,7 @@ package org.example;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,6 +56,20 @@ public class Command {
                 args.add(matcher.group(2));
             }
         }
+
         return args;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Command command = (Command) o;
+        return Objects.equals(name, command.name) && Objects.equals(params, command.params);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, params);
     }
 }

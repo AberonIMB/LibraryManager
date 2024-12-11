@@ -156,9 +156,7 @@ public class CommandValidatorsTest {
                 false,
                 "Год публикации должен быть представлен числом."
         );
-
     }
-
 
     /**
      * Общий метод для проверки валидатора с ожидаемым результатом
@@ -194,4 +192,3 @@ public class CommandValidatorsTest {
         }
     }
 }
-

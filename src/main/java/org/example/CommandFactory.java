@@ -33,7 +33,6 @@ public class CommandFactory {
         commands.put("edit-book", new EditBookCommandHandler(editBookCommandValidator, libraryService, ioHandler));
         commands.put("delete-book", new DeleteBookCommandHandler(deleteBookCommandValidator, libraryService, ioHandler));
         commands.put("help", new HelpCommandHandler(ioHandler, commandWithoutParamsValidator));
-        commands.put("stop", new StopCommandHandler(commandWithoutParamsValidator, ioHandler));
     }
 
     /**

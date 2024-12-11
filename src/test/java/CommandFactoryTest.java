@@ -1,8 +1,6 @@
 import org.example.Command;
 import org.example.CommandFactory;
-import org.example.commandHandlers.AddBookCommandHandler;
-import org.example.commandHandlers.CommandHandler;
-import org.example.commandHandlers.UnknownCommandHandler;
+import org.example.commandHandlers.*;
 import org.example.service.LibraryService;
 import org.example.util.IOHandler;
 import org.junit.jupiter.api.Assertions;
@@ -57,11 +55,17 @@ public class CommandFactoryTest {
      */
     @Test
     void shouldReturnHandlersForAllCommands() {
-        String[] expectedCommands = {"add-book", "list-books", "edit-book", "delete-book", "help", "stop", "unknown"};
-        for (String commandName : expectedCommands) {
-            Command command = new Command(commandName);
+        String[] expectedCommands = {"add-book", "list-books", "edit-book", "delete-book", "help", "unknown"};
+        var expectedClasses = new Class[]{AddBookCommandHandler.class,
+                GetBookListCommandHandler.class,
+                EditBookCommandHandler.class,
+                DeleteBookCommandHandler.class,
+                HelpCommandHandler.class,
+                UnknownCommandHandler.class};
+        for (int i = 0; i < expectedClasses.length; i++) {
+            Command command = new Command(expectedCommands[i]);
             CommandHandler handler = commandFactory.getCommandHandler(command);
-            Assertions.assertNotNull(handler, "Handler for %s should not be null".formatted(commandName));
+            Assertions.assertInstanceOf(expectedClasses[i], handler);
         }
     }
 }
