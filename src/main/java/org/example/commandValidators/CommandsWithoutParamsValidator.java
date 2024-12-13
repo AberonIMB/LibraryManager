@@ -1,22 +1,19 @@
 package org.example.commandValidators;
 
 import org.example.Command;
-import org.example.util.IOHandler;
+import org.example.exceptions.ArgumentsCountException;
 
 /**
  * Проверяет корректность команд без параметров
  */
-public class CommandsWithoutParamsValidator extends DefaultCommandValidator implements CommandValidator {
-
-    /**
-     * Конструктор, в котором присваивается обработчик ввода/вывода
-     */
-    public CommandsWithoutParamsValidator(IOHandler ioHandler) {
-        super(ioHandler);
-    }
+public class CommandsWithoutParamsValidator extends CommandValidator {
 
     @Override
-    public boolean validateCommand(Command command) {
-        return validateArgsCount(command.getParams().size(), 0);
+    public void validateCommand(Command command) throws ArgumentsCountException {
+        int paramsCount = command.getParams().size();
+
+        if (!validateArgsCount(0, paramsCount)) {
+            throw new ArgumentsCountException(0, paramsCount);
+        }
     }
 }

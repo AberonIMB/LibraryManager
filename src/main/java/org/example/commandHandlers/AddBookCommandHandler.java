@@ -2,6 +2,9 @@ package org.example.commandHandlers;
 
 import org.example.Command;
 import org.example.commandValidators.CommandValidator;
+import org.example.exceptions.ArgumentsCountException;
+import org.example.exceptions.InvalidIdException;
+import org.example.exceptions.InvalidYearException;
 import org.example.model.Book;
 import org.example.service.LibraryService;
 import org.example.util.IOHandler;
@@ -26,11 +29,15 @@ public class AddBookCommandHandler implements CommandHandler {
 
     @Override
     public void executeCommand(Command command) {
-        if (commandValidator.validateCommand(command)) {
+        try {
+            commandValidator.validateCommand(command);
             Book book = libraryService.addBook(command.getParams().get(0),
                     command.getParams().get(1),
                     Integer.parseInt(command.getParams().get(2)));
+
             printInfo(book);
+        } catch (ArgumentsCountException | InvalidYearException | InvalidIdException e) {
+            ioHandler.print(e.getMessage());
         }
     }
 

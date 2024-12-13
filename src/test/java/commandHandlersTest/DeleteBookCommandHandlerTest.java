@@ -4,6 +4,9 @@ import org.example.Command;
 import org.example.commandHandlers.CommandHandler;
 import org.example.commandHandlers.DeleteBookCommandHandler;
 import org.example.commandValidators.CommandValidator;
+import org.example.exceptions.ArgumentsCountException;
+import org.example.exceptions.InvalidIdException;
+import org.example.exceptions.InvalidYearException;
 import org.example.model.Book;
 import org.example.service.LibraryService;
 import org.example.util.IOHandler;
@@ -47,8 +50,6 @@ public class DeleteBookCommandHandlerTest {
      */
     @Test
     public void testHandleCorrectDeleteBookCommandWithBookNotNull() {
-        Mockito.when(commandValidatorMock.validateCommand(deleteCommand)).thenReturn(true);
-
         Mockito.when(libraryServiceMock.deleteBook(Long.parseLong(deleteCommand.getParams().get(0)))).thenReturn(book);
 
         commandHandler.executeCommand(deleteCommand);
@@ -65,8 +66,6 @@ public class DeleteBookCommandHandlerTest {
      */
     @Test
     public void testHandleCorrectDeleteBookCommandWithBookNull() {
-        Mockito.when(commandValidatorMock.validateCommand(deleteCommand)).thenReturn(true);
-
         Mockito.when(libraryServiceMock.deleteBook(Long.parseLong(deleteCommand.getParams().get(0)))).thenReturn(null);
 
         commandHandler.executeCommand(deleteCommand);
@@ -82,11 +81,15 @@ public class DeleteBookCommandHandlerTest {
      * Проверяет корректность обработки команды удаления книги с некорректными данными
      */
     @Test
-    public void testHandleIncorrectDeleteBookCommand() {
-        Mockito.when(commandValidatorMock.validateCommand(deleteCommand)).thenReturn(false);
+    public void testHandleIncorrectDeleteBookCommand() throws ArgumentsCountException, InvalidYearException, InvalidIdException {
+        Mockito.doThrow(new ArgumentsCountException(1, 2))
+                .when(commandValidatorMock).validateCommand(deleteCommand);
 
         commandHandler.executeCommand(deleteCommand);
 
-        Mockito.verifyNoInteractions(libraryServiceMock, ioHandlerMock);
+        Mockito.verifyNoInteractions(libraryServiceMock);
+
+        Mockito.verify(ioHandlerMock, Mockito.times(1))
+                .print("Неверное количество аргументов команды: должно быть 1, представлено 2.");
     }
 }

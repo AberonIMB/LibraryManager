@@ -22,10 +22,10 @@ public class CommandFactory {
      * В хранилище добавляются пары команда-обработчик
      */
     public CommandFactory(IOHandler ioHandler, LibraryService libraryService) {
-        CommandValidator addBookCommandValidator = new AddBookCommandValidator(ioHandler);
-        CommandValidator deleteBookCommandValidator = new DeleteBookCommandValidator(ioHandler);
-        CommandValidator editBookCommandValidator = new EditBookCommandValidator(ioHandler);
-        CommandValidator commandWithoutParamsValidator = new CommandsWithoutParamsValidator(ioHandler);
+        CommandValidator addBookCommandValidator = new AddBookCommandValidator();
+        CommandValidator deleteBookCommandValidator = new DeleteBookCommandValidator();
+        CommandValidator editBookCommandValidator = new EditBookCommandValidator();
+        CommandValidator commandWithoutParamsValidator = new CommandsWithoutParamsValidator();
 
         commands.put("unknown", new UnknownCommandHandler(ioHandler));
         commands.put("add-book", new AddBookCommandHandler(addBookCommandValidator, libraryService, ioHandler));

@@ -1,14 +1,37 @@
 package org.example.commandValidators;
 
+
 import org.example.Command;
+import org.example.exceptions.ArgumentsCountException;
+import org.example.exceptions.InvalidIdException;
+import org.example.exceptions.InvalidYearException;
 
 /**
- * Проверяет корректность синтаксиса команды
+ * Содержит общую логику проверки параметров команд для валидаторов
  */
-public interface CommandValidator {
+public abstract class CommandValidator {
+
     /**
-     * Проверяет корректность параметров команды
-     * @return true, если параметры команды корректны
+     * Проверяет корректность команды
+     * @throws ArgumentsCountException ошибка при неправильном количестве аргументов
+     * @throws InvalidYearException ошибка при некорректном значении года
+     * @throws InvalidIdException ошибка при некорректном значении ID
      */
-    boolean validateCommand(Command command);
+    public abstract void validateCommand(Command command) throws ArgumentsCountException, InvalidYearException, InvalidIdException;
+
+    /**
+     * Проверяет, что количество аргументов команды соответствует ожидаемому
+     * @return true, если количество аргументов команды соответствует ожидаемому
+     */
+    protected boolean validateArgsCount(int expectedCount, int paramsCount) {
+        return  expectedCount == paramsCount;
+    }
+
+    /**
+     * Проверяет, что аргумент команды является числом
+     * @return true, если аргумент команды является числом
+     */
+    protected boolean validateArgIsNumber(String arg) {
+        return arg.matches("\\d+");
+    }
 }

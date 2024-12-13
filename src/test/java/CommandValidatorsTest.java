@@ -1,50 +1,45 @@
 import org.example.Command;
 import org.example.commandValidators.*;
-import org.example.util.IOHandler;
+import org.example.exceptions.ArgumentsCountException;
+import org.example.exceptions.InvalidIdException;
+import org.example.exceptions.InvalidYearException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 
 /**
  * Общие тесты для всех валидаторов команд
  */
-@ExtendWith(MockitoExtension.class)
 public class CommandValidatorsTest {
-
-    @Mock
-    private IOHandler ioHandlerMock;
+    
+    private final CommandValidator addBookCommandValidator = new AddBookCommandValidator();
+    private final CommandValidator deleteBookCommandValidator = new DeleteBookCommandValidator();
+    private final CommandValidator editBookCommandValidator = new EditBookCommandValidator();
+    private final CommandValidator commandWithoutParamsValidator = new CommandsWithoutParamsValidator();
 
     /**
      * Проверка валидаторов с корректными данными
      */
     @Test
     void validateCommandsWithCorrectParams() {
-        validateWithValidator(
-                new AddBookCommandValidator(ioHandlerMock),
-                new Command("addBook title author 2023"),
-                true
+        testNothingToThrows(
+                addBookCommandValidator,
+                new Command("addBook title author 2023")
         );
 
-        validateWithValidator(
-                new DeleteBookCommandValidator(ioHandlerMock),
-                new Command("deleteBook 1"),
-                true
+        testNothingToThrows(
+                deleteBookCommandValidator,
+                new Command("deleteBook 1")
         );
 
-        validateWithValidator(
-                new EditBookCommandValidator(ioHandlerMock),
-                new Command("editBook 1 newTitle newAuthor 2024"),
-                true
+        testNothingToThrows(
+                editBookCommandValidator,
+                new Command("editBook 1 newTitle newAuthor 2024")
         );
 
-        validateWithValidator(
-                new CommandsWithoutParamsValidator(ioHandlerMock),
-                new Command("help"),
-                true
+        testNothingToThrows(
+                commandWithoutParamsValidator,
+                new Command("help")
         );
     }
 
@@ -53,12 +48,21 @@ public class CommandValidatorsTest {
      */
     @Test
     public void validateAddCommandWithIncorrectParamsCount() {
-        validateWithValidatorFormattedPrint(
-                new AddBookCommandValidator(ioHandlerMock),
+        testThrowsArgumentsCountException(
+                addBookCommandValidator,
                 new Command("addBook title"),
-                false,
-                "Неверное количество аргументов команды: должно быть %d, представлено %d.",
-                3, 1
+                3
+        );
+    }
+
+    /**
+     * Проверка валидатора добавления книги с некорректным значением года
+     */
+    @Test
+    public void validateAddCommandWithIncorrectParams() {
+        testThrowsInvalidYearException(
+                addBookCommandValidator,
+                new Command("addBook title author invalidYear")
         );
     }
 
@@ -67,12 +71,21 @@ public class CommandValidatorsTest {
      */
     @Test
     public void validateDeleteCommandWithIncorrectParamsCount() {
-        validateWithValidatorFormattedPrint(
-                new DeleteBookCommandValidator(ioHandlerMock),
+        testThrowsArgumentsCountException(
+                deleteBookCommandValidator,
                 new Command("deleteBook 1 extraParam"),
-                false,
-                "Неверное количество аргументов команды: должно быть %d, представлено %d.",
-                1, 2
+                1
+        );
+    }
+
+    /**
+     * Проверка валидатора удаления книги с некорректным ID
+     */
+    @Test
+    public void validateDeleteCommandWithIncorrectParams() {
+        testThrowsInvalidIdException(
+                deleteBookCommandValidator,
+                new Command("deleteBook invalidId")
         );
     }
 
@@ -81,55 +94,11 @@ public class CommandValidatorsTest {
      */
     @Test
     public void validateEditCommandWithIncorrectParamsCount() {
-        validateWithValidatorFormattedPrint(
-                new EditBookCommandValidator(ioHandlerMock),
+        testThrowsArgumentsCountException(
+                editBookCommandValidator,
                 new Command("editBook 1 newTitle"),
-                false,
-                "Неверное количество аргументов команды: должно быть %d, представлено %d.",
-                4, 2
+                4
         );
-
-    }
-
-    /**
-     * Проверка валидатора без параметров с некорректным количеством параметров
-     */
-    @Test
-    public void validateWithoutParamsCommandWithIncorrectParamsCount() {
-        validateWithValidatorFormattedPrint(
-                new CommandsWithoutParamsValidator(ioHandlerMock),
-                new Command("help extraParam"),
-                false,
-                "Неверное количество аргументов команды: должно быть %d, представлено %d.",
-                0, 1
-        );
-    }
-
-    /**
-     * Проверка валидатора добавления книги с некорректным параметрами
-     */
-    @Test
-    public void validateAddCommandWithIncorrectParams() {
-        validateWithValidatorPrint(
-                new AddBookCommandValidator(ioHandlerMock),
-                new Command("addBook title author invalidYear"),
-                false,
-                "Год публикации должен быть представлен числом."
-        );
-    }
-
-    /**
-     * Проверка валидатора удаления книги с некорректным параметрами
-     */
-    @Test
-    public void validateDeleteCommandWithIncorrectParams() {
-        validateWithValidatorPrint(
-                new DeleteBookCommandValidator(ioHandlerMock),
-                new Command("deleteBook invalidId"),
-                false,
-                "ID должен быть представлен числом."
-        );
-
     }
 
     /**
@@ -137,58 +106,71 @@ public class CommandValidatorsTest {
      */
     @Test
     public void validateEditCommandWithIncorrectIDParam() {
-        validateWithValidatorPrint(
-                new DeleteBookCommandValidator(ioHandlerMock),
-                new Command("deleteBook invalidId"),
-                false,
-                "ID должен быть представлен числом."
+        testThrowsInvalidIdException(
+                editBookCommandValidator,
+                new Command("edit-book invalidId title author 2024")
         );
     }
 
     /**
-     * Проверка валидатора без параметров с некорректным параметром года
+     * Проверка валидатора изменеия книги с некорректным значением года
      */
     @Test
     public void validateEditCommandWithIncorrectYearParam() {
-        validateWithValidatorPrint(
-                new EditBookCommandValidator(ioHandlerMock),
-                new Command("editBook 1 title author invalidYear"),
-                false,
-                "Год публикации должен быть представлен числом."
+        testThrowsInvalidYearException(
+                editBookCommandValidator,
+                new Command("edit-book 1 title author InvalidYear")
         );
     }
 
     /**
-     * Общий метод для проверки валидатора с ожидаемым результатом
+     * Проверка валидатора без параметров с некорректным количеством параметров
      */
-    private void validateWithValidator(CommandValidator validator, Command command, boolean expected) {
-        Assertions.assertEquals(expected, validator.validateCommand(command));
+    @Test
+    public void validateWithoutParamsCommandWithIncorrectParamsCount() {
+        testThrowsArgumentsCountException(
+                commandWithoutParamsValidator,
+                new Command("help extraParam"),
+                0
+        );
     }
 
     /**
-     * Общий метод для проверки валидатора с форматированным сообщением
+     * Метод, который проверяет, что валидатор не выбрасывает исключения
      */
-    private void validateWithValidatorFormattedPrint(CommandValidator validator,
-                                                     Command command,
-                                                     boolean expected,
-                                                     String message,
-                                                     Object... args) {
-        Assertions.assertEquals(expected, validator.validateCommand(command));
-        if (!expected) {
-            Mockito.verify(ioHandlerMock).printFormatted(message, args);
-        }
+    private void testNothingToThrows(CommandValidator validator, Command command) {
+        Assertions.assertDoesNotThrow(() -> validator.validateCommand(command));
     }
 
     /**
-     * Общий метод для проверки валидатора с обычным сообщением
+     * Метод для проверки выброса исключения ArgumentsCountException
      */
-    private void validateWithValidatorPrint(CommandValidator validator,
-                                            Command command,
-                                            boolean expected,
-                                            String message) {
-        Assertions.assertEquals(expected, validator.validateCommand(command));
-        if (!expected) {
-            Mockito.verify(ioHandlerMock).print(message);
-        }
+    private void testThrowsArgumentsCountException(CommandValidator validator,
+                                                   Command command,
+                                                   int expectedParamsCount) {
+        Exception e = Assertions.assertThrows(ArgumentsCountException.class, () -> validator.validateCommand(command));
+
+        Assertions.assertEquals("Неверное количество аргументов команды: должно быть %d, представлено %d."
+                .formatted(expectedParamsCount, command.getParams().size()), e.getMessage());
+    }
+
+    /**
+     * Метод для проверки выброса исключения InvalidIdException
+     */
+    private void testThrowsInvalidIdException(CommandValidator validator,
+                                                   Command command) {
+        Exception e = Assertions.assertThrows(InvalidIdException.class, () -> validator.validateCommand(command));
+
+        Assertions.assertEquals("ID должен быть представлен числом.", e.getMessage());
+    }
+
+    /**
+     * Метод для проверки выброса исключения InvalidYearException
+     */
+    private void testThrowsInvalidYearException(CommandValidator validator,
+                                              Command command) {
+        Exception e = Assertions.assertThrows(InvalidYearException.class, () -> validator.validateCommand(command));
+
+        Assertions.assertEquals("Год должен быть представлен числом.", e.getMessage());
     }
 }

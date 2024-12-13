@@ -2,6 +2,9 @@ package org.example.commandHandlers;
 
 import org.example.Command;
 import org.example.commandValidators.CommandValidator;
+import org.example.exceptions.ArgumentsCountException;
+import org.example.exceptions.InvalidIdException;
+import org.example.exceptions.InvalidYearException;
 import org.example.model.Book;
 import org.example.service.LibraryService;
 import org.example.util.IOHandler;
@@ -26,9 +29,12 @@ public class DeleteBookCommandHandler implements CommandHandler {
 
     @Override
     public void executeCommand(Command command) {
-        if (commandValidator.validateCommand(command)) {
+        try {
+            commandValidator.validateCommand(command);
             Book book = libraryService.deleteBook(Long.parseLong(command.getParams().get(0)));
             printInfo(book, command);
+        } catch (ArgumentsCountException | InvalidIdException | InvalidYearException e) {
+            ioHandler.print(e.getMessage());
         }
     }
 
@@ -37,10 +43,12 @@ public class DeleteBookCommandHandler implements CommandHandler {
      */
     private void printInfo(Book book, Command command) {
         String id = command.getParams().get(0);
+
         if (book == null) {
             ioHandler.printFormatted("Книга с ID %s не найдена.", id);
             return;
         }
+
         ioHandler.printFormatted("Книга с ID %s успешно удалена.", id);
     }
 }

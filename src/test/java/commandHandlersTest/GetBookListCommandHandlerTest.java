@@ -4,6 +4,9 @@ import org.example.Command;
 import org.example.commandHandlers.CommandHandler;
 import org.example.commandHandlers.GetBookListCommandHandler;
 import org.example.commandValidators.CommandValidator;
+import org.example.exceptions.ArgumentsCountException;
+import org.example.exceptions.InvalidIdException;
+import org.example.exceptions.InvalidYearException;
 import org.example.model.Book;
 import org.example.service.LibraryService;
 import org.example.util.IOHandler;
@@ -49,7 +52,6 @@ public class GetBookListCommandHandlerTest {
      */
     @Test
     public void testHandleCorrectGetBookListCommandWithNotEmptyList() {
-        Mockito.when(commandValidatorMock.validateCommand(getBookListCommand)).thenReturn(true);
         Mockito.when(libraryServiceMock.getListBooks()).thenReturn(books);
 
         getBookListCommandHandler.executeCommand(getBookListCommand);
@@ -69,7 +71,6 @@ public class GetBookListCommandHandlerTest {
      */
     @Test
     public void testHandleCorrectGetBookListCommandWithEmptyList() {
-        Mockito.when(commandValidatorMock.validateCommand(getBookListCommand)).thenReturn(true);
         Mockito.when(libraryServiceMock.getListBooks()).thenReturn(List.of());
 
         getBookListCommandHandler.executeCommand(getBookListCommand);
@@ -83,11 +84,15 @@ public class GetBookListCommandHandlerTest {
      * Проверяет корректность обработки команды получения списка книг с некорректными данными
      */
     @Test
-    public void testHandleIncorrectGetBookListCommand() {
-        Mockito.when(commandValidatorMock.validateCommand(getBookListCommand)).thenReturn(false);
+    public void testHandleIncorrectGetBookListCommand() throws ArgumentsCountException, InvalidYearException, InvalidIdException {
+        Mockito.doThrow(new ArgumentsCountException(0, 2))
+                .when(commandValidatorMock).validateCommand(getBookListCommand);
 
         getBookListCommandHandler.executeCommand(getBookListCommand);
 
-        Mockito.verifyNoInteractions(libraryServiceMock, ioHandlerMock);
+        Mockito.verifyNoInteractions(libraryServiceMock);
+
+        Mockito.verify(ioHandlerMock, Mockito.times(1))
+                .print("Неверное количество аргументов команды: должно быть 0, представлено 2.");
     }
 }
