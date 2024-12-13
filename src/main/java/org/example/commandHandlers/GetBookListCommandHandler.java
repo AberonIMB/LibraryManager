@@ -2,6 +2,9 @@ package org.example.commandHandlers;
 
 import org.example.Command;
 import org.example.commandValidators.CommandValidator;
+import org.example.exceptions.ArgumentsCountException;
+import org.example.exceptions.InvalidIdException;
+import org.example.exceptions.InvalidYearException;
 import org.example.model.Book;
 import org.example.service.LibraryService;
 import org.example.util.IOHandler;
@@ -28,8 +31,11 @@ public class GetBookListCommandHandler implements CommandHandler {
 
     @Override
     public void executeCommand(Command command) {
-        if (commandValidator.validateCommand(command)) {
+        try {
+            commandValidator.validateCommand(command);
             printInfo(libraryService.getListBooks());
+        } catch (ArgumentsCountException | InvalidIdException | InvalidYearException e) {
+            ioHandler.print(e.getMessage());
         }
     }
 
@@ -41,6 +47,7 @@ public class GetBookListCommandHandler implements CommandHandler {
             ioHandler.print("Список книг пуст.");
             return;
         }
+
         for (int i = 0; i < books.size(); i++) {
             Book book = books.get(i);
             ioHandler.printFormatted("%d) %s", i + 1, book.getBookShortInfo());

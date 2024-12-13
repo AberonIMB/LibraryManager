@@ -3,6 +3,9 @@ package commandHandlersTest;
 import org.example.Command;
 import org.example.commandHandlers.HelpCommandHandler;
 import org.example.commandValidators.CommandValidator;
+import org.example.exceptions.ArgumentsCountException;
+import org.example.exceptions.InvalidIdException;
+import org.example.exceptions.InvalidYearException;
 import org.example.util.IOHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,8 +40,6 @@ public class HelpCommandHandlerTest {
      */
     @Test
     public void testHandleCorrectHelpCommand() {
-        Mockito.when(commandValidatorMock.validateCommand(command)).thenReturn(true);
-
         helpCommandHandler.executeCommand(command);
 
         Mockito.verify(ioHandlerMock).print("""
@@ -55,11 +56,22 @@ public class HelpCommandHandlerTest {
      * Проверяет корректность обработки команды получения справки с некорректными данными
      */
     @Test
-    public void testHandleIncorrectHelpCommand() {
-        Mockito.when(commandValidatorMock.validateCommand(command)).thenReturn(false);
+    public void testHandleIncorrectHelpCommand() throws ArgumentsCountException, InvalidYearException, InvalidIdException {
+        Mockito.doThrow(new ArgumentsCountException(0, 2))
+                .when(commandValidatorMock).validateCommand(command);
 
         helpCommandHandler.executeCommand(command);
 
-        Mockito.verifyNoInteractions(ioHandlerMock);
+        Mockito.verify(ioHandlerMock)
+                .print("Неверное количество аргументов команды: должно быть 0, представлено 2.");
+
+        Mockito.verify(ioHandlerMock, Mockito.never()).print("""
+                Доступные команды:
+                \t- add-book "<название>" "<автор>" <год издания> – Добавить книгу
+                \t- list-books – Просмотреть список книг
+                \t- edit-book <ID книги> “<название>” “<автор>” <год издания> - Изменить книгу
+                \t- delete-book <ID книги> – Удалить книгу
+                \t- help – Справка
+                \t- stop - Завершить работу""");
     }
 }

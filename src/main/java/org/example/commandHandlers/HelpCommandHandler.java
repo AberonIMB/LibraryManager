@@ -2,6 +2,9 @@ package org.example.commandHandlers;
 
 import org.example.Command;
 import org.example.commandValidators.CommandValidator;
+import org.example.exceptions.ArgumentsCountException;
+import org.example.exceptions.InvalidIdException;
+import org.example.exceptions.InvalidYearException;
 import org.example.util.IOHandler;
 
 /**
@@ -21,7 +24,8 @@ public class HelpCommandHandler implements CommandHandler {
 
     @Override
     public void executeCommand(Command command) {
-        if (commandValidator.validateCommand(command)) {
+        try {
+            commandValidator.validateCommand(command);
             ioHandler.print("""
                 Доступные команды:
                 \t- add-book "<название>" "<автор>" <год издания> – Добавить книгу
@@ -30,6 +34,8 @@ public class HelpCommandHandler implements CommandHandler {
                 \t- delete-book <ID книги> – Удалить книгу
                 \t- help – Справка
                 \t- stop - Завершить работу""");
+        } catch (ArgumentsCountException | InvalidIdException | InvalidYearException e) {
+            ioHandler.print(e.getMessage());
         }
     }
 }

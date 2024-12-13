@@ -5,6 +5,9 @@ import org.example.commandHandlers.AddBookCommandHandler;
 import org.example.commandHandlers.CommandHandler;
 import org.example.commandValidators.AddBookCommandValidator;
 import org.example.commandValidators.CommandValidator;
+import org.example.exceptions.ArgumentsCountException;
+import org.example.exceptions.InvalidIdException;
+import org.example.exceptions.InvalidYearException;
 import org.example.model.Book;
 import org.example.service.LibraryService;
 import org.example.util.IOHandler;
@@ -49,9 +52,6 @@ public class AddBookCommandHandlerTest {
      */
     @Test
     public void testHandleCorrectAddBookCommand() {
-
-        Mockito.when(commandValidatorMock.validateCommand(addCommand)).thenReturn(true);
-
         Mockito.when(libraryServiceMock.addBook(
                         addCommand.getParams().get(0),
                         addCommand.getParams().get(1),
@@ -73,11 +73,15 @@ public class AddBookCommandHandlerTest {
      * Проверяет корректность обработки команды добавления книги с некорректными данными
      */
     @Test
-    public void testHandleIncorrectAddBookCommand() {
-        Mockito.when(commandValidatorMock.validateCommand(addCommand)).thenReturn(false);
+    public void testHandleIncorrectAddBookCommand() throws ArgumentsCountException, InvalidYearException, InvalidIdException {
+        Mockito.doThrow(new ArgumentsCountException(3, 2))
+                .when(commandValidatorMock).validateCommand(addCommand);
 
         commandHandler.executeCommand(addCommand);
 
-        Mockito.verifyNoInteractions(libraryServiceMock, ioHandlerMock);
+        Mockito.verifyNoInteractions(libraryServiceMock);
+
+        Mockito.verify(ioHandlerMock, Mockito.times(1))
+                .print("Неверное количество аргументов команды: должно быть 3, представлено 2.");
     }
 }

@@ -2,6 +2,9 @@ package org.example.commandHandlers;
 
 import org.example.Command;
 import org.example.commandValidators.CommandValidator;
+import org.example.exceptions.ArgumentsCountException;
+import org.example.exceptions.InvalidIdException;
+import org.example.exceptions.InvalidYearException;
 import org.example.model.Book;
 import org.example.service.LibraryService;
 import org.example.util.IOHandler;
@@ -27,12 +30,15 @@ public class EditBookCommandHandler implements CommandHandler {
 
     @Override
     public void executeCommand(Command command) {
-        if (commandValidator.validateCommand(command)) {
+        try {
+            commandValidator.validateCommand(command);
             Book book = libraryService.editBook(Long.parseLong(command.getParams().get(0)),
                     command.getParams().get(1),
                     command.getParams().get(2),
                     Integer.parseInt(command.getParams().get(3)));
             printInfo(book, command);
+        } catch (ArgumentsCountException | InvalidIdException | InvalidYearException e) {
+            ioHandler.print(e.getMessage());
         }
     }
 
@@ -44,6 +50,7 @@ public class EditBookCommandHandler implements CommandHandler {
             ioHandler.printFormatted("Книга с ID %s не найдена.", command.getParams().get(0));
             return;
         }
+
         ioHandler.print("Изменена книга:");
         ioHandler.print(book.getBookInfo());
     }
