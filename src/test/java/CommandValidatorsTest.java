@@ -1,8 +1,8 @@
 import org.example.Command;
 import org.example.commandValidators.*;
-import org.example.exceptions.ArgumentsCountException;
-import org.example.exceptions.InvalidIdException;
-import org.example.exceptions.InvalidYearException;
+import org.example.exceptions.commandExceptions.ArgumentsCountException;
+import org.example.exceptions.commandExceptions.InvalidIdException;
+import org.example.exceptions.commandExceptions.InvalidYearException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 public class CommandValidatorsTest {
     
     private final CommandValidator addBookCommandValidator = new AddBookCommandValidator();
-    private final CommandValidator deleteBookCommandValidator = new DeleteBookCommandValidator();
+    private final CommandValidator deleteBookCommandValidator = new OnlyIdCommandValidator();
     private final CommandValidator editBookCommandValidator = new EditBookCommandValidator();
     private final CommandValidator commandWithoutParamsValidator = new CommandsWithoutParamsValidator();
 

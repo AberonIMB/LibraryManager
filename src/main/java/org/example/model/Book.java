@@ -36,6 +36,9 @@ public class Book {
     @Column(name = "publication_year")
     private int publicationYear;
 
+    @ManyToOne
+    private Reader reader;
+
     /**
      * Пустой конструктор для Hibernate
      */
@@ -79,6 +82,10 @@ public class Book {
         return publicationYear;
     }
 
+    public Reader getReader() {
+        return reader;
+    }
+
     /**
      * Установить новые значения для назвавния, автора и года публикации книги
      */
@@ -86,6 +93,10 @@ public class Book {
         this.title = title;
         this.author = author;
         this.publicationYear = publicationYear;
+    }
+
+    public void setReader(Reader reader) {
+        this.reader = reader;
     }
 
     /**

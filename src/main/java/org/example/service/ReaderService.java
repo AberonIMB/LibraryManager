@@ -3,29 +3,24 @@ package org.example.service;
 
 import org.example.dao.ReaderDAO;
 import org.example.model.Reader;
-import org.example.util.Printer;
 
 import java.util.List;
 
 public class ReaderService {
     private final ReaderDAO readerDAO;
-    private final Printer printer;
 
     /**
      * Конструктор, в котором присваивается readerDAO и printer
      */
-    public ReaderService(ReaderDAO readerDAO, Printer printer) {
+    public ReaderService(ReaderDAO readerDAO) {
         this.readerDAO = readerDAO;
-        this.printer = printer;
     }
 
     /**
      * Создать читателя и сохранить его
      */
-    public void addReader(String name) {
-        Reader reader = new Reader(name);
+    public void addReader(Reader reader) {
         readerDAO.save(reader);
-        printer.printReaderAdded(reader);
     }
 
     /**
@@ -38,50 +33,22 @@ public class ReaderService {
     /**
      * Редактировать читателя по id
      */
-    public void editReader(Long id, String name) {
-        Reader reader = getReader(id);
-        if (reader != null) {
-            reader.setName(name);
-            readerDAO.update(reader);
-            printer.printReaderEdited(reader);
-        }
+    public void editReader(Reader reader, String name) {
+        reader.setName(name);
+        readerDAO.update(reader);
     }
 
     /**
      * Удалить читателя по id
      */
-    public void deleteReader(Long id) {
-        Reader reader = getReader(id);
-        if (reader == null) {
-            return;
-        }
-        if (!reader.getBooks().isEmpty()) {
-            printer.printReaderDeleteWithNotEmptyBooks(reader);
-            return;
-        }
+    public void deleteReader(Reader reader) {
         readerDAO.deleteReader(reader);
-        printer.printReaderDeleted(reader);
-    }
-
-    /**
-     * Вывести информацию о читателе
-     */
-    public void showReader(Long id) {
-        Reader reader = getReader(id);
-        if (reader != null) {
-            printer.printReaderInfo(reader);
-        }
     }
 
     /**
      * Получить читателя
      */
     public Reader getReader(Long id) {
-        Reader reader = readerDAO.getById(id);
-        if (reader == null) {
-            printer.printReaderNotFound(id);
-        }
-
-        return reader;
+        return readerDAO.getById(id);
     }
 }

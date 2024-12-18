@@ -3,9 +3,7 @@ package org.example.commandHandlers;
 import org.example.Command;
 import org.example.commandValidators.AddBookCommandValidator;
 import org.example.commandValidators.CommandValidator;
-import org.example.exceptions.ArgumentsCountException;
-import org.example.exceptions.InvalidIdException;
-import org.example.exceptions.InvalidYearException;
+import org.example.exceptions.commandExceptions.CommandValidationException;
 import org.example.model.Book;
 import org.example.service.LibraryService;
 import org.example.util.IOHandler;
@@ -37,7 +35,7 @@ public class AddBookCommandHandler implements CommandHandler {
                     Integer.parseInt(command.getParams().get(2)));
 
             printInfo(book);
-        } catch (ArgumentsCountException | InvalidYearException | InvalidIdException e) {
+        } catch (CommandValidationException e) {
             ioHandler.print(e.getMessage());
         }
     }
