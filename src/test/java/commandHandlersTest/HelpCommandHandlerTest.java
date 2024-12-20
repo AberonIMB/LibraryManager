@@ -2,10 +2,6 @@ package commandHandlersTest;
 
 import org.example.Command;
 import org.example.commandHandlers.HelpCommandHandler;
-import org.example.commandValidators.CommandValidator;
-import org.example.exceptions.ArgumentsCountException;
-import org.example.exceptions.InvalidIdException;
-import org.example.exceptions.InvalidYearException;
 import org.example.util.IOHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class HelpCommandHandlerTest {
 
     private final IOHandler ioHandlerMock;
-    private final CommandValidator commandValidatorMock;
     private final HelpCommandHandler helpCommandHandler;
 
     private final Command command = new Command("help");
@@ -28,11 +23,10 @@ public class HelpCommandHandlerTest {
     /**
      * Конструктор, в котором происходит инициализация полей
      */
-    public HelpCommandHandlerTest(@Mock IOHandler ioHandler, @Mock CommandValidator commandValidator) {
+    public HelpCommandHandlerTest(@Mock IOHandler ioHandler) {
         this.ioHandlerMock = ioHandler;
-        this.commandValidatorMock = commandValidator;
 
-        this.helpCommandHandler = new HelpCommandHandler(ioHandler, commandValidator);
+        this.helpCommandHandler = new HelpCommandHandler(ioHandlerMock);
     }
 
     /**
@@ -56,11 +50,10 @@ public class HelpCommandHandlerTest {
      * Проверяет корректность обработки команды получения справки с некорректными данными
      */
     @Test
-    public void testHandleIncorrectHelpCommand() throws ArgumentsCountException, InvalidYearException, InvalidIdException {
-        Mockito.doThrow(new ArgumentsCountException(0, 2))
-                .when(commandValidatorMock).validateCommand(command);
+    public void testHandleHelpCommandWithIncorrectArgsCount() {
+        Command incorrectCommand = new Command("help 1 2");
 
-        helpCommandHandler.executeCommand(command);
+        helpCommandHandler.executeCommand(incorrectCommand);
 
         Mockito.verify(ioHandlerMock)
                 .print("Неверное количество аргументов команды: должно быть 0, представлено 2.");

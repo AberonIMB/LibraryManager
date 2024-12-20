@@ -1,6 +1,7 @@
 package org.example.commandHandlers;
 
 import org.example.Command;
+import org.example.commandValidators.AddBookCommandValidator;
 import org.example.commandValidators.CommandValidator;
 import org.example.exceptions.ArgumentsCountException;
 import org.example.exceptions.InvalidIdException;
@@ -21,8 +22,8 @@ public class AddBookCommandHandler implements CommandHandler {
     /**
      * Конструктор, который задает все необходимые поля
      */
-    public AddBookCommandHandler(CommandValidator commandValidator, LibraryService libraryService, IOHandler ioHandler) {
-        this.commandValidator = commandValidator;
+    public AddBookCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
+        commandValidator = new AddBookCommandValidator();
         this.libraryService = libraryService;
         this.ioHandler = ioHandler;
     }

@@ -1,7 +1,7 @@
 package org.example.service;
 
-import org.example.model.Book;
 import org.example.dao.BookDAO;
+import org.example.model.Book;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -14,18 +14,23 @@ public class LibraryService {
 
     private final BookService bookService;
 
-    private final SessionFactory factory;
-
     /**
      * Конструктор для создания других сервисов и присваивании им SessionFactory
      */
     public LibraryService() {
-        factory = new Configuration()
+        SessionFactory factory = new Configuration()
                 .configure("hibernate.cfg.xml")
                 .addAnnotatedClass(Book.class)
                 .buildSessionFactory();
         BookDAO bookDAO = new BookDAO(factory);
         bookService = new BookService(bookDAO);
+    }
+
+    /**
+     * Конструктор для тестирования без поднятия базы данных
+     */
+    public LibraryService(BookService bookService) {
+        this.bookService = bookService;
     }
 
     /**
@@ -43,7 +48,11 @@ public class LibraryService {
      */
     public Book editBook(Long id, String title, String author, int publicationYear) {
         Book book = getBookById(id);
-        bookService.editBook(book, title, author, publicationYear);
+
+        if (book != null) {
+            book.setNewData(title, author, publicationYear);
+            bookService.editBook(book);
+        }
 
         return book;
     }
@@ -53,7 +62,10 @@ public class LibraryService {
      */
     public Book deleteBook(Long id) {
         Book book = getBookById(id);
-        bookService.deleteBook(book);
+
+        if (book != null) {
+            bookService.deleteBook(book);
+        }
 
         return book;
     }

@@ -9,25 +9,22 @@ import org.example.util.IOHandler;
  * Класс для запуска приложения
  */
 public class LibraryConsoleApplication {
-    private final LibraryService libraryService;
-    private final CommandFactory commandFactory;
+    private CommandFactory commandFactory;
     private final IOHandler ioHandler;
 
     /**
-     * Конструктор задающий IOHandler, LibraryService, CommandFactory
+     * Конструктор задающий IOHandler, CommandFactory
      */
     public LibraryConsoleApplication() {
-        this.ioHandler = new IOConsoleHandler();
-        this.libraryService = new LibraryService();
-        this.commandFactory = new CommandFactory(ioHandler, libraryService);
+        this(new IOConsoleHandler(), null);
+        this.commandFactory = new CommandFactory(ioHandler, new LibraryService());
     }
 
     /**
      * Конструктор для тестов
      */
-    public LibraryConsoleApplication(IOHandler ioHandler, LibraryService libraryService, CommandFactory commandFactory) {
+    public LibraryConsoleApplication(IOHandler ioHandler, CommandFactory commandFactory) {
         this.ioHandler = ioHandler;
-        this.libraryService = libraryService;
         this.commandFactory = commandFactory;
     }
 

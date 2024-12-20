@@ -3,10 +3,6 @@ package commandHandlersTest;
 import org.example.Command;
 import org.example.commandHandlers.CommandHandler;
 import org.example.commandHandlers.GetBookListCommandHandler;
-import org.example.commandValidators.CommandValidator;
-import org.example.exceptions.ArgumentsCountException;
-import org.example.exceptions.InvalidIdException;
-import org.example.exceptions.InvalidYearException;
 import org.example.model.Book;
 import org.example.service.LibraryService;
 import org.example.util.IOHandler;
@@ -26,7 +22,6 @@ public class GetBookListCommandHandlerTest {
 
     private final LibraryService libraryServiceMock;
     private final IOHandler ioHandlerMock;
-    private final CommandValidator commandValidatorMock;
 
     private final CommandHandler getBookListCommandHandler;
 
@@ -39,13 +34,12 @@ public class GetBookListCommandHandlerTest {
     /**
      * Конструктор, в котором происходит инициализация полей
      */
-    public GetBookListCommandHandlerTest(@Mock CommandValidator commandValidator, @Mock LibraryService libraryService, @Mock IOHandler ioHandler) {
+    public GetBookListCommandHandlerTest(@Mock LibraryService libraryService, @Mock IOHandler ioHandler) {
         this.ioHandlerMock = ioHandler;
-        this.commandValidatorMock = commandValidator;
         this.libraryServiceMock = libraryService;
 
         this.getBookListCommandHandler = new GetBookListCommandHandler(
-                libraryServiceMock, ioHandlerMock, commandValidatorMock);
+                libraryServiceMock, ioHandlerMock);
     }
     /**
      * Проверяет корректность обработки команды получения списка книг с непустым списком
@@ -81,18 +75,17 @@ public class GetBookListCommandHandlerTest {
     }
 
     /**
-     * Проверяет корректность обработки команды получения списка книг с некорректными данными
+     * Проверяет корректность обработки команды получения списка книг с неправильным количеством параметров
      */
     @Test
-    public void testHandleIncorrectGetBookListCommand() throws ArgumentsCountException, InvalidYearException, InvalidIdException {
-        Mockito.doThrow(new ArgumentsCountException(0, 2))
-                .when(commandValidatorMock).validateCommand(getBookListCommand);
+    public void testHandleGetBookListCommandWithIncorrectArgsCount() {
+        Command incorrectCommand = new Command("list-books \"title\"");
 
-        getBookListCommandHandler.executeCommand(getBookListCommand);
+        getBookListCommandHandler.executeCommand(incorrectCommand);
 
         Mockito.verifyNoInteractions(libraryServiceMock);
 
         Mockito.verify(ioHandlerMock, Mockito.times(1))
-                .print("Неверное количество аргументов команды: должно быть 0, представлено 2.");
+                .print("Неверное количество аргументов команды: должно быть 0, представлено 1.");
     }
 }

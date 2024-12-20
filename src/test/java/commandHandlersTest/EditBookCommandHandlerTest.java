@@ -3,10 +3,6 @@ package commandHandlersTest;
 import org.example.Command;
 import org.example.commandHandlers.CommandHandler;
 import org.example.commandHandlers.EditBookCommandHandler;
-import org.example.commandValidators.CommandValidator;
-import org.example.exceptions.ArgumentsCountException;
-import org.example.exceptions.InvalidIdException;
-import org.example.exceptions.InvalidYearException;
 import org.example.model.Book;
 import org.example.service.LibraryService;
 import org.example.util.IOHandler;
@@ -23,7 +19,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class EditBookCommandHandlerTest {
 
     private final IOHandler ioHandlerMock;
-    private final CommandValidator commandValidatorMock;
     private final LibraryService libraryServiceMock;
 
     private final CommandHandler commandHandler;
@@ -35,13 +30,11 @@ public class EditBookCommandHandlerTest {
     /**
      * Конструктор, в котором происходит инициализация полей
      */
-    public EditBookCommandHandlerTest(@Mock CommandValidator commandValidator, @Mock LibraryService libraryService, @Mock IOHandler ioHandler) {
+    public EditBookCommandHandlerTest(@Mock LibraryService libraryService, @Mock IOHandler ioHandler) {
         this.ioHandlerMock = ioHandler;
-        this.commandValidatorMock = commandValidator;
         this.libraryServiceMock = libraryService;
 
-        this.commandHandler = new EditBookCommandHandler(
-                commandValidatorMock, libraryServiceMock, ioHandlerMock);
+        this.commandHandler = new EditBookCommandHandler(libraryServiceMock, ioHandlerMock);
     }
 
     /**
@@ -93,18 +86,47 @@ public class EditBookCommandHandlerTest {
     }
 
     /**
-     * Проверяет корректность обработки команды редактирования книги с некорректными данными
+     * Проверяет корректность обработки команды редактирования книги с неправильным количеством параметров
      */
     @Test
-    public void testHandleIncorrectEditBookCommand() throws ArgumentsCountException, InvalidYearException, InvalidIdException {
-        Mockito.doThrow(new ArgumentsCountException(4, 2))
-                .when(commandValidatorMock).validateCommand(editCommand);
+    public void testHandleEditBookCommandWithIncorrectArgsCount() {
+        Command incorrectCommand = new Command("edit-book 1 \"title\"");
 
-        commandHandler.executeCommand(editCommand);
+        testIncorrectCommand(incorrectCommand,
+                "Неверное количество аргументов команды: должно быть 4, представлено 2.");
+    }
+
+    /**
+     * Проверяет корректность обработки команды редактирования книги с неправильным ID
+     */
+    @Test
+    public void testHandleEditBookCommandWithIncorrectID() {
+        Command incorrectCommand = new Command("edit-book ID \"title\" \"author\" 2023");
+
+        testIncorrectCommand(incorrectCommand, "ID должен быть представлен числом.");
+    }
+
+    /**
+     * Проверяет корректность обработки команды редактирования книги с неправильным типом year
+     */
+    @Test
+    public void testHandleEditBookCommandWithIncorrectYear() {
+        Command incorrectCommand = new Command("edit-book 1 \"title\" \"author\" \"year\"");
+
+        testIncorrectCommand(incorrectCommand, "Год должен быть представлен числом.");
+    }
+
+    /**
+     * Тестирует выполнение неправилньой команды
+     * @param incorrectCommand Команда
+     * @param exceptionMessage сообщение об ошибке
+     */
+    private void testIncorrectCommand(Command incorrectCommand, String exceptionMessage) {
+        commandHandler.executeCommand(incorrectCommand);
 
         Mockito.verifyNoInteractions(libraryServiceMock);
 
         Mockito.verify(ioHandlerMock, Mockito.times(1))
-                .print("Неверное количество аргументов команды: должно быть 4, представлено 2.");
+                .print(exceptionMessage);
     }
 }

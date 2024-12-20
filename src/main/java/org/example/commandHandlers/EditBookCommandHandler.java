@@ -2,6 +2,7 @@ package org.example.commandHandlers;
 
 import org.example.Command;
 import org.example.commandValidators.CommandValidator;
+import org.example.commandValidators.EditBookCommandValidator;
 import org.example.exceptions.ArgumentsCountException;
 import org.example.exceptions.InvalidIdException;
 import org.example.exceptions.InvalidYearException;
@@ -22,8 +23,8 @@ public class EditBookCommandHandler implements CommandHandler {
     /**
      * Конструктор, который задает все необходимые поля
      */
-    public EditBookCommandHandler(CommandValidator commandValidator, LibraryService libraryService, IOHandler ioHandler) {
-        this.commandValidator = commandValidator;
+    public EditBookCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
+        commandValidator = new EditBookCommandValidator();
         this.libraryService = libraryService;
         this.ioHandler = ioHandler;
     }

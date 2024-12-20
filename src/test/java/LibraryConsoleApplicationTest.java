@@ -2,7 +2,6 @@ import org.example.Command;
 import org.example.CommandFactory;
 import org.example.LibraryConsoleApplication;
 import org.example.commandHandlers.CommandHandler;
-import org.example.service.LibraryService;
 import org.example.util.IOHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,13 +27,11 @@ public class LibraryConsoleApplicationTest {
      * Констрктор для инициализации libraryConsoleApplication, commandFactoryMock, commandHandlerMock, ioHandlerMock
      */
     public LibraryConsoleApplicationTest(@Mock CommandFactory commandFactoryMock,
-                                         @Mock LibraryService libraryServiceMock,
                                          @Mock IOHandler ioHandlerMock,
                                          @Mock CommandHandler commandHandlerMock) {
         this.commandFactoryMock = commandFactoryMock;
         this.ioHandlerMock = ioHandlerMock;
         libraryConsoleApplication = new LibraryConsoleApplication(ioHandlerMock,
-                libraryServiceMock,
                 commandFactoryMock);
         this.commandHandlerMock = commandHandlerMock;
     }
