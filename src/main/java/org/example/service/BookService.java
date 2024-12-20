@@ -37,20 +37,15 @@ public class BookService {
     /**
      * Редактировать книгу по id
      */
-    public void editBook(Book book, String title, String author, int publicationYear) {
-        if (book != null) {
-            book.setNewData(title, author, publicationYear);
-            bookDAO.update(book);
-        }
+    public void editBook(Book book) {
+        bookDAO.update(book);
     }
 
     /**
      * Удалить книгу по id
      */
     public void deleteBook(Book book) {
-        if (book != null) {
-            bookDAO.deleteBook(book);
-        }
+        bookDAO.deleteBook(book);
     }
 
     /**

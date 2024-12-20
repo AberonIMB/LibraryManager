@@ -2,6 +2,7 @@ package org.example.commandHandlers;
 
 import org.example.Command;
 import org.example.commandValidators.CommandValidator;
+import org.example.commandValidators.DeleteBookCommandValidator;
 import org.example.exceptions.ArgumentsCountException;
 import org.example.exceptions.InvalidIdException;
 import org.example.exceptions.InvalidYearException;
@@ -21,8 +22,8 @@ public class DeleteBookCommandHandler implements CommandHandler {
     /**
      * Конструктор, который задает все необходимые поля
      */
-    public DeleteBookCommandHandler(CommandValidator commandValidator, LibraryService libraryService, IOHandler ioHandler) {
-        this.commandValidator = commandValidator;
+    public DeleteBookCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
+        commandValidator = new DeleteBookCommandValidator();
         this.libraryService = libraryService;
         this.ioHandler = ioHandler;
     }

@@ -1,7 +1,6 @@
 package org.example;
 
 import org.example.commandHandlers.*;
-import org.example.commandValidators.*;
 import org.example.service.LibraryService;
 import org.example.util.IOHandler;
 
@@ -22,17 +21,12 @@ public class CommandFactory {
      * В хранилище добавляются пары команда-обработчик
      */
     public CommandFactory(IOHandler ioHandler, LibraryService libraryService) {
-        CommandValidator addBookCommandValidator = new AddBookCommandValidator();
-        CommandValidator deleteBookCommandValidator = new DeleteBookCommandValidator();
-        CommandValidator editBookCommandValidator = new EditBookCommandValidator();
-        CommandValidator commandWithoutParamsValidator = new CommandsWithoutParamsValidator();
-
         commands.put("unknown", new UnknownCommandHandler(ioHandler));
-        commands.put("add-book", new AddBookCommandHandler(addBookCommandValidator, libraryService, ioHandler));
-        commands.put("list-books", new GetBookListCommandHandler(libraryService, ioHandler, commandWithoutParamsValidator));
-        commands.put("edit-book", new EditBookCommandHandler(editBookCommandValidator, libraryService, ioHandler));
-        commands.put("delete-book", new DeleteBookCommandHandler(deleteBookCommandValidator, libraryService, ioHandler));
-        commands.put("help", new HelpCommandHandler(ioHandler, commandWithoutParamsValidator));
+        commands.put("add-book", new AddBookCommandHandler(libraryService, ioHandler));
+        commands.put("list-books", new GetBookListCommandHandler(libraryService, ioHandler));
+        commands.put("edit-book", new EditBookCommandHandler(libraryService, ioHandler));
+        commands.put("delete-book", new DeleteBookCommandHandler(libraryService, ioHandler));
+        commands.put("help", new HelpCommandHandler(ioHandler));
     }
 
     /**

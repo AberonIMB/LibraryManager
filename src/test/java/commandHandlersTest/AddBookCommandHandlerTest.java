@@ -3,11 +3,6 @@ package commandHandlersTest;
 import org.example.Command;
 import org.example.commandHandlers.AddBookCommandHandler;
 import org.example.commandHandlers.CommandHandler;
-import org.example.commandValidators.AddBookCommandValidator;
-import org.example.commandValidators.CommandValidator;
-import org.example.exceptions.ArgumentsCountException;
-import org.example.exceptions.InvalidIdException;
-import org.example.exceptions.InvalidYearException;
 import org.example.model.Book;
 import org.example.service.LibraryService;
 import org.example.util.IOHandler;
@@ -25,26 +20,20 @@ public class AddBookCommandHandlerTest {
 
     private final IOHandler ioHandlerMock;
 
-    private final CommandValidator commandValidatorMock;
-
     private final LibraryService libraryServiceMock;
 
     private final CommandHandler commandHandler;
-
-    private final Command addCommand = new Command("add-book \"title\" \"author\" 2023");
 
     private final Book book = new Book("title", "author", 2023);
 
     /**
      * Конструктор, в котором происходит инициализация полей
      */
-    public AddBookCommandHandlerTest(@Mock AddBookCommandValidator commandValidator, @Mock LibraryService libraryService, @Mock IOHandler ioHandler) {
+    public AddBookCommandHandlerTest(@Mock LibraryService libraryService, @Mock IOHandler ioHandler) {
         this.ioHandlerMock = ioHandler;
-        this.commandValidatorMock = commandValidator;
         this.libraryServiceMock = libraryService;
 
-        this.commandHandler = new AddBookCommandHandler(
-                commandValidatorMock, libraryServiceMock, ioHandlerMock);
+        this.commandHandler = new AddBookCommandHandler(libraryServiceMock, ioHandlerMock);
     }
 
     /**
@@ -52,6 +41,8 @@ public class AddBookCommandHandlerTest {
      */
     @Test
     public void testHandleCorrectAddBookCommand() {
+        Command addCommand = new Command("add-book \"title\" \"author\" 2023");
+
         Mockito.when(libraryServiceMock.addBook(
                         addCommand.getParams().get(0),
                         addCommand.getParams().get(1),
@@ -70,18 +61,37 @@ public class AddBookCommandHandlerTest {
     }
 
     /**
-     * Проверяет корректность обработки команды добавления книги с некорректными данными
+     * Проверяет корректность обработки команды добавления книги с неправильным количеством параметров
      */
     @Test
-    public void testHandleIncorrectAddBookCommand() throws ArgumentsCountException, InvalidYearException, InvalidIdException {
-        Mockito.doThrow(new ArgumentsCountException(3, 2))
-                .when(commandValidatorMock).validateCommand(addCommand);
+    public void testHandleAddBookCommandWithIncorrectArgsCount() {
+        Command incorrectCommand = new Command("add-book \"title\" \"author\"");
 
-        commandHandler.executeCommand(addCommand);
+        testIncorrectCommand(incorrectCommand,
+                "Неверное количество аргументов команды: должно быть 3, представлено 2.");
+    }
+
+    /**
+     * Проверяет корректность обработки команды добавления книги с неправилньым типом year
+     */
+    @Test
+    public void testHandleAddBookCommandWithIncorrectYear() {
+        Command incorrectCommand = new Command("add-book \"title\" \"author\" \"year\"");
+
+        testIncorrectCommand(incorrectCommand, "Год должен быть представлен числом.");
+    }
+
+    /**
+     * Тестирует выполнение неправилньой команды
+     * @param incorrectCommand Команда
+     * @param exceptionMessage сообщение об ошибке
+     */
+    private void testIncorrectCommand(Command incorrectCommand, String exceptionMessage) {
+        commandHandler.executeCommand(incorrectCommand);
 
         Mockito.verifyNoInteractions(libraryServiceMock);
 
         Mockito.verify(ioHandlerMock, Mockito.times(1))
-                .print("Неверное количество аргументов команды: должно быть 3, представлено 2.");
+                .print(exceptionMessage);
     }
 }
