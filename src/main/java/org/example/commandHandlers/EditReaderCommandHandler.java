@@ -23,9 +23,9 @@ public class EditReaderCommandHandler implements CommandHandler {
 
 
     public EditReaderCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
+        commandValidator = new EditReaderCommandValidator();
+        stateValidator = new ReaderNotNullStateValidator();
         this.libraryService = libraryService;
-        this.commandValidator = new EditReaderCommandValidator();
-        this.stateValidator = new ReaderNotNullStateValidator();
         this.ioHandler = ioHandler;
     }
 

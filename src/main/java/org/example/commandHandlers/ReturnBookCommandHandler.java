@@ -21,9 +21,9 @@ public class ReturnBookCommandHandler implements CommandHandler {
     private final IOHandler ioHandler;
 
     public ReturnBookCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
+        commandValidator = new OnlyIdCommandValidator();
+        stateValidator = new ReturnStateValidator();
         this.libraryService = libraryService;
-        this.commandValidator = new OnlyIdCommandValidator();
-        this.stateValidator = new ReturnStateValidator();
         this.ioHandler = ioHandler;
     }
 

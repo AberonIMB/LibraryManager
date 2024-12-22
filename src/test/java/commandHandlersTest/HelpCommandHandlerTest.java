@@ -10,7 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
- * тесты для обработчика команды получения справки
+ * Тесты для обработчика команды получения справки
  */
 @ExtendWith(MockitoExtension.class)
 public class HelpCommandHandlerTest {

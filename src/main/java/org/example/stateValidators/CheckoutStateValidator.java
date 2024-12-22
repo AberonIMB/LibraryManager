@@ -12,6 +12,9 @@ import org.example.model.Reader;
  */
 public class CheckoutStateValidator {
 
+    /**
+     * Валидировать состояние
+     */
     public void validateState(Long bookId, Long readerId, Book book, Reader reader) throws BookIsNullException, ReaderIsNullException, BookAlreadyCheckedOutException {
         if (book == null) {
             throw new BookIsNullException(bookId);

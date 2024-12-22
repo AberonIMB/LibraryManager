@@ -10,6 +10,9 @@ import org.example.model.Book;
  */
 public class DeleteBookStateValidator {
 
+    /**
+     * Валидировать состояние
+     */
     public void validateState(Long bookId, Book book) throws BookIsNullException, BookAlreadyCheckedOutException {
         if (book == null) {
             throw new BookIsNullException(bookId);

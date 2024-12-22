@@ -9,6 +9,9 @@ import org.example.model.Book;
  */
 public class EditBookStateValidator {
 
+    /**
+     * Валидировать состояние
+     */
     public void validateState(Long bookId, Book book) throws BookIsNullException {
         if (book == null) {
             throw new BookIsNullException(bookId);

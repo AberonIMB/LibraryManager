@@ -23,9 +23,9 @@ public class GetBookListCommandHandler implements CommandHandler {
      * Конструктор, который задает все необходимые поля
      */
     public GetBookListCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
+        commandValidator = new CommandsWithoutParamsValidator();
         this.libraryService = libraryService;
         this.ioHandler = ioHandler;
-        commandValidator = new CommandsWithoutParamsValidator();
     }
 
     @Override

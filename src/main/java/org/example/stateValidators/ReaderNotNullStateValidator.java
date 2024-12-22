@@ -9,6 +9,9 @@ import org.example.model.Reader;
  */
 public class ReaderNotNullStateValidator {
 
+    /**
+     * Валидировать состояние
+     */
     public void validateState(Long readerId, Reader reader) throws ReaderIsNullException {
         if (reader == null) {
             throw new ReaderIsNullException(readerId);

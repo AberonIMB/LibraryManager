@@ -13,7 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
- * тесты для обработчика команды редактирования книги
+ * Тесты для обработчика команды редактирования книги
  */
 @ExtendWith(MockitoExtension.class)
 public class EditBookCommandHandlerTest {
@@ -90,7 +90,7 @@ public class EditBookCommandHandlerTest {
     }
 
     /**
-     * Проверяет корректность обработки команды редактирования книги с неправильным ID
+     * Проверяет корректность обработки команды редактирования книги с неправильным типом ID
      */
     @Test
     public void testHandleEditBookCommandWithIncorrectID() {

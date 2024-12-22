@@ -19,7 +19,7 @@ public class AddReaderCommandHandler implements CommandHandler {
     private final IOHandler ioHandler;
 
     public AddReaderCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
-        this.commandValidator = new AddReaderCommandValidator();
+        commandValidator = new AddReaderCommandValidator();
         this.libraryService = libraryService;
         this.ioHandler = ioHandler;
     }

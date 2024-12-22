@@ -14,7 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
- * тесты для обработчика команды удаления книги
+ * Тесты для обработчика команды удаления книги
  */
 @ExtendWith(MockitoExtension.class)
 public class DeleteBookCommandHandlerTest {
@@ -73,19 +73,27 @@ public class DeleteBookCommandHandlerTest {
     }
 
     /**
-     * Проверяет корректность обработки команды удаления книги с некорректными данными
+     * Проверяет корректность обработки команды удаления книги с неправильным количеством параметров
      */
     @Test
-    public void testHandleIncorrectDeleteBookCommand() {
+    public void testHandleDeleteBookCommandWithIncorrectArgsCount() {
         Command incorrectCommand = new Command("delete-book 1 2");
 
-        commandHandler.executeCommand(incorrectCommand);
-
-        Mockito.verifyNoInteractions(libraryServiceMock);
-
-        Mockito.verify(ioHandlerMock, Mockito.times(1))
-                .print("Неверное количество аргументов команды: должно быть 1, представлено 2.");
+        testIncorrectCommand(incorrectCommand,
+                "Неверное количество аргументов команды: должно быть 1, представлено 2.");
     }
+
+    /**
+     * Проверяет корректность обработки команды удаления книги с с неправильным типом ID книги
+     */
+    @Test
+    public void testHandleDeleteBookCommandWithIncorrectBookId() {
+        Command incorrectCommand = new Command("delete-book a");
+
+        testIncorrectCommand(incorrectCommand,
+                "ID должен быть представлен числом.");
+    }
+
 
     /**
      * Проверяет корректность обработки команды удаления книги, которая выдана читателю
@@ -104,5 +112,20 @@ public class DeleteBookCommandHandlerTest {
 
         Mockito.verify(ioHandlerMock, Mockito.times(1))
                 .print("Невозможно выполнить операцию, так как книга \"title\" выдана читателю ID: null ФИО: reader.");
+    }
+
+    /**
+     * Тестирует выполнение некорректной команды
+     *
+     * @param incorrectCommand Команда
+     * @param exceptionMessage сообщение об ошибке валидатора команды
+     */
+    private void testIncorrectCommand(Command incorrectCommand, String exceptionMessage) {
+        commandHandler.executeCommand(incorrectCommand);
+
+        Mockito.verifyNoInteractions(libraryServiceMock);
+
+        Mockito.verify(ioHandlerMock, Mockito.times(1))
+                .print(exceptionMessage);
     }
 }

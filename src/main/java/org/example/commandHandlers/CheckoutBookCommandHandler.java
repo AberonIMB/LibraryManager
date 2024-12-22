@@ -23,9 +23,9 @@ public class CheckoutBookCommandHandler implements CommandHandler {
     private final IOHandler ioHandler;
 
     public CheckoutBookCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
-        this.libraryService = libraryService;
         commandValidator = new CheckoutBookCommandValidator();
-        this.stateValidator = new CheckoutStateValidator();
+        stateValidator = new CheckoutStateValidator();
+        this.libraryService = libraryService;
         this.ioHandler = ioHandler;
     }
 

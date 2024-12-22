@@ -21,9 +21,9 @@ public class ShowReaderCommandHandler implements CommandHandler {
     private final IOHandler ioHandler;
 
     public ShowReaderCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
+        commandValidator = new OnlyIdCommandValidator();
+        stateValidator = new ReaderNotNullStateValidator();
         this.libraryService = libraryService;
-        this.commandValidator = new OnlyIdCommandValidator();
-        this.stateValidator = new ReaderNotNullStateValidator();
         this.ioHandler = ioHandler;
     }
 

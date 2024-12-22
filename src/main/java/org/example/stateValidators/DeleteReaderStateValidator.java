@@ -10,6 +10,9 @@ import org.example.model.Reader;
  */
 public class DeleteReaderStateValidator {
 
+    /**
+     * Валидировать состояние
+     */
     public void validateState(Long id, Reader reader) throws ReaderIsNullException, DeleteReaderWithNotEmptyBookListException {
         if (reader == null) {
             throw new ReaderIsNullException(id);

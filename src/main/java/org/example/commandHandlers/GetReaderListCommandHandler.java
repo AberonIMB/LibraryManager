@@ -20,8 +20,8 @@ public class GetReaderListCommandHandler implements CommandHandler {
     private final IOHandler ioHandler;
 
     public GetReaderListCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
+        commandValidator = new CommandsWithoutParamsValidator();
         this.libraryService = libraryService;
-        this.commandValidator = new CommandsWithoutParamsValidator();
         this.ioHandler = ioHandler;
     }
 
