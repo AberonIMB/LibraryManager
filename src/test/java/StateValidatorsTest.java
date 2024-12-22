@@ -123,7 +123,7 @@ public class StateValidatorsTest {
      */
     @Test
     public void testValidateStateForDeleteReaderWithNotEmptyBookList() {
-        reader.getBooks().add(book);
+        reader.getBooks().add(book); // Эмулирование базы данных
         DeleteReaderWithNotEmptyBookListException e = Assertions.assertThrows(DeleteReaderWithNotEmptyBookListException.class,
                 () -> deleteReaderStateValidator.validateState(1L, reader));
 
