@@ -10,7 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
- * тесты для обработчика команды получения справки
+ * Тесты для обработчика команды получения справки
  */
 @ExtendWith(MockitoExtension.class)
 public class HelpCommandHandlerTest {
@@ -54,7 +54,7 @@ public class HelpCommandHandlerTest {
     }
 
     /**
-     * Проверяет корректность обработки команды получения справки с некорректными данными
+     * Проверяет корректность обработки команды получения справки с неправильным количеством параметров
      */
     @Test
     public void testHandleHelpCommandWithIncorrectArgsCount() {

@@ -18,8 +18,11 @@ public class AddReaderCommandHandler implements CommandHandler {
     private final LibraryService libraryService;
     private final IOHandler ioHandler;
 
+    /**
+     * Конструктор, который задает все необходимые поля
+     */
     public AddReaderCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
-        this.commandValidator = new AddReaderCommandValidator();
+        commandValidator = new AddReaderCommandValidator();
         this.libraryService = libraryService;
         this.ioHandler = ioHandler;
     }

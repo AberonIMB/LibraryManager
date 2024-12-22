@@ -17,8 +17,8 @@ public class HelpCommandHandler implements CommandHandler {
      * Конструктор, который задает все необходимые поля
      */
     public HelpCommandHandler(IOHandler ioHandler) {
-        this.ioHandler = ioHandler;
         commandValidator = new CommandsWithoutParamsValidator();
+        this.ioHandler = ioHandler;
     }
 
     @Override

@@ -41,7 +41,7 @@ public class ReaderService {
      * Удалить читателя по id
      */
     public void deleteReader(Reader reader) {
-        readerDAO.deleteReader(reader);
+        readerDAO.delete(reader);
     }
 
     /**

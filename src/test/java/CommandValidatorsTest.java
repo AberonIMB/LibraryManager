@@ -11,10 +11,13 @@ import org.junit.jupiter.api.Test;
  * Общие тесты для всех валидаторов команд
  */
 public class CommandValidatorsTest {
-    
+
     private final CommandValidator addBookCommandValidator = new AddBookCommandValidator();
-    private final CommandValidator deleteBookCommandValidator = new OnlyIdCommandValidator();
+    private final CommandValidator onlyIdCommandValidator = new OnlyIdCommandValidator();
     private final CommandValidator editBookCommandValidator = new EditBookCommandValidator();
+    private final CommandValidator addReaderCommandValidator = new AddReaderCommandValidator();
+    private final CommandValidator editReaderCommandValidator = new EditReaderCommandValidator();
+    private final CommandValidator checkoutBookCommandValidator = new CheckoutBookCommandValidator();
     private final CommandValidator commandWithoutParamsValidator = new CommandsWithoutParamsValidator();
 
     /**
@@ -22,32 +25,34 @@ public class CommandValidatorsTest {
      */
     @Test
     void validateCommandsWithCorrectParams() {
-        testNothingToThrows(
-                addBookCommandValidator,
-                new Command("addBook title author 2023")
-        );
+        Assertions.assertDoesNotThrow(() -> addBookCommandValidator
+                .validateCommand(new Command("add-book title author 2023")));
 
-        testNothingToThrows(
-                deleteBookCommandValidator,
-                new Command("deleteBook 1")
-        );
+        Assertions.assertDoesNotThrow(() -> onlyIdCommandValidator
+                .validateCommand(new Command("delete-book 1")));
 
-        testNothingToThrows(
-                editBookCommandValidator,
-                new Command("editBook 1 newTitle newAuthor 2024")
-        );
+        Assertions.assertDoesNotThrow(() -> editBookCommandValidator
+                .validateCommand(new Command("edit-book 1 newTitle newAuthor 2024")));
 
-        testNothingToThrows(
-                commandWithoutParamsValidator,
-                new Command("help")
-        );
+        Assertions.assertDoesNotThrow(() -> addReaderCommandValidator
+                .validateCommand(new Command("add-reader name")));
+
+        Assertions.assertDoesNotThrow(() -> editReaderCommandValidator
+                .validateCommand(new Command("edit-reader 1 newName")));
+
+        Assertions.assertDoesNotThrow(() -> checkoutBookCommandValidator
+                .validateCommand(new Command("checkout-book 1 1")));
+
+        Assertions.assertDoesNotThrow(() -> commandWithoutParamsValidator
+                .validateCommand(new Command("help")));
+
     }
 
     /**
      * Проверка валидатора добавления книги с некорректным количеством параметров
      */
     @Test
-    public void validateAddCommandWithIncorrectParamsCount() {
+    public void validateAddBookCommandWithIncorrectParamsCount() {
         testThrowsArgumentsCountException(
                 addBookCommandValidator,
                 new Command("addBook title"),
@@ -59,7 +64,7 @@ public class CommandValidatorsTest {
      * Проверка валидатора добавления книги с некорректным значением года
      */
     @Test
-    public void validateAddCommandWithIncorrectParams() {
+    public void validateAddBookCommandWithIncorrectParams() {
         testThrowsInvalidYearException(
                 addBookCommandValidator,
                 new Command("addBook title author invalidYear")
@@ -70,9 +75,9 @@ public class CommandValidatorsTest {
      * Проверка валидатора удаления книги с некорректным количеством параметров
      */
     @Test
-    public void validateDeleteCommandWithIncorrectParamsCount() {
+    public void validateDeleteBookCommandWithIncorrectParamsCount() {
         testThrowsArgumentsCountException(
-                deleteBookCommandValidator,
+                onlyIdCommandValidator,
                 new Command("deleteBook 1 extraParam"),
                 1
         );
@@ -82,9 +87,9 @@ public class CommandValidatorsTest {
      * Проверка валидатора удаления книги с некорректным ID
      */
     @Test
-    public void validateDeleteCommandWithIncorrectParams() {
+    public void validateDeleteBookCommandWithIncorrectParams() {
         testThrowsInvalidIdException(
-                deleteBookCommandValidator,
+                onlyIdCommandValidator,
                 new Command("deleteBook invalidId")
         );
     }
@@ -93,7 +98,7 @@ public class CommandValidatorsTest {
      * Проверка валидатора изменеия книги с некорректным количеством параметров
      */
     @Test
-    public void validateEditCommandWithIncorrectParamsCount() {
+    public void validateEditBookCommandWithIncorrectParamsCount() {
         testThrowsArgumentsCountException(
                 editBookCommandValidator,
                 new Command("editBook 1 newTitle"),
@@ -105,7 +110,7 @@ public class CommandValidatorsTest {
      * Проверка валидатора изменеия книги с некорректным параметром ID
      */
     @Test
-    public void validateEditCommandWithIncorrectIDParam() {
+    public void validateEditBookCommandWithIncorrectIDParam() {
         testThrowsInvalidIdException(
                 editBookCommandValidator,
                 new Command("edit-book invalidId title author 2024")
@@ -116,7 +121,7 @@ public class CommandValidatorsTest {
      * Проверка валидатора изменеия книги с некорректным значением года
      */
     @Test
-    public void validateEditCommandWithIncorrectYearParam() {
+    public void validateEditBookCommandWithIncorrectYearParam() {
         testThrowsInvalidYearException(
                 editBookCommandValidator,
                 new Command("edit-book 1 title author InvalidYear")
@@ -124,7 +129,76 @@ public class CommandValidatorsTest {
     }
 
     /**
-     * Проверка валидатора без параметров с некорректным количеством параметров
+     * Проверка валидатора добавления читателя с некорректным количеством параметров
+     */
+    @Test
+    public void validateAddReaderCommandWithIncorrectParamsCount() {
+        testThrowsArgumentsCountException(
+                addReaderCommandValidator,
+                new Command("addBook name surname"),
+                1
+        );
+    }
+
+    /**
+     * Проверка валидатора изменения читателя с некорректным значением ID
+     */
+    @Test
+    public void validateEditReaderCommandWithIncorrectIdParam() {
+        testThrowsInvalidIdException(
+                editReaderCommandValidator,
+                new Command("addBook a name")
+        );
+    }
+
+    /**
+     * Проверка валидатора изменения читателя с неправильным количеством параметров
+     */
+    @Test
+    public void validateEditReaderCommandWithIncorrectParamsCount() {
+        testThrowsArgumentsCountException(
+                editReaderCommandValidator,
+                new Command("addBook 1 name surname"),
+                2
+        );
+    }
+
+    /**
+     * Проверка валидатора изменения читателя с неправильным типом ID книги
+     */
+    @Test
+    public void validateCheckoutBookCommandWithIncorrectBookIdParam() {
+        testThrowsInvalidIdException(
+                checkoutBookCommandValidator,
+                new Command("checkout-book book 1")
+        );
+    }
+
+    /**
+     * Проверка валидатора изменения читателя с неправильным типом ID читателя
+     */
+    @Test
+    public void validateCheckoutBookCommandWithIncorrectReaderIdParam() {
+        testThrowsInvalidIdException(
+                checkoutBookCommandValidator,
+                new Command("checkout-book 1 reader")
+        );
+    }
+
+    /**
+     * Проверка валидатора выдачи книги с неправильным количеством параметров
+     */
+    @Test
+    public void validateCheckoutBookCommandWithIncorrectParamsCount() {
+        testThrowsArgumentsCountException(
+                checkoutBookCommandValidator,
+                new Command("checkout-book 1 2 excess"),
+                2
+        );
+    }
+
+    /**
+     * Проверка валидатора без параметров с неправильным количеством параметров
      */
     @Test
     public void validateWithoutParamsCommandWithIncorrectParamsCount() {
@@ -133,13 +207,6 @@ public class CommandValidatorsTest {
                 new Command("help extraParam"),
                 0
         );
-    }
-
-    /**
-     * Метод, который проверяет, что валидатор не выбрасывает исключения
-     */
-    private void testNothingToThrows(CommandValidator validator, Command command) {
-        Assertions.assertDoesNotThrow(() -> validator.validateCommand(command));
     }
 
     /**
@@ -158,7 +225,7 @@ public class CommandValidatorsTest {
      * Метод для проверки выброса исключения InvalidIdException
      */
     private void testThrowsInvalidIdException(CommandValidator validator,
-                                                   Command command) {
+                                              Command command) {
         Exception e = Assertions.assertThrows(InvalidIdException.class, () -> validator.validateCommand(command));
 
         Assertions.assertEquals("ID должен быть представлен числом.", e.getMessage());
@@ -168,7 +235,7 @@ public class CommandValidatorsTest {
      * Метод для проверки выброса исключения InvalidYearException
      */
     private void testThrowsInvalidYearException(CommandValidator validator,
-                                              Command command) {
+                                                Command command) {
         Exception e = Assertions.assertThrows(InvalidYearException.class, () -> validator.validateCommand(command));
 
         Assertions.assertEquals("Год должен быть представлен числом.", e.getMessage());

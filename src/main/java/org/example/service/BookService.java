@@ -45,7 +45,7 @@ public class BookService {
      * Удалить книгу по id
      */
     public void deleteBook(Book book) {
-        bookDAO.deleteBook(book);
+        bookDAO.delete(book);
     }
 
     /**

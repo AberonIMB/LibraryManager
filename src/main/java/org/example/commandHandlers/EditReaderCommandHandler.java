@@ -21,11 +21,13 @@ public class EditReaderCommandHandler implements CommandHandler {
     private final ReaderNotNullStateValidator stateValidator;
     private final IOHandler ioHandler;
 
-
+    /**
+     * Конструктор, который задает все необходимые поля
+     */
     public EditReaderCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
+        commandValidator = new EditReaderCommandValidator();
+        stateValidator = new ReaderNotNullStateValidator();
         this.libraryService = libraryService;
-        this.commandValidator = new EditReaderCommandValidator();
-        this.stateValidator = new ReaderNotNullStateValidator();
         this.ioHandler = ioHandler;
     }
 
@@ -47,6 +49,9 @@ public class EditReaderCommandHandler implements CommandHandler {
         }
     }
 
+    /**
+     * Выводит необходимую информацию об измененном читателе
+     */
     private void printInfo(Reader reader) {
         ioHandler.print(String.format("Имя читателя %d изменено на %s", reader.getId(), reader.getName()));
     }

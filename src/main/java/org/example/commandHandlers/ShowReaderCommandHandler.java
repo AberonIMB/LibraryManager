@@ -20,10 +20,13 @@ public class ShowReaderCommandHandler implements CommandHandler {
     private final ReaderNotNullStateValidator stateValidator;
     private final IOHandler ioHandler;
 
+    /**
+     * Конструктор, который задает все необходимые поля
+     */
     public ShowReaderCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
+        commandValidator = new OnlyIdCommandValidator();
+        stateValidator = new ReaderNotNullStateValidator();
         this.libraryService = libraryService;
-        this.commandValidator = new OnlyIdCommandValidator();
-        this.stateValidator = new ReaderNotNullStateValidator();
         this.ioHandler = ioHandler;
     }
 
@@ -43,6 +46,9 @@ public class ShowReaderCommandHandler implements CommandHandler {
         }
     }
 
+    /**
+     * Выводит информацию об читателе
+     */
     private void printInfo(Reader reader) {
         ioHandler.print(reader.getReaderInfo());
     }
