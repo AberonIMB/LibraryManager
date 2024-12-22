@@ -2,6 +2,7 @@ package org.example.commandHandlers;
 
 import org.example.Command;
 import org.example.commandValidators.CommandValidator;
+import org.example.commandValidators.OnlyIdCommandValidator;
 import org.example.exceptions.commandExceptions.CommandValidationException;
 import org.example.exceptions.stateExceptions.StateValidationException;
 import org.example.model.Reader;
@@ -20,10 +21,10 @@ public class DeleteReaderCommandHandler implements CommandHandler {
     private final DeleteReaderStateValidator stateValidator;
     private final IOHandler ioHandler;
 
-    public DeleteReaderCommandHandler(CommandValidator commandValidator,LibraryService libraryService, IOHandler ioHandler, DeleteReaderStateValidator stateValidator) {
+    public DeleteReaderCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
         this.libraryService = libraryService;
-        this.commandValidator = commandValidator;
-        this.stateValidator = stateValidator;
+        this.commandValidator = new OnlyIdCommandValidator();
+        this.stateValidator = new DeleteReaderStateValidator();
         this.ioHandler = ioHandler;
     }
 
@@ -31,9 +32,11 @@ public class DeleteReaderCommandHandler implements CommandHandler {
     public void executeCommand(Command command) {
         try {
             commandValidator.validateCommand(command);
-            Reader reader = libraryService.getReaderById(Long.parseLong(command.getParams().get(0)));
 
-            stateValidator.validateState(command, reader);
+            Long id = Long.parseLong(command.getParams().get(0));
+            Reader reader = libraryService.getReaderById(id);
+
+            stateValidator.validateState(id, reader);
 
             libraryService.deleteReader(reader);
             printInfo(reader);

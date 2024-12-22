@@ -1,6 +1,7 @@
 package org.example.commandHandlers;
 
 import org.example.Command;
+import org.example.commandValidators.AddReaderCommandValidator;
 import org.example.commandValidators.CommandValidator;
 import org.example.exceptions.commandExceptions.CommandValidationException;
 import org.example.model.Reader;
@@ -17,8 +18,8 @@ public class AddReaderCommandHandler implements CommandHandler {
     private final LibraryService libraryService;
     private final IOHandler ioHandler;
 
-    public AddReaderCommandHandler(CommandValidator commandValidator, LibraryService libraryService, IOHandler ioHandler) {
-        this.commandValidator = commandValidator;
+    public AddReaderCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
+        this.commandValidator = new AddReaderCommandValidator();
         this.libraryService = libraryService;
         this.ioHandler = ioHandler;
     }
@@ -28,7 +29,9 @@ public class AddReaderCommandHandler implements CommandHandler {
     public void executeCommand(Command command) {
         try {
             commandValidator.validateCommand(command);
-            Reader reader = libraryService.addReader(command.getParams().get(0));
+
+            String name = command.getParams().get(0);
+            Reader reader = libraryService.addReader(name);
 
             printInfo(reader);
         } catch (CommandValidationException e) {

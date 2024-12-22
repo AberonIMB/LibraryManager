@@ -1,6 +1,7 @@
 package org.example.commandHandlers;
 
 import org.example.Command;
+import org.example.commandValidators.CheckoutBookCommandValidator;
 import org.example.commandValidators.CommandValidator;
 import org.example.exceptions.commandExceptions.CommandValidationException;
 import org.example.exceptions.stateExceptions.StateValidationException;
@@ -21,10 +22,10 @@ public class CheckoutBookCommandHandler implements CommandHandler {
     private final CheckoutStateValidator stateValidator;
     private final IOHandler ioHandler;
 
-    public CheckoutBookCommandHandler(CommandValidator commandValidator, LibraryService libraryService, IOHandler ioHandler, CheckoutStateValidator stateValidator) {
+    public CheckoutBookCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
         this.libraryService = libraryService;
-        this.commandValidator = commandValidator;
-        this.stateValidator = stateValidator;
+        commandValidator = new CheckoutBookCommandValidator();
+        this.stateValidator = new CheckoutStateValidator();
         this.ioHandler = ioHandler;
     }
 
@@ -33,10 +34,13 @@ public class CheckoutBookCommandHandler implements CommandHandler {
         try {
             commandValidator.validateCommand(command);
 
-            Book book = libraryService.getBookById(Long.parseLong(command.getParams().get(0)));
-            Reader reader = libraryService.getReaderById(Long.parseLong(command.getParams().get(1)));
+            Long bookId = Long.parseLong(command.getParams().get(0));
+            Long readerId = Long.parseLong(command.getParams().get(1));
 
-            stateValidator.validateState(command, book, reader);
+            Book book = libraryService.getBookById(bookId);
+            Reader reader = libraryService.getReaderById(readerId);
+
+            stateValidator.validateState(bookId, readerId, book, reader);
 
             libraryService.checkoutBook(book, reader);
 

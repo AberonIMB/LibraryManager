@@ -1,14 +1,17 @@
 package org.example.stateValidators;
 
-import org.example.Command;
 import org.example.exceptions.stateExceptions.ReaderIsNullException;
 import org.example.model.Reader;
 
+/**
+ * Проверяет состояние читателя
+ * Читатель не должен быть null
+ */
 public class ReaderNotNullStateValidator {
 
-    public void validateState(Command command, Reader reader) throws ReaderIsNullException {
+    public void validateState(Long readerId, Reader reader) throws ReaderIsNullException {
         if (reader == null) {
-            throw new ReaderIsNullException(command.getParams().get(0));
+            throw new ReaderIsNullException(readerId);
         }
     }
 }

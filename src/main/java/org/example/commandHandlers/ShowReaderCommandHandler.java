@@ -2,6 +2,7 @@ package org.example.commandHandlers;
 
 import org.example.Command;
 import org.example.commandValidators.CommandValidator;
+import org.example.commandValidators.OnlyIdCommandValidator;
 import org.example.exceptions.commandExceptions.CommandValidationException;
 import org.example.exceptions.stateExceptions.StateValidationException;
 import org.example.model.Reader;
@@ -19,10 +20,10 @@ public class ShowReaderCommandHandler implements CommandHandler {
     private final ReaderNotNullStateValidator stateValidator;
     private final IOHandler ioHandler;
 
-    public ShowReaderCommandHandler(CommandValidator commandValidator, LibraryService libraryService, IOHandler ioHandler, ReaderNotNullStateValidator stateValidator) {
+    public ShowReaderCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
         this.libraryService = libraryService;
-        this.commandValidator = commandValidator;
-        this.stateValidator = stateValidator;
+        this.commandValidator = new OnlyIdCommandValidator();
+        this.stateValidator = new ReaderNotNullStateValidator();
         this.ioHandler = ioHandler;
     }
 
@@ -30,9 +31,11 @@ public class ShowReaderCommandHandler implements CommandHandler {
     public void executeCommand(Command command) {
         try {
             commandValidator.validateCommand(command);
-            Reader reader = libraryService.getReaderById(Long.parseLong(command.getParams().get(0)));
 
-            stateValidator.validateState(command, reader);
+            Long id = Long.parseLong(command.getParams().get(0));
+            Reader reader = libraryService.getReaderById(id);
+
+            stateValidator.validateState(id, reader);
 
             printInfo(reader);
         } catch (CommandValidationException | StateValidationException e) {

@@ -3,9 +3,7 @@ package org.example.commandHandlers;
 import org.example.Command;
 import org.example.commandValidators.CommandValidator;
 import org.example.commandValidators.CommandsWithoutParamsValidator;
-import org.example.exceptions.ArgumentsCountException;
-import org.example.exceptions.InvalidIdException;
-import org.example.exceptions.InvalidYearException;
+import org.example.exceptions.commandExceptions.CommandValidationException;
 import org.example.model.Book;
 import org.example.service.LibraryService;
 import org.example.util.IOHandler;
@@ -35,7 +33,7 @@ public class GetBookListCommandHandler implements CommandHandler {
         try {
             commandValidator.validateCommand(command);
             printInfo(libraryService.getListBooks());
-        } catch (ArgumentsCountException | InvalidIdException | InvalidYearException e) {
+        } catch (CommandValidationException e) {
             ioHandler.print(e.getMessage());
         }
     }

@@ -33,8 +33,7 @@ public class ReaderService {
     /**
      * Редактировать читателя по id
      */
-    public void editReader(Reader reader, String name) {
-        reader.setName(name);
+    public void editReader(Reader reader) {
         readerDAO.update(reader);
     }
 

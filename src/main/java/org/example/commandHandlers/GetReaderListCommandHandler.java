@@ -2,6 +2,7 @@ package org.example.commandHandlers;
 
 import org.example.Command;
 import org.example.commandValidators.CommandValidator;
+import org.example.commandValidators.CommandsWithoutParamsValidator;
 import org.example.exceptions.commandExceptions.CommandValidationException;
 import org.example.model.Reader;
 import org.example.service.LibraryService;
@@ -18,9 +19,9 @@ public class GetReaderListCommandHandler implements CommandHandler {
     private final CommandValidator commandValidator;
     private final IOHandler ioHandler;
 
-    public GetReaderListCommandHandler(CommandValidator commandValidator, LibraryService libraryService, IOHandler ioHandler) {
+    public GetReaderListCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
         this.libraryService = libraryService;
-        this.commandValidator = commandValidator;
+        this.commandValidator = new CommandsWithoutParamsValidator();
         this.ioHandler = ioHandler;
     }
 
@@ -28,6 +29,7 @@ public class GetReaderListCommandHandler implements CommandHandler {
     public void executeCommand(Command command) {
         try {
             commandValidator.validateCommand(command);
+
             List<Reader> readers = libraryService.getListReaders();
             printInfo(readers);
         } catch (CommandValidationException e) {

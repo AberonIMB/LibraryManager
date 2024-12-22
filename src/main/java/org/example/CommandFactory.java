@@ -22,10 +22,20 @@ public class CommandFactory {
      */
     public CommandFactory(IOHandler ioHandler, LibraryService libraryService) {
         commands.put("unknown", new UnknownCommandHandler(ioHandler));
+
         commands.put("add-book", new AddBookCommandHandler(libraryService, ioHandler));
         commands.put("list-books", new GetBookListCommandHandler(libraryService, ioHandler));
         commands.put("edit-book", new EditBookCommandHandler(libraryService, ioHandler));
         commands.put("delete-book", new DeleteBookCommandHandler(libraryService, ioHandler));
+
+        commands.put("add-reader", new AddReaderCommandHandler(libraryService, ioHandler));
+        commands.put("edit-reader", new EditReaderCommandHandler(libraryService, ioHandler));
+        commands.put("show-reader", new ShowReaderCommandHandler(libraryService, ioHandler));
+        commands.put("list-readers", new GetReaderListCommandHandler(libraryService, ioHandler));
+        commands.put("delete-reader", new DeleteReaderCommandHandler(libraryService, ioHandler));
+        commands.put("checkout-book", new CheckoutBookCommandHandler(libraryService, ioHandler));
+        commands.put("return-book", new ReturnBookCommandHandler(libraryService, ioHandler));
+
         commands.put("help", new HelpCommandHandler(ioHandler));
     }
 

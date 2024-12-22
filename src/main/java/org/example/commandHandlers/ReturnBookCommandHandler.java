@@ -2,6 +2,7 @@ package org.example.commandHandlers;
 
 import org.example.Command;
 import org.example.commandValidators.CommandValidator;
+import org.example.commandValidators.OnlyIdCommandValidator;
 import org.example.exceptions.commandExceptions.CommandValidationException;
 import org.example.exceptions.stateExceptions.StateValidationException;
 import org.example.model.Book;
@@ -19,10 +20,10 @@ public class ReturnBookCommandHandler implements CommandHandler {
     private final ReturnStateValidator stateValidator;
     private final IOHandler ioHandler;
 
-    public ReturnBookCommandHandler(CommandValidator commandValidator, LibraryService libraryService, IOHandler ioHandler, ReturnStateValidator stateValidator) {
+    public ReturnBookCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
         this.libraryService = libraryService;
-        this.commandValidator = commandValidator;
-        this.stateValidator = stateValidator;
+        this.commandValidator = new OnlyIdCommandValidator();
+        this.stateValidator = new ReturnStateValidator();
         this.ioHandler = ioHandler;
     }
 
@@ -30,9 +31,11 @@ public class ReturnBookCommandHandler implements CommandHandler {
     public void executeCommand(Command command) {
         try {
             commandValidator.validateCommand(command);
-            Book book = libraryService.getBookById(Long.parseLong(command.getParams().get(0)));
 
-            stateValidator.validateState(command, book);
+            Long id = Long.parseLong(command.getParams().get(0));
+            Book book = libraryService.getBookById(id);
+
+            stateValidator.validateState(id, book);
 
             libraryService.returnBook(book);
 

@@ -1,15 +1,18 @@
 package org.example.stateValidators;
 
-import org.example.Command;
 import org.example.exceptions.stateExceptions.BookAlreadyCheckedOutException;
 import org.example.exceptions.stateExceptions.BookIsNullException;
 import org.example.model.Book;
 
+/**
+ * Проверяет состояние книги перед удалением
+ * Книга не должна быть null и не должна быть выдана читателю
+ */
 public class DeleteBookStateValidator {
 
-    public void validateState(Command command, Book book) throws BookIsNullException, BookAlreadyCheckedOutException {
+    public void validateState(Long bookId, Book book) throws BookIsNullException, BookAlreadyCheckedOutException {
         if (book == null) {
-            throw new BookIsNullException(command.getParams().get(0));
+            throw new BookIsNullException(bookId);
         }
 
         if (book.getReader() != null) {

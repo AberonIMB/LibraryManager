@@ -4,6 +4,7 @@ import org.example.Command;
 import org.example.commandHandlers.CommandHandler;
 import org.example.commandHandlers.DeleteBookCommandHandler;
 import org.example.model.Book;
+import org.example.model.Reader;
 import org.example.service.LibraryService;
 import org.example.util.IOHandler;
 import org.junit.jupiter.api.Test;
@@ -41,7 +42,17 @@ public class DeleteBookCommandHandlerTest {
     @Test
     public void testHandleCorrectDeleteBookCommandWithBookNotNull() {
         Book book = new Book("title", "author", 2023);
-        testCorrectCommand(book, "Книга с ID %s успешно удалена.");
+
+        Mockito.when(libraryServiceMock.getBookById(Long.parseLong(deleteCommand.getParams().get(0))))
+                .thenReturn(book);
+
+        commandHandler.executeCommand(deleteCommand);
+
+        Mockito.verify(libraryServiceMock, Mockito.times(1))
+                .deleteBook(book);
+
+        Mockito.verify(ioHandlerMock, Mockito.times(1))
+                .print("Книга с ID null успешно удалена.");
     }
 
     /**
@@ -49,7 +60,16 @@ public class DeleteBookCommandHandlerTest {
      */
     @Test
     public void testHandleCorrectDeleteBookCommandWithBookNull() {
-        testCorrectCommand(null, "Книга с ID %s не найдена.");
+        Mockito.when(libraryServiceMock.getBookById(Long.parseLong(deleteCommand.getParams().get(0))))
+                .thenReturn(null);
+
+        commandHandler.executeCommand(deleteCommand);
+
+        Mockito.verify(libraryServiceMock, Mockito.never())
+                .deleteBook(Mockito.any(Book.class));
+
+        Mockito.verify(ioHandlerMock, Mockito.times(1))
+                .print("Книга с ID 1 не найдена.");
     }
 
     /**
@@ -68,19 +88,21 @@ public class DeleteBookCommandHandlerTest {
     }
 
     /**
-     * Тестирует корректную команду
-     * @param book Книга
-     * @param exceptionMessage Сообщение об ошибке
+     * Проверяет корректность обработки команды удаления книги, которая выдана читателю
      */
-    private void testCorrectCommand(Book book, String exceptionMessage) {
-        Mockito.when(libraryServiceMock.deleteBook(Long.parseLong(deleteCommand.getParams().get(0)))).thenReturn(book);
+    @Test
+    public void testDeleteBookWithReader() {
+        Book book = new Book("title", "author", 2023);
+        book.setReader(new Reader("reader"));
+
+        Mockito.when(libraryServiceMock.getBookById(Long.parseLong(deleteCommand.getParams().get(0))))
+                .thenReturn(book);
 
         commandHandler.executeCommand(deleteCommand);
 
-        Mockito.verify(libraryServiceMock, Mockito.times(1))
-                .deleteBook(Long.parseLong(deleteCommand.getParams().get(0)));
+        Mockito.verify(libraryServiceMock, Mockito.never()).deleteBook(Mockito.any(Book.class));
 
         Mockito.verify(ioHandlerMock, Mockito.times(1))
-                .printFormatted(exceptionMessage, deleteCommand.getParams().get(0));
+                .print("Невозможно выполнить операцию, так как книга \"title\" выдана читателю ID: null ФИО: reader.");
     }
 }

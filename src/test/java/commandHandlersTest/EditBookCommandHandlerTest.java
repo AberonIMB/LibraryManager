@@ -42,17 +42,13 @@ public class EditBookCommandHandlerTest {
      */
     @Test
     public void testHandleCorrectEditBookCommand() {
-        Mockito.when(libraryServiceMock.editBook(
-                        Long.parseLong(editCommand.getParams().get(0)),
-                        editCommand.getParams().get(1),
-                        editCommand.getParams().get(2),
-                        Integer.parseInt(editCommand.getParams().get(3))))
+        Mockito.when(libraryServiceMock.getBookById(Long.parseLong(editCommand.getParams().get(0))))
                 .thenReturn(book);
 
         commandHandler.executeCommand(editCommand);
 
         Mockito.verify(libraryServiceMock, Mockito.times(1)).editBook(
-                Long.parseLong(editCommand.getParams().get(0)),
+                book,
                 editCommand.getParams().get(1),
                 editCommand.getParams().get(2),
                 Integer.parseInt(editCommand.getParams().get(3)));
@@ -66,23 +62,20 @@ public class EditBookCommandHandlerTest {
      */
     @Test
     public void testHandleCorrectEditBookCommandWithBookNull() {
-        Mockito.when(libraryServiceMock.editBook(
-                        Long.parseLong(editCommand.getParams().get(0)),
-                        editCommand.getParams().get(1),
-                        editCommand.getParams().get(2),
-                        Integer.parseInt(editCommand.getParams().get(3))))
+        Mockito.when(libraryServiceMock.getBookById(Long.parseLong(editCommand.getParams().get(0))))
                 .thenReturn(null);
 
         commandHandler.executeCommand(editCommand);
 
-        Mockito.verify(libraryServiceMock, Mockito.times(1)).editBook(
-                Long.parseLong(editCommand.getParams().get(0)),
-                editCommand.getParams().get(1),
-                editCommand.getParams().get(2),
-                Integer.parseInt(editCommand.getParams().get(3)));
+
+        Mockito.verify(libraryServiceMock, Mockito.never()).editBook(
+                Mockito.any(Book.class),
+                Mockito.any(String.class),
+                Mockito.any(String.class),
+                Mockito.anyInt());
 
         Mockito.verify(ioHandlerMock, Mockito.times(1))
-                .printFormatted("Книга с ID %s не найдена.", editCommand.getParams().get(0));
+                .print("Книга с ID 1 не найдена.");
     }
 
     /**
