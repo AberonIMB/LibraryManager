@@ -1,7 +1,8 @@
 package org.example;
 
 import org.example.commandHandlers.*;
-import org.example.util.Printer;
+import org.example.service.LibraryService;
+import org.example.util.IOHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,22 +19,24 @@ public class CommandFactory {
 
     /**
      * В хранилище добавляются пары команда-обработчик
-     * @param printer класс для вывода текста в консоль
      */
-    public CommandFactory(Printer printer) {
-        commands.put("unknown", new UnknownCommandHandler(printer));
-        commands.put("add-book", new AddBookCommandHandler());
-        commands.put("list-books", new GetBookListCommandHandler(printer));
-        commands.put("edit-book", new EditBookCommandHandler());
-        commands.put("delete-book", new DeleteBookCommandHandler());
-        commands.put("help", new HelpCommandHandler(printer));
-        commands.put("add-reader", new AddReaderCommandHandler());
-        commands.put("list-readers", new GetReaderListCommandHandler(printer));
-        commands.put("edit-reader", new EditReaderCommandHandler());
-        commands.put("delete-reader", new DeleteReaderCommandHandler());
-        commands.put("show-reader", new ShowReaderCommandHandler(printer));
-        commands.put("checkout-book", new CheckoutBookCommandHandler());
-        commands.put("return-book", new ReturnBookCommandHandler());
+    public CommandFactory(IOHandler ioHandler, LibraryService libraryService) {
+        commands.put("unknown", new UnknownCommandHandler(ioHandler));
+
+        commands.put("add-book", new AddBookCommandHandler(libraryService, ioHandler));
+        commands.put("list-books", new GetBookListCommandHandler(libraryService, ioHandler));
+        commands.put("edit-book", new EditBookCommandHandler(libraryService, ioHandler));
+        commands.put("delete-book", new DeleteBookCommandHandler(libraryService, ioHandler));
+
+        commands.put("add-reader", new AddReaderCommandHandler(libraryService, ioHandler));
+        commands.put("edit-reader", new EditReaderCommandHandler(libraryService, ioHandler));
+        commands.put("show-reader", new ShowReaderCommandHandler(libraryService, ioHandler));
+        commands.put("list-readers", new GetReaderListCommandHandler(libraryService, ioHandler));
+        commands.put("delete-reader", new DeleteReaderCommandHandler(libraryService, ioHandler));
+        commands.put("checkout-book", new CheckoutBookCommandHandler(libraryService, ioHandler));
+        commands.put("return-book", new ReturnBookCommandHandler(libraryService, ioHandler));
+
+        commands.put("help", new HelpCommandHandler(ioHandler));
     }
 
     /**
@@ -41,7 +44,7 @@ public class CommandFactory {
      * Если команда не существует, то возвращается обработчик UnknownCommandHandler
      * @param command команда
      */
-    public CommandHandler getCommandHandler(String command) {
-        return commands.getOrDefault(command, commands.get("unknown"));
+    public CommandHandler getCommandHandler(Command command) {
+        return commands.getOrDefault(command.getName(), commands.get("unknown"));
     }
 }

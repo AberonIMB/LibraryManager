@@ -1,25 +1,51 @@
 package org.example.commandHandlers;
 
+import org.example.Command;
+import org.example.commandValidators.CommandValidator;
+import org.example.commandValidators.CommandsWithoutParamsValidator;
+import org.example.exceptions.commandExceptions.CommandValidationException;
+import org.example.model.Reader;
 import org.example.service.LibraryService;
-import org.example.util.Printer;
+import org.example.util.IOHandler;
+
+import java.util.List;
 
 /**
  * Обрабатывает команду получения списка читателей
  */
-public class GetReaderListCommandHandler implements CommandHandler{
+public class GetReaderListCommandHandler implements CommandHandler {
 
-    private final Printer printer;
+    private final LibraryService libraryService;
+    private final CommandValidator commandValidator;
+    private final IOHandler ioHandler;
 
-    /**
-     * Конструктор
-     * @param printer класс для вывода текста в консоль
-     */
-    public GetReaderListCommandHandler(Printer printer) {
-        this.printer = printer;
+    public GetReaderListCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
+        this.libraryService = libraryService;
+        this.commandValidator = new CommandsWithoutParamsValidator();
+        this.ioHandler = ioHandler;
     }
 
     @Override
-    public void executeCommand(LibraryService libraryService, String[] command) {
-        printer.printReaderList(libraryService.getReaderList());
+    public void executeCommand(Command command) {
+        try {
+            commandValidator.validateCommand(command);
+
+            List<Reader> readers = libraryService.getListReaders();
+            printInfo(readers);
+        } catch (CommandValidationException e) {
+            ioHandler.print(e.getMessage());
+        }
+    }
+
+    private void printInfo(List<Reader> readers) {
+        if (readers.isEmpty()) {
+            ioHandler.print("Список читателей пуст.");
+            return;
+        }
+
+        for (int i = 0; i < readers.size(); i++) {
+            Reader reader = readers.get(i);
+            ioHandler.printFormatted("%d) %s", i + 1, reader.getReaderShortInfo());
+        }
     }
 }

@@ -1,26 +1,49 @@
 package org.example.commandHandlers;
 
+import org.example.Command;
+import org.example.commandValidators.AddReaderCommandValidator;
+import org.example.commandValidators.CommandValidator;
+import org.example.exceptions.commandExceptions.CommandValidationException;
+import org.example.model.Reader;
 import org.example.service.LibraryService;
+import org.example.util.IOHandler;
 
 /**
  * Обрабатывает команду добавления читателя
  * Если команда корректна - добавляет читателя в библиотеку
  */
-public class AddReaderCommandHandler implements CommandHandler{
+public class AddReaderCommandHandler implements CommandHandler {
+
+    private final CommandValidator commandValidator;
+    private final LibraryService libraryService;
+    private final IOHandler ioHandler;
+
+    public AddReaderCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
+        this.commandValidator = new AddReaderCommandValidator();
+        this.libraryService = libraryService;
+        this.ioHandler = ioHandler;
+    }
+
+
     @Override
-    public void executeCommand(LibraryService libraryService, String[] command) {
-        if (isCommandCorrect(libraryService, command)) {
-            libraryService.addReader(command[1]);
+    public void executeCommand(Command command) {
+        try {
+            commandValidator.validateCommand(command);
+
+            String name = command.getParams().get(0);
+            Reader reader = libraryService.addReader(name);
+
+            printInfo(reader);
+        } catch (CommandValidationException e) {
+            ioHandler.print(e.getMessage());
         }
     }
 
     /**
-     * Проверяет, что параметры команды корректны
-     * @param libraryService сервис библиотеки
-     * @param command название команды и параметры
-     * @return Если команда корректна - true, иначе false
+     * Выводит необходимую информацию о добавленном читателе
      */
-    private boolean isCommandCorrect(LibraryService libraryService, String[] command) {
-        return libraryService.getSyntaxChecker().checkAddReaderCommandSyntax(command);
+    private void printInfo(Reader reader) {
+        ioHandler.print("Читатель добавлен в систему:");
+        ioHandler.print(reader.getReaderShortInfo());
     }
 }

@@ -2,64 +2,65 @@ package org.example;
 
 import org.example.commandHandlers.CommandHandler;
 import org.example.service.LibraryService;
-import org.example.util.Printer;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.example.util.IOConsoleHandler;
+import org.example.util.IOHandler;
 
 /**
  * Класс для запуска приложения
  */
 public class LibraryConsoleApplication {
+    private CommandFactory commandFactory;
+    private final IOHandler ioHandler;
+
+    /**
+     * Конструктор задающий IOHandler, CommandFactory
+     */
+    public LibraryConsoleApplication() {
+        this(new IOConsoleHandler(), null);
+        this.commandFactory = new CommandFactory(ioHandler, new LibraryService());
+    }
+
+    /**
+     * Конструктор для тестов
+     */
+    public LibraryConsoleApplication(IOHandler ioHandler, CommandFactory commandFactory) {
+        this.ioHandler = ioHandler;
+        this.commandFactory = commandFactory;
+    }
 
     /**
      * Метод запуска приложения
      */
     public static void main(String[] args) {
-        Printer printer = new Printer();
-        LibraryService libraryService = new LibraryService(printer);
-        CommandFactory commandFactory = new CommandFactory(printer);
         LibraryConsoleApplication app = new LibraryConsoleApplication();
-        app.commandsProcess(libraryService, commandFactory);
+        app.start();
     }
 
     /**
      * Обрабатывает команды пользователя из консоли
-     * @param libraryService сервсис библиотеки
      */
-    private void commandsProcess(LibraryService libraryService, CommandFactory commandFactory) {
+    public void start() {
         while (true) {
-            String[] command = readCommand();
-            if (command.length == 0)
+            Command command = readCommand();
+            if (command.getName() == null)
                 continue;
 
-            CommandHandler commandHandler = commandFactory.getCommandHandler(command[0]);
-            commandHandler.executeCommand(libraryService, command);
+            //Убрали обработчик для команды "stop", чтобы можно было протестировать класс
+            if (command.getName().equals("stop")) {
+                ioHandler.print("Завершение работы.");
+                break;
+            }
+
+            CommandHandler commandHandler = commandFactory.getCommandHandler(command);
+            commandHandler.executeCommand(command);
         }
     }
 
     /**
-     * Считывает команду пользователя и разбивает её на название и параметры
+     * Считывает команду пользователя
      */
-    private String[] readCommand() {
-        Scanner scanner = new Scanner(System.in);
-        String command = scanner.nextLine();
-        List<String> args = new ArrayList<>();
-
-        Pattern pattern = Pattern.compile("[\"“](.*?)[\"”]|(\\S+)");
-        // выбирает либо выражения в ковычках, либо выражения без пробела
-        Matcher matcher = pattern.matcher(command);
-        while (matcher.find()) {
-            String subString = matcher.group(1);
-            if (subString != null) {
-                args.add(subString);
-            } else {
-                args.add(matcher.group(2));
-            }
-        }
-        return args.toArray(new String[0]);
+    private Command readCommand() {
+        String commandString = ioHandler.readInput();
+        return new Command(commandString);
     }
 }

@@ -1,11 +1,9 @@
 package org.example.service;
 
-import org.example.model.Book;
 import org.example.dao.BookDAO;
-import org.example.model.Reader;
-import org.example.util.Printer;
+import org.example.model.Book;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * Класс для работы с книгами в библиотеки, который включает в себя
@@ -14,23 +12,19 @@ import java.util.*;
 public class BookService {
 
     private final BookDAO bookDAO;
-    private final Printer printer;
 
     /**
-     * Конструктор, в котором присваивается bookDAO и printer
+     * Конструктор, в котором присваивается bookDAO
      */
-    public BookService(BookDAO bookDAO, Printer printer) {
+    public BookService(BookDAO bookDAO) {
         this.bookDAO = bookDAO;
-        this.printer = printer;
     }
 
     /**
-     * Создать книгу и сохранить книгу
+     * Сохранить книгу
      */
-    public void addBook(String title, String author, int publicationYear) {
-        Book book = new Book(title, author, publicationYear);
+    public void addBook(Book book) {
         bookDAO.save(book);
-        printer.printBookAdded(book);
     }
 
     /**
@@ -43,81 +37,21 @@ public class BookService {
     /**
      * Редактировать книгу по id
      */
-    public void editBook(Long id, String title, String author, int publicationYear) {
-        Book book = bookDAO.getById(id);
-        if (book == null) {
-            printer.printBookNotFound(id);
-            return;
-        }
-        book.setNewData(title, author, publicationYear);
+    public void editBook(Book book) {
         bookDAO.update(book);
-        printer.printBookEdited(book);
     }
 
     /**
      * Удалить книгу по id
      */
-    public void deleteBook(Long id) {
-        Book book = bookDAO.getById(id);
-        if (book == null) {
-            printer.printBookNotFound(id);
-            return;
-        }
-        if (book.getReader() != null) {
-            printer.printBookAlreadyCheckoutError();
-            return;
-        }
+    public void deleteBook(Book book) {
         bookDAO.deleteBook(book);
-        printer.printBookDeleted(id);
     }
 
     /**
-     * Получить и вывести книгу по id
+     * Получить книгу по id
      */
     public Book getBook(Long id) {
-        Book book = bookDAO.getById(id);
-        if (book == null) {
-            printer.printBookNotFound(id);
-        } else {
-            printer.printBookInfo(book);
-        }
-        return book;
-    }
-
-    /**
-     * Выдать книгу читателю
-     */
-    public void checkoutBook(Long bookId, Reader reader) {
-        Book book = bookDAO.getById(bookId);
-        if (book == null) {
-            printer.printBookNotFound(bookId);
-            return;
-        }
-        if (book.getReader() != null) {
-            printer.printBookAlreadyCheckoutError();
-            return;
-        }
-        book.setReader(reader);
-        bookDAO.update(book);
-        printer.printBookCheckout(book, reader);
-
-    }
-
-    /**
-     *  Вернуть книгу
-     */
-    public void returnBook(long bookID) {
-        Book book = bookDAO.getById(bookID);
-        if (book == null) {
-            printer.printBookNotFound(bookID);
-            return;
-        }
-        if (book.getReader() == null) {
-            printer.printBookAlreadyReturnedError();
-            return;
-        }
-        book.setReader(null);
-        bookDAO.update(book);
-        printer.printBookReturned(book);
+        return bookDAO.getById(id);
     }
 }
