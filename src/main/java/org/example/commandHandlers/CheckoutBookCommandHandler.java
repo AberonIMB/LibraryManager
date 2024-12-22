@@ -22,6 +22,9 @@ public class CheckoutBookCommandHandler implements CommandHandler {
     private final CheckoutStateValidator stateValidator;
     private final IOHandler ioHandler;
 
+    /**
+     * Конструктор, который задает все необходимые поля
+     */
     public CheckoutBookCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
         commandValidator = new CheckoutBookCommandValidator();
         stateValidator = new CheckoutStateValidator();
@@ -50,6 +53,9 @@ public class CheckoutBookCommandHandler implements CommandHandler {
         }
     }
 
+    /**
+     * Вывод информации об успешной операции
+     */
     private void printInfo(Book book, Reader reader) {
         ioHandler.print(String.format("Книга \"%s\" выдана читателю \"%s\"",
                 book.getTitle(), reader.getReaderShortInfo()));

@@ -32,7 +32,7 @@ public class ShowReaderCommandHandlerTest {
     }
 
     /**
-     * Проверяет корректность обработки команды показа читателя с корректными данными и существующим читателем
+     * Проверяет корректность обработки команды показа читателя с существующим читателем
      */
     @Test
     public void testHandleCorrectShowReaderCommand() {
@@ -48,7 +48,7 @@ public class ShowReaderCommandHandlerTest {
     }
 
     /**
-     * Проверяет корректность обработки команды показа читателя с корректными данными и несуществующим читателем
+     * Проверяет корректность обработки команды показа читателя с несуществующим читателем
      */
     @Test
     public void testHandleCorrectShowReaderCommandWithReaderNull() {

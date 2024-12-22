@@ -22,7 +22,7 @@ public class StateValidatorsTest {
     private final Reader reader = new Reader("name");
 
     /**
-     * Удаляет читателя у кнги
+     * Удаляет читателя у книги
      */
     @BeforeEach
     public void setUp() {

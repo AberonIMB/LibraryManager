@@ -21,6 +21,9 @@ public class DeleteReaderCommandHandler implements CommandHandler {
     private final DeleteReaderStateValidator stateValidator;
     private final IOHandler ioHandler;
 
+    /**
+     * Конструктор, который задает все необходимые поля
+     */
     public DeleteReaderCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
         commandValidator = new OnlyIdCommandValidator();
         stateValidator = new DeleteReaderStateValidator();
@@ -46,6 +49,9 @@ public class DeleteReaderCommandHandler implements CommandHandler {
         }
     }
 
+    /**
+     * Выводит необходимую информацию об удаленном читателе
+     */
     private void printInfo(Reader reader) {
         ioHandler.print(String.format("Читатель %s успешно удален.", reader.getReaderShortInfo()));
     }

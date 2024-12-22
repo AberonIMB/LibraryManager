@@ -20,6 +20,9 @@ public class ReturnBookCommandHandler implements CommandHandler {
     private final ReturnStateValidator stateValidator;
     private final IOHandler ioHandler;
 
+    /**
+     * Конструктор, который задает все необходимые поля
+     */
     public ReturnBookCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
         commandValidator = new OnlyIdCommandValidator();
         stateValidator = new ReturnStateValidator();
@@ -45,6 +48,9 @@ public class ReturnBookCommandHandler implements CommandHandler {
         }
     }
 
+    /**
+     * Выводит информацию об успешной операции возврата книги
+     */
     private void printInfo(Book book) {
         ioHandler.print(String.format("Книга \"%s\" возвращена в библиотеку", book.getTitle()));
     }

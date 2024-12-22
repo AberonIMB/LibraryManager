@@ -5,6 +5,9 @@ import org.example.exceptions.commandExceptions.ArgumentsCountException;
 import org.example.exceptions.commandExceptions.InvalidIdException;
 import org.example.exceptions.commandExceptions.InvalidYearException;
 
+/**
+ * Проверяет корректность команды добавления читателя
+ */
 public class AddReaderCommandValidator extends CommandValidator {
 
     @Override

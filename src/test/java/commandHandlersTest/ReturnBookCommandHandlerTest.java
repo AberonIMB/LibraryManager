@@ -65,7 +65,7 @@ public class ReturnBookCommandHandlerTest {
     }
 
     /**
-     * Проверяет корректность обработки команды возврата книги с несуществующим книгой
+     * Проверяет корректность обработки команды возврата книги с книгой, что уже находится в библиотеке
      */
     @Test
     void testHandleReturnBookCommandHandlerWithAlreadyReturnedBook() {
@@ -114,7 +114,7 @@ public class ReturnBookCommandHandlerTest {
     }
 
     /**
-     * Тестирует выполнение корректной команды с правалом валидации состояния
+     * Тестирует выполнение корректной команды с провалом валидации состояния
      */
     private void testCommandWithIncorrectStateValidation(Book book, Command command, String exceptionMessage) {
         Mockito.when(libraryServiceMock.getBookById(1L))

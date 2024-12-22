@@ -110,7 +110,7 @@ public class EditBookCommandHandlerTest {
     }
 
     /**
-     * Тестирует выполнение неправилньой команды
+     * Тестирует выполнение неправильной команды
      * @param incorrectCommand Команда
      * @param exceptionMessage сообщение об ошибке
      */

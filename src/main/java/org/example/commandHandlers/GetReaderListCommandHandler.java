@@ -19,6 +19,9 @@ public class GetReaderListCommandHandler implements CommandHandler {
     private final CommandValidator commandValidator;
     private final IOHandler ioHandler;
 
+    /**
+     * Конструктор, который задает все необходимые поля
+     */
     public GetReaderListCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
         commandValidator = new CommandsWithoutParamsValidator();
         this.libraryService = libraryService;
@@ -37,6 +40,9 @@ public class GetReaderListCommandHandler implements CommandHandler {
         }
     }
 
+    /**
+     * Выводит необходимую информацию о списке читателей
+     */
     private void printInfo(List<Reader> readers) {
         if (readers.isEmpty()) {
             ioHandler.print("Список читателей пуст.");

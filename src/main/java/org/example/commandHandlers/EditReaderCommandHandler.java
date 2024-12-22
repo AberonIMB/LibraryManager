@@ -21,7 +21,9 @@ public class EditReaderCommandHandler implements CommandHandler {
     private final ReaderNotNullStateValidator stateValidator;
     private final IOHandler ioHandler;
 
-
+    /**
+     * Конструктор, который задает все необходимые поля
+     */
     public EditReaderCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
         commandValidator = new EditReaderCommandValidator();
         stateValidator = new ReaderNotNullStateValidator();
@@ -47,6 +49,9 @@ public class EditReaderCommandHandler implements CommandHandler {
         }
     }
 
+    /**
+     * Выводит необходимую информацию об измененном читателе
+     */
     private void printInfo(Reader reader) {
         ioHandler.print(String.format("Имя читателя %d изменено на %s", reader.getId(), reader.getName()));
     }

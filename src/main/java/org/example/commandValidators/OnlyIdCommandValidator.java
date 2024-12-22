@@ -5,7 +5,7 @@ import org.example.exceptions.commandExceptions.ArgumentsCountException;
 import org.example.exceptions.commandExceptions.InvalidIdException;
 
 /**
- * Проверяет корректность команды удаления книги
+ * Проверяет корректность команды удаления, возврата книги
  */
 public class OnlyIdCommandValidator extends CommandValidator {
 

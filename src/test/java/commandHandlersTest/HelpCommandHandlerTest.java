@@ -54,7 +54,7 @@ public class HelpCommandHandlerTest {
     }
 
     /**
-     * Проверяет корректность обработки команды получения справки с некорректными данными
+     * Проверяет корректность обработки команды получения справки с неправильным количеством параметров
      */
     @Test
     public void testHandleHelpCommandWithIncorrectArgsCount() {

@@ -57,6 +57,16 @@ public class CheckoutBookCommandHandlerTest {
                         book.getTitle(), reader.getReaderShortInfo()));
     }
 
+    /**
+     * Проверяет корректность обработки команды выдачи книги с несуществующей книгой
+     */
+    @Test
+    void testHandleCheckoutBookCommandHandlerWithNullBook() {
+        Command command = new Command("Checkout-book 1 1");
+
+        testCommandWithIncorrectStateValidation(null, reader, command, "Книга с ID 1 не найдена.");
+    }
+
 
     /**
      * Проверяет корректность обработки команды выдачи книги с несуществующим читателем
@@ -66,16 +76,6 @@ public class CheckoutBookCommandHandlerTest {
         Command command = new Command("Checkout-book 1 1");
 
         testCommandWithIncorrectStateValidation(book, null, command, "Читатель с ID 1 не найден.");
-    }
-
-    /**
-     * Проверяет корректность обработки команды выдачи книги с несуществующей книгой
-     */
-    @Test
-    void testHandleCheckoutBookCommandHandlerWithNullBook() {
-        Command command = new Command("Checkout-book 1 1");
-
-        testCommandWithIncorrectStateValidation(null, reader, command, "Книга с ID 1 не найдена.");
     }
 
     /**
@@ -137,7 +137,7 @@ public class CheckoutBookCommandHandlerTest {
     }
 
     /**
-     * Тестирует выполнение корректной команды с правалом валидации состояния
+     * Тестирует выполнение корректной команды с провалом валидации состояния
      */
     private void testCommandWithIncorrectStateValidation(Book book, Reader reader,
                                                          Command command, String exceptionMessage) {

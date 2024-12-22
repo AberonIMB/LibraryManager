@@ -152,7 +152,7 @@ public class CommandValidatorsTest {
     }
 
     /**
-     * Проверка валидатора изменения читателя с некорректным количеством параметров
+     * Проверка валидатора изменения читателя с неправильным количеством параметров
      */
     @Test
     public void validateEditReaderCommandWithIncorrectParamsCount() {
@@ -164,7 +164,7 @@ public class CommandValidatorsTest {
     }
 
     /**
-     * Проверка валидатора изменения читателя с некорректным значением ID
+     * Проверка валидатора изменения читателя с неправильным типом ID книги
      */
     @Test
     public void validateCheckoutBookCommandWithIncorrectBookIdParam() {
@@ -175,7 +175,7 @@ public class CommandValidatorsTest {
     }
 
     /**
-     * Проверка валидатора изменения читателя с некорректным значением ID
+     * Проверка валидатора изменения читателя с неправильным типом ID читателя
      */
     @Test
     public void validateCheckoutBookCommandWithIncorrectReaderIdParam() {
@@ -186,7 +186,7 @@ public class CommandValidatorsTest {
     }
 
     /**
-     * Проверка валидатора выдачи книги с некорректным количеством параметров
+     * Проверка валидатора выдачи книги с неправильным количеством параметров
      */
     @Test
     public void validateCheckoutBookCommandWithIncorrectParamsCount() {
@@ -198,7 +198,7 @@ public class CommandValidatorsTest {
     }
 
     /**
-     * Проверка валидатора без параметров с некорректным количеством параметров
+     * Проверка валидатора без параметров с неправильным количеством параметров
      */
     @Test
     public void validateWithoutParamsCommandWithIncorrectParamsCount() {

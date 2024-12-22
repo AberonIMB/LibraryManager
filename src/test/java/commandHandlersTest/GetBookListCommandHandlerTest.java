@@ -42,7 +42,7 @@ public class GetBookListCommandHandlerTest {
                 libraryServiceMock, ioHandlerMock);
     }
     /**
-     * Проверяет корректность обработки команды получения списка книг с непустым списком
+     * Проверяет корректность обработки команды получения списка книг, когда они есть
      */
     @Test
     public void testHandleCorrectGetBookListCommandWithNotEmptyList() {
@@ -61,7 +61,7 @@ public class GetBookListCommandHandlerTest {
     }
 
     /**
-     * Проверяет корректность обработки команды получения списка книг с пустым списком
+     * Проверяет корректность обработки команды получения списка книг, когда их нет
      */
     @Test
     public void testHandleCorrectGetBookListCommandWithEmptyList() {

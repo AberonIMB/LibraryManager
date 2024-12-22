@@ -84,7 +84,7 @@ public class DeleteBookCommandHandlerTest {
     }
 
     /**
-     * Проверяет корректность обработки команды удаления книги с с неправильным типом ID книги
+     * Проверяет корректность обработки команды удаления книги с неправильным типом ID книги
      */
     @Test
     public void testHandleDeleteBookCommandWithIncorrectBookId() {
