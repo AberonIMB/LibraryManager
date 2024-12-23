@@ -2,9 +2,9 @@ package org.example.commandValidators;
 
 
 import org.example.Command;
-import org.example.exceptions.ArgumentsCountException;
-import org.example.exceptions.InvalidIdException;
-import org.example.exceptions.InvalidYearException;
+import org.example.exceptions.commandExceptions.ArgumentsCountException;
+import org.example.exceptions.commandExceptions.InvalidIdException;
+import org.example.exceptions.commandExceptions.InvalidYearException;
 
 /**
  * Содержит общую логику проверки параметров команд для валидаторов

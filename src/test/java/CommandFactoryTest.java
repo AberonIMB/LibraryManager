@@ -55,12 +55,21 @@ public class CommandFactoryTest {
      */
     @Test
     void shouldReturnHandlersForAllCommands() {
-        String[] expectedCommands = {"add-book", "list-books", "edit-book", "delete-book", "help", "unknown"};
+        String[] expectedCommands = {"add-book", "list-books", "edit-book", "delete-book", "help", "add-reader",
+                "edit-reader", "show-reader", "list-readers", "delete-reader", "checkout-book", "return-book",
+                "unknown"};
         var expectedClasses = new Class[]{AddBookCommandHandler.class,
                 GetBookListCommandHandler.class,
                 EditBookCommandHandler.class,
                 DeleteBookCommandHandler.class,
                 HelpCommandHandler.class,
+                AddReaderCommandHandler.class,
+                EditReaderCommandHandler.class,
+                ShowReaderCommandHandler.class,
+                GetReaderListCommandHandler.class,
+                DeleteReaderCommandHandler.class,
+                CheckoutBookCommandHandler.class,
+                ReturnBookCommandHandler.class,
                 UnknownCommandHandler.class};
         for (int i = 0; i < expectedClasses.length; i++) {
             Command command = new Command(expectedCommands[i]);

@@ -1,9 +1,9 @@
-package org.example.exceptions;
+package org.example.exceptions.commandExceptions;
 
 /**
  * Ошибка, связанная с неправильным количеством аргументов
  */
-public class ArgumentsCountException extends Exception{
+public class ArgumentsCountException extends CommandValidationException {
 
     /**
      * Конструктор, в котором происходит задается сообщение об ошибке

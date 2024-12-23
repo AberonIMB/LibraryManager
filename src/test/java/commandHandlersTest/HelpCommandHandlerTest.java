@@ -10,7 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
- * тесты для обработчика команды получения справки
+ * Тесты для обработчика команды получения справки
  */
 @ExtendWith(MockitoExtension.class)
 public class HelpCommandHandlerTest {
@@ -42,12 +42,19 @@ public class HelpCommandHandlerTest {
                 \t- list-books – Просмотреть список книг
                 \t- edit-book <ID книги> “<название>” “<автор>” <год издания> - Изменить книгу
                 \t- delete-book <ID книги> – Удалить книгу
+                \t- add-reader "<ФИО читателя>” – Добавить читателя
+                \t- edit-reader <ID читателя> “<ФИО читателя>” – Изменить читателя
+                \t- show-reader <ID читателя> – Просмотреть читателя
+                \t- list-readers – Просмотреть список читателей
+                \t- delete-reader <ID читателя> – Удалить читателя
+                \t- checkout-book <ID книги> <ID читателя> – Выдать книгу
+                \t- return-book <ID книги> - Вернуть книгу
                 \t- help – Справка
                 \t- stop - Завершить работу""");
     }
 
     /**
-     * Проверяет корректность обработки команды получения справки с некорректными данными
+     * Проверяет корректность обработки команды получения справки с неправильным количеством параметров
      */
     @Test
     public void testHandleHelpCommandWithIncorrectArgsCount() {
@@ -64,6 +71,13 @@ public class HelpCommandHandlerTest {
                 \t- list-books – Просмотреть список книг
                 \t- edit-book <ID книги> “<название>” “<автор>” <год издания> - Изменить книгу
                 \t- delete-book <ID книги> – Удалить книгу
+                \t- add-reader "<ФИО читателя>” – Добавить читателя
+                \t- edit-reader <ID читателя> “<ФИО читателя>” – Изменить читателя
+                \t- show-reader <ID читателя> – Просмотреть читателя
+                \t- list-readers – Просмотреть список читателей
+                \t- delete-reader <ID читателя> – Удалить читателя
+                \t- checkout-book <ID книги> <ID читателя> – Выдать книгу
+                \t- return-book <ID книги> - Вернуть книгу
                 \t- help – Справка
                 \t- stop - Завершить работу""");
     }

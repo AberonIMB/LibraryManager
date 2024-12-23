@@ -1,7 +1,7 @@
 package org.example.commandValidators;
 
 import org.example.Command;
-import org.example.exceptions.ArgumentsCountException;
+import org.example.exceptions.commandExceptions.ArgumentsCountException;
 
 /**
  * Проверяет корректность команд без параметров

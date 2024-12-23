@@ -4,25 +4,25 @@ import org.example.Command;
 import org.example.commandValidators.CommandValidator;
 import org.example.commandValidators.CommandsWithoutParamsValidator;
 import org.example.exceptions.commandExceptions.CommandValidationException;
-import org.example.model.Book;
+import org.example.model.Reader;
 import org.example.service.LibraryService;
 import org.example.util.IOHandler;
 
 import java.util.List;
 
 /**
- * Обрабатывает команду получения списка книг
+ * Обрабатывает команду получения списка читателей
  */
-public class GetBookListCommandHandler implements CommandHandler {
+public class GetReaderListCommandHandler implements CommandHandler {
 
     private final LibraryService libraryService;
-    private final IOHandler ioHandler;
     private final CommandValidator commandValidator;
+    private final IOHandler ioHandler;
 
     /**
      * Конструктор, который задает все необходимые поля
      */
-    public GetBookListCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
+    public GetReaderListCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
         commandValidator = new CommandsWithoutParamsValidator();
         this.libraryService = libraryService;
         this.ioHandler = ioHandler;
@@ -32,24 +32,26 @@ public class GetBookListCommandHandler implements CommandHandler {
     public void executeCommand(Command command) {
         try {
             commandValidator.validateCommand(command);
-            printInfo(libraryService.getListBooks());
+
+            List<Reader> readers = libraryService.getListReaders();
+            printInfo(readers);
         } catch (CommandValidationException e) {
             ioHandler.print(e.getMessage());
         }
     }
 
     /**
-     * Выводит необходимую информацию о списке книг
+     * Выводит необходимую информацию о списке читателей
      */
-    private void printInfo(List<Book> books) {
-        if (books.isEmpty()) {
-            ioHandler.print("Список книг пуст.");
+    private void printInfo(List<Reader> readers) {
+        if (readers.isEmpty()) {
+            ioHandler.print("Список читателей пуст.");
             return;
         }
 
-        for (int i = 0; i < books.size(); i++) {
-            Book book = books.get(i);
-            ioHandler.printFormatted("%d) %s", i + 1, book.getBookShortInfo());
+        for (int i = 0; i < readers.size(); i++) {
+            Reader reader = readers.get(i);
+            ioHandler.printFormatted("%d) %s", i + 1, reader.getReaderShortInfo());
         }
     }
 }

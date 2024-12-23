@@ -1,7 +1,9 @@
 package org.example.service;
 
 import org.example.dao.BookDAO;
+import org.example.dao.ReaderDAO;
 import org.example.model.Book;
+import org.example.model.Reader;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -13,6 +15,7 @@ import java.util.List;
 public class LibraryService {
 
     private final BookService bookService;
+    private final ReaderService readerService;
 
     /**
      * Конструктор для создания других сервисов и присваивании им SessionFactory
@@ -23,21 +26,24 @@ public class LibraryService {
                 .addAnnotatedClass(Book.class)
                 .buildSessionFactory();
         BookDAO bookDAO = new BookDAO(factory);
+        ReaderDAO readerDAO = new ReaderDAO(factory);
         bookService = new BookService(bookDAO);
+        readerService = new ReaderService(readerDAO);
     }
 
     /**
      * Конструктор для тестирования без поднятия базы данных
      */
-    public LibraryService(BookService bookService) {
+    public LibraryService(BookService bookService, ReaderService readerService) {
         this.bookService = bookService;
+        this.readerService = readerService;
     }
 
     /**
      * Добавить книгу в библиотеку.
      */
     public Book addBook(String title, String author, int publicationYear) {
-        Book book = createBook(title, author, publicationYear);
+        Book book = new Book(title, author, publicationYear);
         bookService.addBook(book);
 
         return book;
@@ -46,28 +52,16 @@ public class LibraryService {
     /**
      * Редактировать книгу по id
      */
-    public Book editBook(Long id, String title, String author, int publicationYear) {
-        Book book = getBookById(id);
-
-        if (book != null) {
-            book.setNewData(title, author, publicationYear);
-            bookService.editBook(book);
-        }
-
-        return book;
+    public void editBook(Book book, String title, String author, int publicationYear) {
+        book.setNewData(title, author, publicationYear);
+        bookService.editBook(book);
     }
 
     /**
      * Удалить книгу из библиотеки.
      */
-    public Book deleteBook(Long id) {
-        Book book = getBookById(id);
-
-        if (book != null) {
-            bookService.deleteBook(book);
-        }
-
-        return book;
+    public void deleteBook(Book book) {
+        bookService.deleteBook(book);
     }
 
     /**
@@ -80,14 +74,61 @@ public class LibraryService {
     /**
      * Получает книгу по id
      */
-    private Book getBookById(Long id) {
+    public Book getBookById(Long id) {
         return bookService.getBook(id);
     }
 
     /**
-     * Создает книгу
+     * Получить читателя по id
      */
-    private Book createBook(String title, String author, int publicationYear) {
-        return new Book(title, author, publicationYear);
+    public Reader getReaderById(Long id) {
+        return readerService.getReader(id);
+    }
+
+    /**
+     * Добавить читателя
+     */
+    public Reader addReader(String name) {
+        Reader reader = new Reader(name);
+        readerService.addReader(reader);
+        return reader;
+    }
+
+    /**
+     * Выдать книгу
+     */
+    public void checkoutBook(Book book, Reader reader) {
+        book.setReader(reader);
+        bookService.editBook(book);
+    }
+
+    /**
+     * Удалить читателя
+     */
+    public void deleteReader(Reader reader) {
+        readerService.deleteReader(reader);
+    }
+
+    /**
+     * Редактировать читателя
+     */
+    public void editReader(Reader reader, String name) {
+        reader.setName(name);
+        readerService.editReader(reader);
+    }
+
+    /**
+     * Получить список читателей
+     */
+    public List<Reader> getListReaders() {
+        return readerService.getListReaders();
+    }
+
+    /**
+     * Вернуть книгу в библиотеку
+     */
+    public void returnBook(Book book) {
+        book.setReader(null);
+        bookService.editBook(book);
     }
 }

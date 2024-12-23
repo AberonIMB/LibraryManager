@@ -5,27 +5,28 @@ import org.example.commandValidators.CommandValidator;
 import org.example.commandValidators.OnlyIdCommandValidator;
 import org.example.exceptions.commandExceptions.CommandValidationException;
 import org.example.exceptions.stateExceptions.StateValidationException;
-import org.example.model.Book;
+import org.example.model.Reader;
 import org.example.service.LibraryService;
-import org.example.stateValidators.DeleteBookStateValidator;
+import org.example.stateValidators.DeleteReaderStateValidator;
 import org.example.util.IOHandler;
 
 /**
- * Обрабатывает команду удаления книги
- * Если команда корректна - удаляет книгу из библиотеки
+ * Обрабатывает команду удаления читателя
+ * Если команда корректна - удаляет читателя из библиотеки
  */
-public class DeleteBookCommandHandler implements CommandHandler {
-    private final CommandValidator commandValidator;
+public class DeleteReaderCommandHandler implements CommandHandler {
+
     private final LibraryService libraryService;
+    private final CommandValidator commandValidator;
+    private final DeleteReaderStateValidator stateValidator;
     private final IOHandler ioHandler;
-    private final DeleteBookStateValidator stateValidator;
 
     /**
      * Конструктор, который задает все необходимые поля
      */
-    public DeleteBookCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
+    public DeleteReaderCommandHandler(LibraryService libraryService, IOHandler ioHandler) {
         commandValidator = new OnlyIdCommandValidator();
-        stateValidator = new DeleteBookStateValidator();
+        stateValidator = new DeleteReaderStateValidator();
         this.libraryService = libraryService;
         this.ioHandler = ioHandler;
     }
@@ -36,21 +37,22 @@ public class DeleteBookCommandHandler implements CommandHandler {
             commandValidator.validateCommand(command);
 
             Long id = Long.parseLong(command.getParams().get(0));
-            Book book = libraryService.getBookById(id);
+            Reader reader = libraryService.getReaderById(id);
 
-            stateValidator.validateState(id, book);
+            stateValidator.validateState(id, reader);
 
-            libraryService.deleteBook(book);
-            printInfo(book);
+            libraryService.deleteReader(reader);
+            printInfo(reader);
+
         } catch (CommandValidationException | StateValidationException e) {
             ioHandler.print(e.getMessage());
         }
     }
 
     /**
-     * Выводит необходимую информацию об удаленной книге
+     * Выводит необходимую информацию об удаленном читателе
      */
-    private void printInfo(Book book) {
-        ioHandler.print(String.format("Книга с ID %d успешно удалена.", book.getId()));
+    private void printInfo(Reader reader) {
+        ioHandler.print(String.format("Читатель %s успешно удален.", reader.getReaderShortInfo()));
     }
 }

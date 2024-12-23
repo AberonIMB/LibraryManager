@@ -8,7 +8,7 @@ import java.util.Objects;
  * Класс книги
  */
 @Entity
-@Table(name = "books")
+@Table(name="books")
 public class Book {
 
     /**
@@ -21,20 +21,23 @@ public class Book {
     /**
      * Название книги
      */
-    @Column(name = "title")
+    @Column(name="title")
     private String title;
 
     /**
      * Автор книги
      */
-    @Column(name = "author")
+    @Column(name="author")
     private String author;
 
     /**
      * Год издания книги
      */
-    @Column(name = "publication_year")
+    @Column(name="publication_year")
     private int publicationYear;
+
+    @ManyToOne
+    private Reader reader;
 
     /**
      * Пустой конструктор для Hibernate
@@ -79,6 +82,10 @@ public class Book {
         return publicationYear;
     }
 
+    public Reader getReader() {
+        return reader;
+    }
+
     /**
      * Установить новые значения для назвавния, автора и года публикации книги
      */
@@ -86,6 +93,10 @@ public class Book {
         this.title = title;
         this.author = author;
         this.publicationYear = publicationYear;
+    }
+
+    public void setReader(Reader reader) {
+        this.reader = reader;
     }
 
     /**
@@ -96,15 +107,29 @@ public class Book {
                         ID: %d
                         Название: %s
                         Автор: %s
-                        Год издания: %d""",
-                id, title, author, publicationYear);
+                        Год издания: %d
+                        Статус: %s""",
+                id, title, author, publicationYear, reader == null ? "в библиотеке" : "выдана");
+    }
+
+    /**
+     * Возвращает информуцию о книге в кратком виде для просмотра в списке книг читателя
+     */
+    public String getBookShortInfoForReaderList() {
+        return String.format("[%d] %s - %s (%d)", id, title, author, publicationYear);
     }
 
     /**
      * Возвращает информуцию о книге в кратком виде
      */
     public String getBookShortInfo() {
-        return String.format("[%d] %s - %s (%d)", id, title, author, publicationYear);
+        if (reader == null) {
+            return String.format("[%d] %s - %s (%d) - %s", id, title, author, publicationYear, "в библиотеке");
+        }
+
+        return String.format("""
+                [%d] %s - %s (%d)
+                \t\tУ читателя: [%d] %s""", id, title, author, publicationYear, reader.getId(), reader.getName());
     }
 
     /**

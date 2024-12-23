@@ -1,6 +1,8 @@
 import org.example.model.Book;
+import org.example.model.Reader;
 import org.example.service.BookService;
 import org.example.service.LibraryService;
+import org.example.service.ReaderService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +23,9 @@ public class LibraryServiceTest {
     @Mock
     private BookService bookServiceMock;
 
+    @Mock
+    private ReaderService readerServiceMock;
+
     @InjectMocks
     private LibraryService libraryService;
 
@@ -35,7 +40,7 @@ public class LibraryServiceTest {
 
         Book result = libraryService.addBook(title, author, year);
 
-        assertBooksEquals(result, title, author, year);
+        assertBooksEquals(result, title, author, year, null);
 
         Mockito.verify(bookServiceMock, Mockito.times(1)).addBook(result);
     }
@@ -45,39 +50,17 @@ public class LibraryServiceTest {
      */
     @Test
     public void testEditBook() {
-        Long bookId = 1L;
         String newTitle = "newTitle";
         String newAuthor = "newAuthor";
         int newYear = 2025;
 
         Book existingBook = new Book("Title", "Author", 2023);
 
-        Mockito.when(bookServiceMock.getBook(bookId)).thenReturn(existingBook);
+        libraryService.editBook(existingBook, newTitle, newAuthor, newYear);
 
-        Book result = libraryService.editBook(bookId, newTitle, newAuthor, newYear);
-
-        assertBooksEquals(result, newTitle, newAuthor, newYear);
+        assertBooksEquals(existingBook, newTitle, newAuthor, newYear, null);
 
         Mockito.verify(bookServiceMock, Mockito.times(1)).editBook(existingBook);
-    }
-
-    /**
-     * Проверяет корректность редактирования несуществующей книги
-     */
-    @Test
-    public void testEditNullBook() {
-        Long bookId = 1L;
-        String newTitle = "newTitle";
-        String newAuthor = "newAuthor";
-        int newYear = 2025;
-
-        Mockito.when(bookServiceMock.getBook(bookId)).thenReturn(null);
-
-        Book result = libraryService.editBook(bookId, newTitle, newAuthor, newYear);
-
-        Assertions.assertNull(result);
-
-        Mockito.verify(bookServiceMock, Mockito.never()).editBook(Mockito.any(Book.class));
     }
 
     /**
@@ -85,32 +68,11 @@ public class LibraryServiceTest {
      */
     @Test
     public void testDeleteBook() {
-        Long bookId = 1L;
         Book book = new Book("Title", "Author", 2020);
 
-        Mockito.when(bookServiceMock.getBook(bookId)).thenReturn(book);
-
-        Book result = libraryService.deleteBook(bookId);
-
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals(book, result);
+        libraryService.deleteBook(book);
 
         Mockito.verify(bookServiceMock, Mockito.times(1)).deleteBook(book);
-    }
-
-    /**
-     * Проверяет корректность удаления несуществующей книги
-     */
-    @Test
-    public void testDeleteNullBook() {
-        Long bookId = 1L;
-        Mockito.when(bookServiceMock.getBook(bookId)).thenReturn(null);
-
-        Book result = libraryService.deleteBook(bookId);
-
-        Assertions.assertNull(result);
-
-        Mockito.verify(bookServiceMock, Mockito.never()).deleteBook(Mockito.any(Book.class));
     }
 
     /**
@@ -132,12 +94,112 @@ public class LibraryServiceTest {
     }
 
     /**
+     * Проверяет корректность добавления нового читателя
+     */
+    @Test
+    public void testAddReader() {
+        String name = "Name";
+
+        Reader reader = libraryService.addReader(name);
+
+        assertReaderEquals(reader, name, List.of());
+
+        Mockito.verify(readerServiceMock, Mockito.times(1)).addReader(reader);
+    }
+
+    /**
+     * Проверяет корректность редактирования читателя
+     */
+    @Test
+    public void testEditReader() {
+        Reader reader = new Reader("Name");
+        String newName = "newName";
+
+        libraryService.editReader(reader, newName);
+
+        assertReaderEquals(reader, newName, List.of());
+
+        Mockito.verify(readerServiceMock, Mockito.times(1)).editReader(reader);
+    }
+
+    /**
+     * Проверяет корректность удаления читателя
+     */
+    @Test
+    public void testDeleteReader() {
+        Reader reader = new Reader("Name");
+
+        libraryService.deleteReader(reader);
+
+        Mockito.verify(readerServiceMock, Mockito.times(1)).deleteReader(reader);
+    }
+
+    /**
+     * Проверяет корректность получения списка читателей
+     */
+    @Test
+    public void testGetListReaders() {
+        List<Reader> readers = List.of(
+                new Reader("Name1"),
+                new Reader("Name2")
+        );
+
+        Mockito.when(readerServiceMock.getListReaders()).thenReturn(readers);
+
+        List<Reader> result = libraryService.getListReaders();
+
+        Assertions.assertEquals(readers, result);
+        Mockito.verify(readerServiceMock, Mockito.times(1)).getListReaders();
+    }
+
+    /**
+     * Проверяет корректность выдачи книги
+     */
+    @Test
+    public void testCheckoutBook() {
+        Book book = new Book("Title", "Author", 2020);
+        Reader reader = new Reader("Name");
+
+        libraryService.checkoutBook(book, reader);
+
+        assertBooksEquals(book, "Title", "Author", 2020, reader);
+
+        Mockito.verify(bookServiceMock, Mockito.times(1)).editBook(book);
+    }
+
+    /**
+     * Проверяет корректность возврата книги
+     */
+    @Test
+    public void testReturnBook() {
+        Book book = new Book("Title", "Author", 2020);
+        Reader reader = new Reader();
+        book.setReader(reader);
+
+        libraryService.returnBook(book);
+
+        assertBooksEquals(book, "Title", "Author", 2020, null);
+
+        Mockito.verify(bookServiceMock, Mockito.times(1)).editBook(book);
+    }
+
+    /**
      * Проверяет, что книга совпадает с ожидаемым значением
      */
-    private void assertBooksEquals(Book result, String title, String author, int year) {
+    private void assertBooksEquals(Book result, String title, String author, int year, Reader reader) {
         Assertions.assertNotNull(result);
         Assertions.assertEquals(title, result.getTitle());
         Assertions.assertEquals(author, result.getAuthor());
         Assertions.assertEquals(year, result.getPublicationYear());
+        Assertions.assertEquals(reader, result.getReader());
+    }
+
+    /**
+     * Проверяет, что читатель совпадает с ожидаемым значением
+     */
+    private void assertReaderEquals(Reader result, String name, List<Book> books) {
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(name, result.getName());
+        Assertions.assertEquals(books, result.getBooks());
     }
 }

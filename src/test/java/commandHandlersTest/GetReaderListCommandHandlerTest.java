@@ -2,8 +2,8 @@ package commandHandlersTest;
 
 import org.example.Command;
 import org.example.commandHandlers.CommandHandler;
-import org.example.commandHandlers.GetBookListCommandHandler;
-import org.example.model.Book;
+import org.example.commandHandlers.GetReaderListCommandHandler;
+import org.example.model.Reader;
 import org.example.service.LibraryService;
 import org.example.util.IOHandler;
 import org.junit.jupiter.api.Test;
@@ -15,64 +15,61 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 /**
- * Тесты для обработчика команды получения списка книг
+ * Тесты для обработчика команды получения списка читателей
  */
 @ExtendWith(MockitoExtension.class)
-public class GetBookListCommandHandlerTest {
+public class GetReaderListCommandHandlerTest {
 
     private final LibraryService libraryServiceMock;
     private final IOHandler ioHandlerMock;
-
-    private final CommandHandler getBookListCommandHandler;
-
-    private final Command getBookListCommand = new Command("list-books");
-
-    private final List<Book> books = List.of(
-            new Book("title", "author", 2023),
-            new Book("title2", "author2", 2024));
+    private final CommandHandler getReaderListCommandHandler;
+    private final Command getReaderListCommand = new Command("list-readers");
+    private final List<Reader> readers = List.of(
+            new Reader("Name1"),
+            new Reader("Name2"));
 
     /**
      * Конструктор, в котором происходит инициализация полей
      */
-    public GetBookListCommandHandlerTest(@Mock LibraryService libraryService, @Mock IOHandler ioHandler) {
+    public GetReaderListCommandHandlerTest(@Mock LibraryService libraryService, @Mock IOHandler ioHandler) {
         this.ioHandlerMock = ioHandler;
         this.libraryServiceMock = libraryService;
 
-        this.getBookListCommandHandler = new GetBookListCommandHandler(
+        this.getReaderListCommandHandler = new GetReaderListCommandHandler(
                 libraryServiceMock, ioHandlerMock);
     }
 
     /**
-     * Проверяет корректность обработки команды получения списка книг, когда они есть
+     * Проверяет корректность обработки команды получения списка читателей, когда они есть
      */
     @Test
     public void testHandleCorrectGetBookListCommandWithNotEmptyList() {
-        Mockito.when(libraryServiceMock.getListBooks()).thenReturn(books);
+        Mockito.when(libraryServiceMock.getListReaders()).thenReturn(readers);
 
-        getBookListCommandHandler.executeCommand(getBookListCommand);
+        getReaderListCommandHandler.executeCommand(getReaderListCommand);
 
-        Mockito.verify(libraryServiceMock, Mockito.times(1)).getListBooks();
+        Mockito.verify(libraryServiceMock, Mockito.times(1)).getListReaders();
         Mockito.verify(ioHandlerMock, Mockito.times(1))
                 .printFormatted("%d) %s", 1,
-                        books.get(0).getBookShortInfo());
+                        readers.get(0).getReaderShortInfo());
 
         Mockito.verify(ioHandlerMock, Mockito.times(1))
                 .printFormatted("%d) %s", 2,
-                        books.get(1).getBookShortInfo());
+                        readers.get(1).getReaderShortInfo());
     }
 
     /**
-     * Проверяет корректность обработки команды получения списка книг, когда их нет
+     * Проверяет корректность обработки команды получения списка читателей, когда их нет
      */
     @Test
     public void testHandleCorrectGetBookListCommandWithEmptyList() {
-        Mockito.when(libraryServiceMock.getListBooks()).thenReturn(List.of());
+        Mockito.when(libraryServiceMock.getListReaders()).thenReturn(List.of());
 
-        getBookListCommandHandler.executeCommand(getBookListCommand);
+        getReaderListCommandHandler.executeCommand(getReaderListCommand);
 
-        Mockito.verify(libraryServiceMock, Mockito.times(1)).getListBooks();
+        Mockito.verify(libraryServiceMock, Mockito.times(1)).getListReaders();
         Mockito.verify(ioHandlerMock, Mockito.times(1))
-                .print("Список книг пуст.");
+                .print("Список читателей пуст.");
     }
 
     /**
@@ -80,9 +77,9 @@ public class GetBookListCommandHandlerTest {
      */
     @Test
     public void testHandleGetBookListCommandWithIncorrectArgsCount() {
-        Command incorrectCommand = new Command("list-books \"title\"");
+        Command incorrectCommand = new Command("list-readers \"list\"");
 
-        getBookListCommandHandler.executeCommand(incorrectCommand);
+        getReaderListCommandHandler.executeCommand(incorrectCommand);
 
         Mockito.verifyNoInteractions(libraryServiceMock);
 
