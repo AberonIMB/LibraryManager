@@ -8,7 +8,7 @@ import java.util.Objects;
  * Класс книги
  */
 @Entity
-@Table(name = "books")
+@Table(name="books")
 public class Book {
 
     /**
@@ -21,19 +21,19 @@ public class Book {
     /**
      * Название книги
      */
-    @Column(name = "title")
+    @Column(name="title")
     private String title;
 
     /**
      * Автор книги
      */
-    @Column(name = "author")
+    @Column(name="author")
     private String author;
 
     /**
      * Год издания книги
      */
-    @Column(name = "publication_year")
+    @Column(name="publication_year")
     private int publicationYear;
 
     @ManyToOne
@@ -131,6 +131,7 @@ public class Book {
                 [%d] %s - %s (%d)
                 \t\tУ читателя: [%d] %s""", id, title, author, publicationYear, reader.getId(), reader.getName());
     }
+
     /**
      * Сравнивает этот объект с другим объектом на равенство
      * @return true - если эти объекты равны

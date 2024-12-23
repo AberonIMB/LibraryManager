@@ -38,6 +38,7 @@ public class GetReaderListCommandHandlerTest {
         this.getReaderListCommandHandler = new GetReaderListCommandHandler(
                 libraryServiceMock, ioHandlerMock);
     }
+
     /**
      * Проверяет корректность обработки команды получения списка читателей, когда они есть
      */

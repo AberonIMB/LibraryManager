@@ -10,7 +10,7 @@ import java.util.Objects;
  * Класс читателя
  */
 @Entity
-@Table(name = "readers")
+@Table(name="readers")
 
 public class Reader {
 
@@ -18,10 +18,10 @@ public class Reader {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
+    @Column(name="name")
     private String name;
 
-    @OneToMany(mappedBy = "reader", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="reader", fetch=FetchType.EAGER)
     private List<Book> books;
 
     /**

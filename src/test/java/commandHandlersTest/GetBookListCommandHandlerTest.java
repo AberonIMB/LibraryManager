@@ -41,6 +41,7 @@ public class GetBookListCommandHandlerTest {
         this.getBookListCommandHandler = new GetBookListCommandHandler(
                 libraryServiceMock, ioHandlerMock);
     }
+
     /**
      * Проверяет корректность обработки команды получения списка книг, когда они есть
      */

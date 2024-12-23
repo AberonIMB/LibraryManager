@@ -215,7 +215,7 @@ public class CommandValidatorsTest {
     private void testThrowsArgumentsCountException(CommandValidator validator,
                                                    Command command,
                                                    int expectedParamsCount) {
-        Exception e = Assertions.assertThrows(ArgumentsCountException.class, () -> validator.validateCommand(command));
+        ArgumentsCountException e = Assertions.assertThrows(ArgumentsCountException.class, () -> validator.validateCommand(command));
 
         Assertions.assertEquals("Неверное количество аргументов команды: должно быть %d, представлено %d."
                 .formatted(expectedParamsCount, command.getParams().size()), e.getMessage());
@@ -226,7 +226,7 @@ public class CommandValidatorsTest {
      */
     private void testThrowsInvalidIdException(CommandValidator validator,
                                               Command command) {
-        Exception e = Assertions.assertThrows(InvalidIdException.class, () -> validator.validateCommand(command));
+        InvalidIdException e = Assertions.assertThrows(InvalidIdException.class, () -> validator.validateCommand(command));
 
         Assertions.assertEquals("ID должен быть представлен числом.", e.getMessage());
     }
@@ -236,7 +236,7 @@ public class CommandValidatorsTest {
      */
     private void testThrowsInvalidYearException(CommandValidator validator,
                                                 Command command) {
-        Exception e = Assertions.assertThrows(InvalidYearException.class, () -> validator.validateCommand(command));
+        InvalidYearException e = Assertions.assertThrows(InvalidYearException.class, () -> validator.validateCommand(command));
 
         Assertions.assertEquals("Год должен быть представлен числом.", e.getMessage());
     }
