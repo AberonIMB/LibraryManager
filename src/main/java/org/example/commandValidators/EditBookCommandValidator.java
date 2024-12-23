@@ -8,7 +8,7 @@ import org.example.exceptions.commandExceptions.InvalidYearException;
 /**
  * Проверяет корректность команды редактирования книги
  */
-public class EditBookCommandValidator extends CommandValidator{
+public class EditBookCommandValidator extends CommandValidator {
 
     @Override
     public void validateCommand(Command command) throws ArgumentsCountException, InvalidIdException, InvalidYearException {

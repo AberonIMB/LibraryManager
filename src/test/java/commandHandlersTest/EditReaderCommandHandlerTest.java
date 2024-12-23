@@ -52,7 +52,7 @@ public class EditReaderCommandHandlerTest {
                 .editReader(reader, "NewName");
 
         Mockito.verify(ioHandlerMock, Mockito.times(1))
-                .print(String.format("Имя читателя %d изменено на %s",reader.getId(), reader.getName()));
+                .print(String.format("Имя читателя %d изменено на %s", reader.getId(), reader.getName()));
     }
 
     /**
@@ -98,6 +98,7 @@ public class EditReaderCommandHandlerTest {
 
     /**
      * Тестирует выполнение некорректной команды
+     *
      * @param incorrectCommand Команда
      * @param exceptionMessage сообщение об ошибке
      */

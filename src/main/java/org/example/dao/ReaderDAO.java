@@ -6,7 +6,7 @@ import org.hibernate.SessionFactory;
 /**
  * DAO класс читателей для доступа к данным
  */
-public class ReaderDAO extends GenericDAO<Reader>{
+public class ReaderDAO extends GenericDAO<Reader> {
 
 
     /**
